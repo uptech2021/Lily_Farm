@@ -1,0 +1,26 @@
+{
+  "name": "rishis-lily-farm",
+  "version": "1.0.0",
+  "description": "Rishi's Lily Farm and Exotic Plants - Collaborative Web Development Project",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "build": "echo 'Build process for static site'",
+    "dev": "live-server --port=3000 --open"
+  },
+  "keywords": [
+    "lily-farm",
+    "exotic-plants",
+    "ecommerce",
+    "firebase",
+    "collaborative"
+  ],
+  "author": "Rishi's Lily Farm Team",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1"
+  }
+}
