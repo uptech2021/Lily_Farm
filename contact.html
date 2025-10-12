@@ -1,0 +1,233 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact & Address | Rishi"s Lily Farm and Exotic Plants</title>
+
+  <!-- Simple CSS styling (no Tailwind needed) -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      margin: 0;
+      padding: 0;
+    }
+    .contact-bar {
+      background: linear-gradient(to right, #24f091, #d1fae5);
+      padding: 10px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .contact-bar a {
+      color: #047857;
+      text-decoration: none;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header .logo-badge {
+      background: #047857;
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    nav a {
+      color: #4b5563;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover {
+      color: #047857;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    section, aside {
+      background: white;
+      border: 1px solid #f3f4f6;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    h1, h2 {
+      color: #06815e;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    form button {
+      background: #047857;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background: #065f46;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px dashed #d1d5db;
+      margin: 24px 0;
+    }
+
+    .info small {
+      color: #6b7280;
+    }
+
+    footer {
+      border-top: 1px solid #e5e7eb;
+      padding: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    footer a {
+      color: #047857;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Persistent Contact Bar -->
+  <!-- <div class="contact-bar"> -->
+    <!-- 📞 <strong>+1 (868) 710-4296 -->
+    <!--  -->
+    <!-- </strong> -->
+    <!-- ✉️ <a href="mailto:info@darren.kowlessar6.example">darren.kowlessar6@gmail.com</a> -->
+    <!-- 📍 Rishi's Lily Farm and Exotic Plants, #6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad -->
+  <!-- </div> -->
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-badge">RL</div>
+      <div>
+        <div style="font-weight:bold;">Rishi's Lily Farm and Exotic Plants</div>
+        <div style="font-size:13px; color:#6b7280;">Beautiful Lillies • Exotic Plants • Local Delivery</div>
+      </div>
+    </div>
+    <nav>
+      <!-- <a href="/">Home</a> -->
+      <!-- <a href="/about">About</a> -->
+      <!-- <a href="/contact">Contact</a> -->
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Contact Form -->
+    <section>
+      <h1>Contact Us</h1>
+      <p style="color:#6b7280;">Have a question about our Lillies, Exotic Plants, or Delivery? Send us an Email and we'll get back to you within 1–2 business days.</p>
+
+      <form action="#" method="post">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+        <label for="phone">Phone (optional)</label>
+        <input type="text" id="phone" name="phone" placeholder="+1 (868) 555-0123" />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="How can we help?" rows="5"></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+
+      <hr />
+      <div class="info">
+        <div><strong>Phone:</strong> +1 (868) 710-4296</div>
+        <div><strong>Email:</strong> <a href="mailto:info@darren.kowlessar6.example">darren.kowlessar6@gmail.com</a></div>
+        <div><strong>Address:</strong> Rishi's Lily Farm and Exotic Plants, #6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
+      
+      </div>
+    </section>
+
+    <!-- Address Sidebar -->
+    <!-- <aside> -->
+      <!-- <h2>Visit / Contact</h2> -->
+      <!-- <p><strong>Rishi's Lily Farm and Exotic Plants</strong><br> -->
+        <!-- #6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad<br> -->
+        <!-- <strong>Phone:</strong> +1 (868) 710-4296<br> -->
+        <!-- <strong>Email:</strong> <a href="mailto:info@darren.kowlessar6.example">darren.kowlessar6#gmail.com</a><br> -->
+        <!-- <small>Open Mon — Sat: 8:00 AM — 5:00 PM</small> -->
+      <!-- </p> -->
+      <!-- <div style="background:#f3f4f6; border-radius:8px; height:200px; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:14px;"> -->
+        <!-- Map preview — embed map here -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <div style="font-weight:bold;">Rishi's Lily Farm and Exotic Plants</div>
+      <div> #6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
+    </div>
+    <div style="text-align:right;">
+      <div><strong>+1 (868) 710-4296</strong></div>
+      <div><a href="mailto:info@darren.kowlessar6.example">darren.kowlessar6@gmail.com</a></div>
+    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+    </div>
+  </footer>
+</body>
+</html>
