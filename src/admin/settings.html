@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Rishi's Lily Farm Admin</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-app">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="brand-logo">Lily Farm Admin</a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="products.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
+                            </svg>
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="pricing-availability.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+                            </svg>
+                            Pricing & Availability
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="orders.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
+                            </svg>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="reviews.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            Reviews
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="gallery.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                            </svg>
+                            Gallery
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="faqs.html" class="nav-link">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                            </svg>
+                            FAQs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link active">
+                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                            </svg>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <button class="btn btn-secondary d-block d-md-none" data-sidebar-toggle>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                
+                <div class="topbar-search">
+                    <input type="search" class="search-input" placeholder="Search settings...">
+                </div>
+                
+                <div class="topbar-actions">
+                    <button class="notification-btn" data-modal-target="notifications-modal">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="profile-menu">
+                        <button class="profile-btn" data-dropdown-toggle>
+                            <div class="avatar">KN</div>
+                            <span class="d-none d-md-inline">Kyle Nagee</span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="admin-content">
+                <div class="page-header">
+                    <h1 class="page-title">Settings</h1>
+                    <p class="page-subtitle">Configure your store settings and preferences</p>
+                </div>
+
+                <div class="settings-grid">
+                    <!-- Store Information -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Store Information</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- SEED DATA -->
+                            <form class="settings-form seed">
+                                <div class="form-group">
+                                    <label for="store-name" class="form-label">Store Name</label>
+                                    <input type="text" id="store-name" class="form-control" value="Rishi's Lily Farm & Exotic Plants">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="store-hours" class="form-label">Operating Hours</label>
+                                    <input type="text" id="store-hours" class="form-control" value="Mon–Sat 8am–6pm">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="store-phone" class="form-label">Phone Number</label>
+                                    <input type="tel" id="store-phone" class="form-control" value="(868) 710-4296" data-validate="phone">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="store-email" class="form-label">Email Address</label>
+                                    <input type="email" id="store-email" class="form-control" value="info@lilyfarm.tt">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="store-address" class="form-label">Address</label>
+                                    <textarea id="store-address" class="form-control" rows="3">123 Lotus Rd
+Port of Spain
+Trinidad & Tobago</textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Payment Methods</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- SEED DATA -->
+                            <div class="payment-methods seed">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Cash on Delivery (COD)</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Debit/Credit Cards</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Online Transfer</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" checked>
+                                        <span>Mobile Wallet</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Settings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Delivery Settings</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- SEED DATA -->
+                            <form class="delivery-form seed">
+                                <div class="form-group">
+                                    <label for="free-delivery-threshold" class="form-label">Free Delivery Threshold</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="free-delivery-threshold" class="form-control" value="500" min="0" step="0.01">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery-areas" class="form-label">Service Areas</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" checked>
+                                            <span>Port of Spain</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" checked>
+                                            <span>San Fernando</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" checked>
+                                            <span>Chaguanas</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" checked>
+                                            <span>Arima</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery-fee" class="form-label">Standard Delivery Fee</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="delivery-fee" class="form-control" value="25" min="0" step="0.01">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Roles & Permissions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">User Roles & Permissions</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- SEED DATA -->
+                            <div class="permissions-table seed">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">User</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Permissions</th>
+                                            <th scope="col">Last Active</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">KN</div>
+                                                    <div>
+                                                        <div class="user-name">Kyle Nagee</div>
+                                                        <div class="user-email">kyle@lilyfarm.tt</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge primary">Admin</span>
+                                            </td>
+                                            <td>All</td>
+                                            <td>Online now</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">AS</div>
+                                                    <div>
+                                                        <div class="user-name">Ashana</div>
+                                                        <div class="user-email">ashana@lilyfarm.tt</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge info">Editor</span>
+                                            </td>
+                                            <td>Home</td>
+                                            <td>2 hours ago</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">JO</div>
+                                                    <div>
+                                                        <div class="user-name">Joey</div>
+                                                        <div class="user-email">joey@lilyfarm.tt</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge info">Editor</span>
+                                            </td>
+                                            <td>FAQs</td>
+                                            <td>1 day ago</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">JA</div>
+                                                    <div>
+                                                        <div class="user-name">Jasmine</div>
+                                                        <div class="user-email">jasmine@lilyfarm.tt</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge info">Editor</span>
+                                            </td>
+                                            <td>Products, Contact</td>
+                                            <td>3 hours ago</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">ET</div>
+                                                    <div>
+                                                        <div class="user-name">Ethan</div>
+                                                        <div class="user-email">ethan@lilyfarm.tt</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge info">Editor</span>
+                                            </td>
+                                            <td>Reviews, Gallery, Cart/Checkout</td>
+                                            <td>5 hours ago</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Settings -->
+                <div class="settings-actions">
+                    <button class="btn btn-primary btn-lg" data-action="publish-settings">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        Publish Settings
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/forms.js"></script>
+    
+    <style>
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--gap-lg);
+            margin-bottom: var(--gap-xl);
+        }
+        
+        .settings-form,
+        .delivery-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-lg);
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group-text {
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-right: none;
+            padding: var(--gap-sm) var(--gap);
+            color: var(--muted);
+            font-size: var(--font-sm);
+        }
+        
+        .input-group .form-control {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        .payment-methods,
+        .permissions-table {
+            margin-top: var(--gap);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            cursor: pointer;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--gap);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--brand);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: var(--font-sm);
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .user-email {
+            font-size: var(--font-sm);
+            color: var(--muted);
+        }
+        
+        .badge.primary {
+            background-color: rgba(46, 125, 107, 0.1);
+            color: var(--brand);
+        }
+        
+        .badge.info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+        
+        .settings-actions {
+            display: flex;
+            justify-content: center;
+            padding: var(--gap-xl) 0;
+            border-top: 1px solid var(--border);
+        }
+        
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .permissions-table {
+                overflow-x: auto;
+            }
+            
+            .permissions-table .table {
+                min-width: 500px;
+            }
+        }
+    </style>
+</body>
+</html>
+
+
+

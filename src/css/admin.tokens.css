@@ -1,0 +1,94 @@
+/* Admin Design System Tokens */
+:root {
+  /* Colors - Dark Theme First */
+  --bg: #0f1115;
+  --panel: #151821;
+  --elev: #1a1f2b;
+  --text: #eef2ff;
+  --muted: #9aa4b2;
+  --border: #2a3441;
+  --border-light: #3a4552;
+  
+  /* Brand Colors */
+  --brand: #2e7d6b;
+  --brand-light: #3d8b7a;
+  --brand-dark: #1f5a4f;
+  --accent: #e36e9a;
+  --accent-light: #f085b3;
+  --accent-dark: #d45a81;
+  
+  /* Status Colors */
+  --warn: #ffb020;
+  --warn-light: #ffc040;
+  --danger: #e24a4a;
+  --danger-light: #e85a5a;
+  --ok: #28a745;
+  --ok-light: #34ce57;
+  --info: #17a2b8;
+  --info-light: #20c997;
+  
+  /* Spacing */
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap: 12px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 32px;
+  --gap-2xl: 48px;
+  
+  /* Border Radius */
+  --r-sm: 6px;
+  --r: 14px;
+  --r-lg: 20px;
+  --r-xl: 24px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.15);
+  --shadow: 0 8px 24px rgba(0,0,0,.25);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.35);
+  --shadow-inner: inset 0 2px 4px rgba(0,0,0,.1);
+  
+  /* Typography */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  
+  /* Transitions */
+  --transition: all 0.2s ease;
+  --transition-slow: all 0.3s ease;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
+
+/* Light Theme Override */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --panel: #f8f9fa;
+  --elev: #ffffff;
+  --text: #212529;
+  --muted: #6c757d;
+  --border: #dee2e6;
+  --border-light: #e9ecef;
+  
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.1);
+  --shadow: 0 8px 24px rgba(0,0,0,.15);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.2);
+}
+

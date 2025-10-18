@@ -1,1 +1,258 @@
-<!-- Admin login page - Kyle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Rishi's Lily Farm</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="brand-title">Rishi's Lily Farm</h1>
+                <p class="brand-subtitle">Admin Dashboard</p>
+            </div>
+            
+            <form class="login-form" data-validate>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control" 
+                        placeholder="admin@lilyfarm.com"
+                        value="admin@lilyfarm.com"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control" 
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="switch">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span class="slider"></span>
+                        <span class="switch-label">Remember me</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    Sign In
+                </button>
+                
+                <div class="login-footer">
+                    <a href="#" class="forgot-password">Forgot your password?</a>
+                </div>
+                
+                <!-- Placeholder for SSO - commented out as requested -->
+                <!--
+                <div class="sso-section">
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    <button type="button" class="btn btn-secondary w-100">
+                        Sign in with Google
+                    </button>
+                </div>
+                -->
+            </form>
+        </div>
+        
+        <div class="login-info">
+            <div class="info-card">
+                <h3>Welcome Back!</h3>
+                <p>Access your admin dashboard to manage products, orders, and more.</p>
+                <div class="info-features">
+                    <div class="feature">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Manage Products</span>
+                    </div>
+                    <div class="feature">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Process Orders</span>
+                    </div>
+                    <div class="feature">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span>Review Feedback</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/forms.js"></script>
+    
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, var(--bg) 0%, var(--panel) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--gap-lg);
+        }
+        
+        .login-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--gap-2xl);
+            max-width: 1000px;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .login-card {
+            background-color: var(--elev);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--gap-2xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--gap-xl);
+        }
+        
+        .brand-title {
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            color: var(--brand);
+            margin-bottom: var(--gap-sm);
+        }
+        
+        .brand-subtitle {
+            color: var(--muted);
+            font-size: var(--font-lg);
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .switch {
+            display: flex;
+            align-items: center;
+            gap: var(--gap);
+        }
+        
+        .switch-label {
+            color: var(--text);
+            font-size: var(--font-sm);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: var(--gap-lg);
+        }
+        
+        .forgot-password {
+            color: var(--brand);
+            text-decoration: none;
+            font-size: var(--font-sm);
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .login-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info-card {
+            background-color: var(--elev);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--gap-2xl);
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .info-card h3 {
+            color: var(--text);
+            margin-bottom: var(--gap);
+        }
+        
+        .info-card p {
+            color: var(--muted);
+            margin-bottom: var(--gap-xl);
+        }
+        
+        .info-features {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: var(--gap);
+            color: var(--text);
+            font-size: var(--font-sm);
+        }
+        
+        .feature svg {
+            color: var(--brand);
+            flex-shrink: 0;
+        }
+        
+        .w-100 {
+            width: 100%;
+        }
+        
+        /* Fix form validation styling */
+        .form-control:invalid:not(:focus) {
+            border-color: var(--border);
+        }
+        
+        .form-control.is-invalid {
+            border-color: var(--danger);
+        }
+        
+        .form-control.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(226, 74, 74, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                gap: var(--gap-lg);
+            }
+            
+            .login-info {
+                order: -1;
+            }
+            
+            .info-card {
+                max-width: none;
+            }
+        }
+    </style>
+</body>
+</html>
