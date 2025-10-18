@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>RISHI'S LILLY FARM</title>
+  <link rel="icon" type="image/jpg" href="lilly flowers.jpg">
+
+  <!-- Google Font for contact info -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "san-serif", cursive;
+      text-align: center;
+      background-color: #ffffff;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+    }
+
+    .my_cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(80%);
+    }
+
+    /* Overlay content */
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+    }
+
+    .title {
+      font-family:Constantia;
+      font-size: 3em;
+      color: #ffffff; /* Parakeet Green */
+      margin-bottom: 10px;
+    }
+
+    .contact-info {
+      font-family: "Luckiest Guy", cursive;
+      font-size: 1.2em;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .shop-btn {
+      background-color: #03C04A; /* Parakeet Green */
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0px 4px 10px rgba(3, 192, 74, 0.4);
+    }
+
+    .shop-btn:hover {
+      background-color: #02943A; /* darker parakeet green */
+      transform: scale(1.05);
+      box-shadow: 0px 6px 15px rgba(3, 192, 74, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="my_cover" src="images/lily flowers.jpg" alt="Lilly Field">
+
+    <div class="overlay">
+      <div class="title">RISHI'S LILLY FARM</div>
+      <div class="contact-info">
+        📞 Contact: (868) 555-1234 | ✉️ Email: info@rishislillyfarm.com
+      </div>
+      <button class="shop-btn">SHOP NOW</button>
+    </div>
+  </div>
+</body>
+</html>
+
