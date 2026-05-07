@@ -1,1 +1,235 @@
 <!-- Customer Review & Gallery Page - Ethan -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lily Gallery</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Motion One -->
+  <script type="module">
+    import { animate, stagger } from "https://cdn.jsdelivr.net/npm/motion@11/+esm";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      animate(
+        ".hero",
+        { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+        { duration: 0.7, easing: "ease-out" }
+      );
+
+      animate(
+        ".card",
+        { opacity: [0, 1], transform: ["translateY(24px)", "translateY(0px)"] },
+        {
+          delay: stagger(0.08),
+          duration: 0.55,
+          easing: "ease-out",
+        }
+      );
+    });
+  </script>
+</head>
+
+<body class="bg-white text-zinc-900">
+  <div class="max-w-6xl mx-auto px-6 py-16">
+
+    <!-- Header -->
+    <div class="hero text-center mb-14 opacity-0">
+      <p class="text-xs tracking-[0.3em] uppercase text-zinc-500 mb-3">
+        Our Collection
+      </p>
+
+      <h1 class="text-5xl md:text-6xl font-light italic mb-4">
+        Lily Gallery
+      </h1>
+
+      <p class="text-zinc-500 font-light max-w-xl mx-auto">
+        Explore our hand-grown selection of rare and beautiful lily varieties,
+        cultivated with love at Rishi Lily Farm.
+      </p>
+    </div>
+
+    <!-- Filter Tags -->
+    <div id="filters" class="flex flex-wrap gap-3 justify-center mb-12">
+      <button class="filter-btn active px-5 py-1.5 border text-sm tracking-wider uppercase transition-colors border-black bg-black text-white">
+        All
+      </button>
+
+      <button class="filter-btn px-5 py-1.5 border border-zinc-300 text-sm tracking-wider uppercase text-zinc-600 hover:border-black hover:text-black transition-colors">
+        Pink
+      </button>
+
+      <button class="filter-btn px-5 py-1.5 border border-zinc-300 text-sm tracking-wider uppercase text-zinc-600 hover:border-black hover:text-black transition-colors">
+        Orange
+      </button>
+
+      <button class="filter-btn px-5 py-1.5 border border-zinc-300 text-sm tracking-wider uppercase text-zinc-600 hover:border-black hover:text-black transition-colors">
+        Yellow
+      </button>
+
+      <button class="filter-btn px-5 py-1.5 border border-zinc-300 text-sm tracking-wider uppercase text-zinc-600 hover:border-black hover:text-black transition-colors">
+        White
+      </button>
+
+      <button class="filter-btn px-5 py-1.5 border border-zinc-300 text-sm tracking-wider uppercase text-zinc-600 hover:border-black hover:text-black transition-colors">
+        Red
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="Orange">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1559667238-551905fa2efe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="Tiger Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">Tiger Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            Orange
+          </span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="Pink">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1656840339150-3452a3b9675d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="Pink Asiatic Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">Pink Asiatic Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            Pink
+          </span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="Yellow">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1764412009186-b0e7f1ad2067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="Yellow Day Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">Yellow Day Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            Yellow
+          </span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="White">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1771164042527-fcd1805a2131?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="White Calla Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">White Calla Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            White
+          </span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="Red">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1775663883751-7afbf0081070?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="Red Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">Red Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            Red
+          </span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card group opacity-0" data-tag="Pink">
+        <div class="overflow-hidden aspect-[3/4] bg-zinc-100">
+          <img
+            src="https://images.unsplash.com/photo-1537731661359-aef2cb05865c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600"
+            alt="Pink Water Lily"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        <div class="pt-4 pb-2 text-center">
+          <p class="text-xl font-light tracking-wide">Pink Water Lily</p>
+          <span class="inline-block mt-1 text-xs tracking-widest uppercase text-zinc-500">
+            Pink
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Script -->
+  <script>
+    const buttons = document.querySelectorAll(".filter-btn");
+    const cards = document.querySelectorAll(".card");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tag = button.textContent.trim();
+
+        // active styles
+        buttons.forEach((btn) => {
+          btn.classList.remove("bg-black", "text-white", "border-black");
+
+          btn.classList.add(
+            "border-zinc-300",
+            "text-zinc-600"
+          );
+        });
+
+        button.classList.add("bg-black", "text-white", "border-black");
+
+        button.classList.remove(
+          "border-zinc-300",
+          "text-zinc-600"
+        );
+
+        // filtering
+        cards.forEach((card) => {
+          const cardTag = card.dataset.tag;
+
+          if (tag === "All" || cardTag === tag) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
