@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amaryllis| Rishi's Lily Farm</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <style>
+    body {
+      font-family: 'Constantia', serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8fff9;
+      color: #041804;
+    }
+
+     /* Smaller centered search bar */
+        .search-container {
+            max-width: 450px;
+            margin: 20px auto;
+        }
+
+        .search-input {
+            height: 38px;
+            font-size: 0.9rem;
+        }
+    
+    
+    header {
+      background-color: #4a805a;
+      color: black;
+      text-align: center;
+      padding: 1.2rem 0;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+
+    .product-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 40px;
+      text-align: center;
+    }
+
+    .product-container img {
+      width: 350px;
+      height: 350px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      max-width: 600px;
+    }
+
+    .product-info h2 {
+      font-size: 2rem;
+      color: darkgreen;
+      margin-bottom: 15px;
+    }
+
+    .product-info p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 1.4rem;
+      color: #2b5d34;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .buttons {
+      margin-top: 25px;
+    }
+
+    button {
+      background-color: #4a805a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin: 8px;
+    }
+
+    button:hover {
+      background-color: #366b45;
+    }
+
+    footer {
+      background-color: #4a805a;
+      color: black;
+      text-align: center;
+      padding: 12px;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  
+
+<!-- ✅ SEARCH BAR (Bootstrap 5) -->
+  <div class="search-container">
+  <div class="input-group">
+<input type="text" id="detailSearch" class="form-control" placeholder="Search products...">
+<button class="btn btn-success btn-sm" id="detailSearchBtn">Search</button>
+  </div>
+</div> 
+
+ <p id="noResults" class="text-center mt-3 text-danger" style="display:none;">
+    No results found
+  </p>
+</div >
+
+   <header>Amaryllis</header>
+
+  <div class="product-container">
+    <img src="../img/amaryllis.jpg" alt="Amaryllis">
+    <div class="product-info">
+      
+      <h1>Amaryllis</h1>
+      <div class="price">Price: TTD $300.00</div>
+     
+      <p><strong>Description:</strong><br>
+     The Amaryllis is a striking flowering plant admired for its large, trumpet-shaped blooms that come in shades of red, pink, and white. Perfect for indoor or garden display, it adds vibrant color and elegance to any space.</p>
+    
+      <p><strong>Fertilizer Information:</strong><br>
+     Use aquatic plant fertilizer tablets such as 10-14NPK once every 3-4 weeks during the growing season. Push the tablet gently into the soil near the plant roots. Ensure the Lily receives full sunlight for maximum blooming.</p>
+
+    <div class="buttons">
+        <button class="add-to-cart()">Add to Cart</button>
+        <br>
+        <button class="back-to-products" onclick="window.location.href='../products.html'">Back to Products</button>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div><strong>Rishi's Lily Farm and Exotic Plants</strong></div>
+    <div>#6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
+    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+  </footer>
+
+ <script>
+// SEARCH REDIRECT LIST
+const productPages = {
+"purple blue day bloomer": "purple-blue-day-bloomer.html",
+"light yellow day bloomer": "light-yellow-day-bloomer.html",
+"white night bloomer": "white-night-bloomer.html",
+"light pink night bloomer": "light-pink-night-bloomer.html",
+"variegated purple day bloomer": "variegated-purple-day-bloomer.html",
+"light purple day bloomer": "light-purple-day-bloomer.html",
+"dark purple day bloomer": "dark-purple-day-bloomer.html",
+"pink indian lotus": "pink-indian-lotus.html",
+"dark yellow day bloomer": "dark-yellow-day-bloomer.html",
+"white purple day bloomer": "white-purple-day-bloomer.html",
+"golden champaca": "golden-champaca.html",
+"amaryllis": "amaryllis.html",
+"red amaryllis": "red-amaryllis.html",
+"rangoon creeper": "rangoon-creeper.html",
+"parrot's beak heliconia": "parrot's-beak-heliconia.html"
+};
+
+
+document.getElementById("detailSearchBtn").addEventListener("click", function() {
+let query = document.getElementById("detailSearch").value.toLowerCase().trim();
+
+
+if (productPages[query]) {
+window.location.href = productPages[query];
+} else {
+alert("No matching product found.");
+}
+});
+</script>
+
+
+</body>
+</html>
