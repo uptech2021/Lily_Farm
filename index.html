@@ -7,6 +7,7 @@
   <link rel="icon" type="image/jpg" href="images/lilly flowers.jpg" />
   <link rel="stylesheet" href="src/css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
 
@@ -70,43 +71,6 @@
     }
 
 
-    /* ===================== NAVBAR ===================== */
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 40px;
-      background: rgba(13, 61, 31, 0.97);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--green-400);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color var(--transition);
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--green-400);
-    }
 
 
     /* ===================== HERO ===================== */
@@ -644,15 +608,6 @@
     }
 
 
-    /* ===================== FOOTER ===================== */
-
-    footer {
-      background: var(--green-900);
-      color: rgba(255, 255, 255, 0.6);
-      text-align: center;
-      padding: 28px 24px;
-      font-size: 0.88rem;
-    }
 
 
     /* ===================== RESPONSIVE ===================== */
@@ -678,13 +633,6 @@
     }
 
     @media (max-width: 600px) {
-      nav {
-        padding: 14px 20px;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-
-      .nav-links { gap: 16px; }
 
       .hero__actions {
         flex-direction: column;
@@ -714,17 +662,7 @@
 </head>
 <body>
 
-  <!-- ===================== NAVBAR ===================== -->
-
-  <nav aria-label="Main navigation">
-    <a class="nav-logo" href="index.html">🌸 Rishi's Lilly Farm</a>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="shop.html">Shop</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+<div id="navbar"></div>
 
   <main>
 
@@ -739,13 +677,13 @@
         <h1 class="hero__title">Rishi's <span>Lilly</span> Farm</h1>
 
         <p class="hero__contact">
-          <a href="tel:+18685551234">📞 (868) 555-1234</a>
+          <a href="tel:+18687104296">📞 (868) 710-4296</a>
           <span aria-hidden="true">•</span>
-          <a href="mailto:info@rishislillyfarm.com">✉️ info@rishislillyfarm.com</a>
+          <a href="mailto:darren.kowlessar6@gmail.com">✉️ darren.kowlessar6@gmail.com</a>
         </p>
 
         <div class="hero__actions">
-          <a href="shop.html" class="btn-primary">🛒 Shop Now</a>
+          <a href="products.html" class="btn-primary">🛒 Shop Now</a>
           <a href="#gallery" class="btn-outline">View Gallery</a>
         </div>
       </div>
@@ -835,7 +773,7 @@
       </div>
 
       <div class="gallery__cta">
-        <a href="shop.html" class="btn-primary" style="display: inline-flex;">Browse Full Collection →</a>
+        <a href="products.html" class="btn-primary" style="display: inline-flex;">Browse Full Collection →</a>
       </div>
 
     </section>
@@ -854,43 +792,48 @@
         <details>
           <summary>
             <span class="faq-icon" aria-hidden="true">🌿</span>
-            How do I care for my lilies after purchase?
+            What types of lilies do you offer?
           </summary>
           <p class="faq-answer">
-            Keep lilies in indirect sunlight, change water every two days, and trim stems slightly for longer freshness.
+            We offer a wide variety of exotic lilies and aquatic plants — from tiger lilies and oriental hybrids to lotus flowers and day-blooming water lilies. <a href="products.html" style="color: var(--green-700); font-weight: 600;">Browse our full collection →</a>
           </p>
         </details>
 
         <details>
           <summary>
             <span class="faq-icon" aria-hidden="true">🚚</span>
-            Do you offer delivery?
+            What are your delivery charges?
           </summary>
           <p class="faq-answer">
-            Yes! Island-wide delivery within 2–3 business days. Free delivery on orders over $100.
+            Delivery rates are based on your location: Central Trinidad — $60, North Trinidad — $85, South Trinidad — $60. Free delivery on orders over <strong>$500</strong>.
           </p>
         </details>
 
         <details>
           <summary>
             <span class="faq-icon" aria-hidden="true">💧</span>
-            Are your lilies pesticide-free?
+            Are your lilies pesticide-free or organic?
           </summary>
           <p class="faq-answer">
-            Absolutely! Our flowers are grown organically using eco-friendly farming practices — no harmful chemicals, ever.
+            Yes, absolutely! All our flowers are grown using organic, eco-friendly farming practices — no harmful chemicals, ever.
           </p>
         </details>
 
         <details>
           <summary>
             <span class="faq-icon" aria-hidden="true">🌸</span>
-            Can I visit the farm?
+            Can I place an order for pickup?
           </summary>
           <p class="faq-answer">
-            Yes! Book an appointment via our Contact page. Tours available Tue–Sat, 9am–4pm.
+            Yes! You can select <strong>Pickup</strong> at checkout and collect your order from our farm in Central Trinidad. We'll confirm your pickup time via email or phone.
           </p>
         </details>
 
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="faq.html" class="btn-primary" style="display: inline-flex;">View More Questions →</a>
+        <a href="contact.html" class="btn-outline" style="display: inline-flex; margin-left: 12px;">Contact Us</a>
       </div>
     </section>
 
@@ -922,11 +865,25 @@
   </main>
 
 
-  <!-- ===================== FOOTER ===================== -->
-
   <footer>
-    <p>© 2025 Rishi's Lilly Farm · Trinidad · All rights reserved</p>
+    <div id="footer"></div>
   </footer>
 
+<script>
+  fetch("src/components/navbar.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("navbar").innerHTML = html;
+      const page = "index.html";
+      document.querySelectorAll("#navbar a").forEach(a => {
+        if (a.getAttribute("href") === page) a.classList.add("active");
+      });
+    });
+  fetch("src/components/footer.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("footer").innerHTML = html;
+    });
+</script>
 </body>
 </html>

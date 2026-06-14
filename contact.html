@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact & Address | Rishi"s Lily Farm and Exotic Plants</title>
-
-  <!-- Simple CSS styling (no Tailwind needed) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="src/css/styles.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,58 +15,8 @@
       margin: 0;
       padding: 0;
     }
-    .contact-bar {
-      background: linear-gradient(to right, #24f091, #d1fae5);
-      padding: 10px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      font-size: 14px;
-    }
-    .contact-bar a {
-      color: #047857;
-      text-decoration: none;
-    }
 
-    header {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    header .logo-badge {
-      background: #047857;
-      color: white;
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    nav a {
-      color: #4b5563;
-      margin: 0 12px;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    nav a:hover {
-      color: #047857;
-    }
-
-    main {
+    .contact-page {
       max-width: 1100px;
       margin: 0 auto;
       padding: 40px 24px;
@@ -75,12 +25,12 @@
       gap: 24px;
     }
     @media (max-width: 768px) {
-      main {
+      .contact-page {
         grid-template-columns: 1fr;
       }
     }
 
-    section, aside {
+    .contact-page section, .contact-page aside {
       background: white;
       border: 1px solid #f3f4f6;
       border-radius: 16px;
@@ -88,8 +38,8 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    h1, h2 {
-      color: #06815e;
+    .contact-page h1, .contact-page h2 {
+      color: var(--primary-green);
     }
 
     form label {
@@ -107,7 +57,7 @@
       font-size: 14px;
     }
     form button {
-      background: #047857;
+      background: var(--primary-green);
       color: white;
       border: none;
       padding: 10px 16px;
@@ -125,23 +75,8 @@
       margin: 24px 0;
     }
 
-    .info small {
+    .contact-page .info small {
       color: #6b7280;
-    }
-
-    footer {
-      border-top: 1px solid #e5e7eb;
-      padding: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      color: #4b5563;
-    }
-    footer a {
-      color: #047857;
-      text-decoration: none;
     }
   </style>
 </head>
@@ -151,7 +86,7 @@
  <div id="navbar"></div>
 
   <!-- Main Content -->
-  <main>
+  <main class="contact-page">
     <!-- Contact Form -->
     <section>
       <h1>Contact Us</h1>
@@ -198,7 +133,9 @@
   </main>
 
   <!-- Footer -->
-  <div id="footer"></div>
+  <footer>
+    <div id="footer"></div>
+  </footer>
 
   <script>
 

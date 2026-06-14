@@ -1,1 +1,118 @@
-<!-- Cart Page - Ethan & Kyle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Rishi's Lily Farm and Exotic Plants</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/cart.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <section class="page-header cart-hero">
+        <h1>Your Shopping Cart</h1>
+        <p>Review your items and proceed to checkout when you're ready.</p>
+    </section>
+
+    <main class="cart-container">
+        <div class="cart-intro">
+            <h2>Cart Summary</h2>
+            <p>Browse our collection and add your favorite plants.</p>
+        </div>
+
+        <div id="emptyCart" class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Let's Grow Your Collection</h3>
+            <p>You haven't selected any plants yet. Explore our catalog and find something you'll love.</p>
+            <a href="products.html" class="btn-cart btn-cart-green"><i class="fas fa-seedling" style="color: var(--primary-green);"></i> Browse Products</a>
+        </div>
+
+        <div id="recommendedSection" class="recommended-section">
+            <div class="recommended-header">
+                <h3>Popular Plants</h3>
+                <p>Explore our best-selling varieties and add something special to your order</p>
+            </div>
+            <div class="recommended-grid" id="recommendedGrid"></div>
+        </div>
+
+        <div id="cartContent" class="cart-content" style="display: none;">
+            <div class="cart-layout">
+                <div class="cart-items-section">
+                    <div class="cart-items-header">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3>Cart Items</h3>
+                    </div>
+                    <div id="cartItems" class="cart-items"></div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-header">
+                        <i class="fas fa-receipt"></i>
+                        <h3>Order Summary</h3>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Delivery</span>
+                            <span id="deliveryFee">Calculated at checkout</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row summary-total">
+                            <span>Total</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                    <a href="checkout.html" class="btn btn-primary checkout-btn"><i class="fas fa-lock"></i> Proceed to Checkout</a>
+                    <a href="products.html" class="btn btn-secondary continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="cta-section">
+            <h3>Need Help With Your Order?</h3>
+            <p>Have questions about your plants or delivery? Our team is here to help you every step of the way.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-primary">Contact Us</a>
+                <a href="faq.html" class="btn btn-secondary">Visit FAQ</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+    <script src="src/js/cart.js"></script>
+    <script>
+        fetch("src/components/navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("navbar").innerHTML = data;
+                const currentPage = window.location.pathname.split("/").pop();
+                document.querySelectorAll(".nav-links a").forEach(link => {
+                    if (link.getAttribute("href") === currentPage) {
+                        link.classList.add("active");
+                    }
+                });
+                const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+                const navLinksMenu = document.getElementById("navLinks");
+                if (mobileMenuBtn && navLinksMenu) {
+                    mobileMenuBtn.addEventListener("click", function () {
+                        navLinksMenu.classList.toggle("active");
+                    });
+                }
+            });
+
+        fetch("src/components/footer.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("footer").innerHTML = data;
+            });
+    </script>
+</body>
+</html>

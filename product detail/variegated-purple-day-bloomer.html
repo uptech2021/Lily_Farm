@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dark Purple Day Bloomer | Rishi's Lily Farm</title>
+  <title>Variegated Purple Day Bloomer | Rishi's Lily Farm</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
@@ -14,7 +14,8 @@
       background-color: #f8fff9;
       color: #041804;
     }
-
+ 
+ 
     /* Smaller centered search bar */
         .search-container {
             max-width: 450px;
@@ -25,9 +26,10 @@
             height: 38px;
             font-size: 0.9rem;
         }
-   
-   
-     header {
+    
+    
+    
+    header {
       background-color: #4a805a;
       color: black;
       text-align: center;
@@ -116,36 +118,44 @@
 </div>
 </div>
   
-  <header>Dark Purple Day Bloomer</header>
+  <header>Variegated Purple Day Bloomer</header>
 
   <div class="product-container">
-    <img src="../img/dark-purple-day-bloomer.jpg" alt="Dark Purple Day Bloomer">
+    <img src="../img/variegated-purple-day-bloomer.jpg" alt="Variegated Purple Day Bloomer">
     <div class="product-info">
-      <h1>Dark Purple Day Bloomer</h1>
+      <h1>Variegated Purple Day Bloomer</h1>
       <div class="price">Price: TTD $150.00</div>
      
       <p><strong>Description:</strong><br>
-     The Dark Purple Day Bloomer is a striking tropical water lily with deep violet petals that shine brilliantly under sunlight. Its rich color and broad green leaves make it a stunning focal point in any pond or water garden.</p>
-    
+     The Variegated Purple Day Bloomer is a stunning tropical water lily known for its vibrant purple petals accented with subtle variegation. Blooming brightly during the day, it add elegance to ponds or garden water features.</p>
+     
       <p><strong>Fertilizer Information:</strong><br>
      For best results, use aquatic plant fertilizer tablets such as 10-14NPK once every 3-4 weeks during the growing season. Push the tablet gently into the soil near the plant roots. Ensure the Lily receives full sunlight for maximum blooming.</p>
 
-    <div class="buttons">
+      
+      <div class="buttons">
         <button class="add-to-cart()">Add to Cart</button>
         <br>
         <button class="back-to-products" onclick="window.location.href='../products.html'">Back to Products</button>
-
       </div>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <div><strong>Rishi's Lily Farm and Exotic Plants</strong></div>
-    <div>#6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
-    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+    <div id="footer"></div>
   </footer>
 
- <script>
+  <script>
+    // ================= FOOTER =================
+    fetch("../src/components/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer").innerHTML = data;
+        });
+  </script>
+ 
+<script>
 // SEARCH REDIRECT LIST
 const productPages = {
 "purple blue day bloomer": "purple-blue-day-bloomer.html",

@@ -1,1 +1,194 @@
-<!-- Checkout Page - Ethan & Kyle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Rishi's Lily Farm and Exotic Plants</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/checkout.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <section class="page-header checkout-hero">
+        <h1>Checkout</h1>
+        <p>Complete your order and we'll get your plants ready for delivery.</p>
+    </section>
+
+    <main class="checkout-container">
+        <div class="checkout-intro">
+            <h2>Place Your Order</h2>
+            <p>Fill in your details below and we'll confirm your order within 24 hours.</p>
+        </div>
+
+        <div id="emptyCart" class="empty-checkout" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your Cart is Empty</h3>
+            <p>Add some plants to your cart before proceeding to checkout.</p>
+            <a href="products.html" class="btn-primary" style="display: inline-block; padding: 12px 32px; border-radius: 5px; text-decoration: none; font-weight: 600; background-color: var(--accent-gold); color: var(--dark-text);"><i class="fas fa-seedling"></i> Browse Products</a>
+        </div>
+
+        <div id="checkoutContent" class="checkout-layout">
+            <div class="checkout-form-section">
+                <div class="form-header">
+                    <i class="fas fa-address-card"></i>
+                    <h3>Contact & Delivery Details</h3>
+                </div>
+                <form id="checkoutForm" class="checkout-form" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <input type="email" id="email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" placeholder="(868) 555-0123" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deliveryOption">Delivery Option <span class="required">*</span></label>
+                            <select id="deliveryOption" required>
+                                <option value="">Select an option</option>
+                                <option value="delivery">Delivery</option>
+                                <option value="pickup">Farm Pickup (Free)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="deliveryFields" class="delivery-fields">
+                        <div class="form-group">
+                            <label for="address">Delivery Address <span class="required">*</span></label>
+                            <input type="text" id="address" placeholder="Street address, building, etc.">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City / Town <span class="required">*</span></label>
+                                <input type="text" id="city" placeholder="e.g. Chaguanas">
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Region</label>
+                                <select id="region">
+                                    <option value="">Select region</option>
+                                    <option value="central">Central Trinidad</option>
+                                    <option value="north">North Trinidad</option>
+                                    <option value="south">South Trinidad</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="delivery-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Delivery charges are location-based. Free delivery for orders $500+.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Order Notes</label>
+                        <textarea id="notes" placeholder="Any special instructions or preferred delivery date?" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method <span class="required">*</span></label>
+                        <div class="payment-options" id="paymentMethod">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="cash" checked>
+                                <i class="fas fa-money-bill-wave"></i> Cash
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="card">
+                                <i class="fas fa-credit-card"></i> Card
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="bank">
+                                <i class="fas fa-university"></i> Bank Transfer
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="mobile">
+                                <i class="fas fa-mobile-alt"></i> Mobile Wallet
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="place-order-btn"><i class="fas fa-check-circle"></i> Place Order</button>
+                </form>
+            </div>
+
+            <div class="checkout-summary">
+                <div class="summary-header">
+                    <i class="fas fa-receipt"></i>
+                    <h3>Order Summary</h3>
+                </div>
+                <div id="checkoutItems" class="checkout-items"></div>
+                <div class="summary-divider"></div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="checkoutSubtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery</span>
+                    <span id="checkoutDelivery">$0.00</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span id="checkoutTotal">$0.00</span>
+                </div>
+                <a href="cart.html" class="back-link"><i class="fas fa-arrow-left"></i> Return to Cart</a>
+            </div>
+        </div>
+
+        <div id="orderSuccess" class="order-success" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <h3>Order Placed Successfully!</h3>
+            <p>Thank you for your order. We'll review it and contact you within 24 hours to confirm delivery details.</p>
+            <div class="success-actions">
+                <a href="products.html" class="btn-primary" style="display: inline-block; padding: 12px 32px; border-radius: 5px; text-decoration: none; font-weight: 600; background-color: var(--accent-gold); color: var(--dark-text);"><i class="fas fa-seedling"></i> Continue Shopping</a>
+                <a href="index.html" class="btn-secondary" style="display: inline-block; padding: 12px 32px; border-radius: 5px; text-decoration: none; font-weight: 600; border: 2px solid var(--primary-green); color: var(--primary-green);">Return Home</a>
+            </div>
+        </div>
+
+        <section class="cta-section">
+            <h3>Questions Before You Order?</h3>
+            <p>Not sure about delivery options or plant care? Our team is happy to help.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-primary">Contact Us</a>
+                <a href="faq.html" class="btn btn-secondary">Visit FAQ</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+    <script src="src/js/checkout.js"></script>
+    <script>
+        fetch("src/components/navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("navbar").innerHTML = data;
+                const currentPage = window.location.pathname.split("/").pop();
+                document.querySelectorAll(".nav-links a").forEach(link => {
+                    if (link.getAttribute("href") === currentPage) {
+                        link.classList.add("active");
+                    }
+                });
+                const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+                const navLinksMenu = document.getElementById("navLinks");
+                if (mobileMenuBtn && navLinksMenu) {
+                    mobileMenuBtn.addEventListener("click", function () {
+                        navLinksMenu.classList.toggle("active");
+                    });
+                }
+            });
+
+        fetch("src/components/footer.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("footer").innerHTML = data;
+            });
+    </script>
+</body>
+</html>

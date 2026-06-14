@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parrot's Beak Heliconia | Rishi's Lily Farm</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
+  <title>Rangoon Creeper | Rishi's Lily Farm</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
     body {
@@ -16,7 +15,7 @@
       color: #041804;
     }
 
-    /* Smaller centered search bar */
+     /* Smaller centered search bar */
         .search-container {
             max-width: 450px;
             margin: 20px auto;
@@ -26,8 +25,8 @@
             height: 38px;
             font-size: 0.9rem;
         }
-   
-   
+    
+    
     header {
       background-color: #4a805a;
       color: black;
@@ -117,20 +116,19 @@
 </div>
 </div>
   
-  
-  <header>Parrot's Beak Heliconia</header>
+  <header>Rangoon Creeper</header>
 
   <div class="product-container">
-    <img src="../img/parrot's-beak-heliconia.jpg" alt="Parrot's Beak Heliconia">
+    <img src="../img/rangoon-creeper.jpg" alt="Rangoon Creeper">
     <div class="product-info">
-      <h1>Parrot's Beak Heliconia</h1>
+      <h1>Rangoon Creeper</h1>
       <div class="price">Price: TTD $100.00</div>
      
       <P><strong>Description:</strong><br>
-      The Parrot’s Beak Heliconia features bold, curved blooms resembling a parrot’s beak, displaying bright red, orange, and yellow colors against lush green leaves. It thrives in warm, humid climates and adds vibrant tropical color to gardens.</p>
+      The Rangoon Creeper is a vibrant tropical vine that  changes from white to pink to deep red as they mature. It thrives in full sunlight and brings a lush, colorful beauty to fences and garden walls.</p>
      
       <p><strong>Fertilizer Information:</strong><br>
-      Some compost or organic mulch around the base helps boost growth and maintain moisture.</p>
+      Feed every 4 to 6 weeks with a balanced fertilizer (10-10-10 NPK or 14-14-14 NPK). Use organic compost fertilizer to promote lush foliage and flowering. Ensure good drainage and moderate watering for healthy growth.</p>
 
       
       <div class="buttons">
@@ -141,11 +139,19 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <div><strong>Rishi's Lily Farm and Exotic Plants</strong></div>
-    <div>#6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
-    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+    <div id="footer"></div>
   </footer>
+
+  <script>
+    // ================= FOOTER =================
+    fetch("../src/components/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer").innerHTML = data;
+        });
+  </script>
 
  <script>
 // SEARCH REDIRECT LIST
@@ -182,6 +188,5 @@ alert("No matching product found.");
 
 
 
-
-</body>
+  </body>
 </html>

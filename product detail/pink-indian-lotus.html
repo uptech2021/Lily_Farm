@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rangoon Creeper | Rishi's Lily Farm</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Pink Indian Lotus | Rishi's Lily Farm</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
     body {
@@ -108,7 +108,7 @@
 </head>
 <body>
   
-  <!-- ✅ SEARCH BAR (Bootstrap 5) -->
+   <!-- ✅ SEARCH BAR (Bootstrap 5) -->
   <div class="search-container">
   <div class="input-group">
 <input type="text" id="detailSearch" class="form-control" placeholder="Search products...">
@@ -116,22 +116,21 @@
 </div>
 </div>
   
-  <header>Rangoon Creeper</header>
+  <header>Pink Indian Lotus</header>
 
   <div class="product-container">
-    <img src="../img/rangoon-creeper.jpg" alt="Rangoon Creeper">
+    <img src="../img/pink-indian-lotus.jpg" alt="Pink Indian Lotus">
     <div class="product-info">
-      <h1>Rangoon Creeper</h1>
-      <div class="price">Price: TTD $100.00</div>
+      <h1>Pink Indian Lotus</h1>
+      <div class="price">Price: TTD $250.00</div>
      
-      <P><strong>Description:</strong><br>
-      The Rangoon Creeper is a vibrant tropical vine that  changes from white to pink to deep red as they mature. It thrives in full sunlight and brings a lush, colorful beauty to fences and garden walls.</p>
-     
+      <p><strong>Description:</strong><br>
+      The Pink Indian Lotus is a sacred aquatic flower admired for its large, soft pink petals and golden center. Symbolizing purity and renewal, it thrives in warm, sunny ponds and adds a touch of elegance to any water garden.</p>
+    
       <p><strong>Fertilizer Information:</strong><br>
-      Feed every 4 to 6 weeks with a balanced fertilizer (10-10-10 NPK or 14-14-14 NPK). Use organic compost fertilizer to promote lush foliage and flowering. Ensure good drainage and moderate watering for healthy growth.</p>
+     Use aquatic plant fertilizer tablets such as 10-14NPK once every 3 to 4 weeks during the growing season. Push the tablet into the soil near the plant roots. Ensure the Pink Indian Lotus receives sunlight for maximum blooming.</p>
 
-      
-      <div class="buttons">
+    <div class="buttons">
         <button class="add-to-cart()">Add to Cart</button>
         <br>
         <button class="back-to-products" onclick="window.location.href='../products.html'">Back to Products</button>
@@ -139,11 +138,19 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <div><strong>Rishi's Lily Farm and Exotic Plants</strong></div>
-    <div>#6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
-    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+    <div id="footer"></div>
   </footer>
+
+  <script>
+    // ================= FOOTER =================
+    fetch("../src/components/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer").innerHTML = data;
+        });
+  </script>
 
  <script>
 // SEARCH REDIRECT LIST
@@ -177,8 +184,6 @@ alert("No matching product found.");
 }
 });
 </script>
-
-
 
   </body>
 </html>

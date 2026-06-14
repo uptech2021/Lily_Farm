@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>White Purple Day Bloomer | Rishi's Lily Farm</title>
+  <title>White Night  Bloomer | Rishi's Lily Farm</title>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
@@ -25,6 +25,7 @@
             height: 38px;
             font-size: 0.9rem;
         }
+    
     
     header {
       background-color: #4a805a;
@@ -115,21 +116,22 @@
 </div>
 </div>
   
-  <header>White Purple Day Bloomer</header>
+  <header>White Night Bloomer</header>
 
   <div class="product-container">
-    <img src="../img/white-purple-day-bloomer.jpg" alt="White Purple Day Bloomer">
+    <img src="../img/white-night-bloomer.jpg" alt="White Night Bloomer">
     <div class="product-info">
-      <h1>White Purple Day Bloomer</h1>
+      <h1>White Night Bloomer</h1>
+      
       <div class="price">Price: TTD $150.00</div>
-     
-      <p><strong>Description:</strong><br>
-      The White Purple Day Bloomer is an elegant tropical water lily featuring delicate white petals accented with soft purple hues near the center. It opens in full sunlight, adding a colorful charm to ponds and water gardens.</p>
-    
-      <p><strong>Fertilizer Information:</strong><br>
-       Feed with slow-release aquatic fertilizer tablets every 4 to 6 weeks during the warm months. Push the tablets into the soil near the plant’s roots. Avoid applying fertilizer directly into the water.</p>
-
-    <div class="buttons">
+      
+     <p><strong>Description:</strong><br>
+        The White Night Bloomer is a captivating tropical water lily that showcases pristine white petals with a subtle hint of cream at the center. This variety blooms during the day, adding elegance and tranquility to any pond or water garden setting.</p>
+      
+        <p><strong>Fertilizer Information:</strong><br>
+        Use an aquatic plant fertilizer tablet once every two weeks during the blooming season. Avoid over-fertilizing to maintain clear water and healthy leaves.</p>
+      
+      <div class="buttons">
         <button class="add-to-cart()">Add to Cart</button>
         <br>
         <button class="back-to-products" onclick="window.location.href='../products.html'">Back to Products</button>
@@ -137,11 +139,19 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    <div><strong>Rishi's Lily Farm and Exotic Plants</strong></div>
-    <div>#6 Kowlessar Street, Dallo Road, Gasparillo, Trinidad</div>
-    <div>Open Mon — Sat: 8:00 AM — 5:00 PM</div>
+    <div id="footer"></div>
   </footer>
+
+  <script>
+    // ================= FOOTER =================
+    fetch("../src/components/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer").innerHTML = data;
+        });
+  </script>
 
  <script>
 // SEARCH REDIRECT LIST
