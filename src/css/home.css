@@ -246,7 +246,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: linear-gradient(135deg, var(--green-500), #1637a3);
+      background: linear-gradient(135deg, var(--green-500), #034e1a);
       color: var(--white);
       border: none;
       padding: 16px 44px;
@@ -493,11 +493,15 @@
 
 
     /* ===================== FAQ ===================== */
-
     .faq {
-  background: linear-gradient(180deg, #fdfaf5, #dcfce7); /* cream to mint gradient */
-  padding: 96px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers the whole section */
+  justify-content: center;
+  text-align: center; /* centers text inside */
+  width: 100%;
 }
+
 
 .faq .section-eyebrow,
 .faq .section-title {
@@ -515,8 +519,8 @@
 }
 
 .faq__list {
-  color: var(--text-light); /* softer text for answers */
-  line-height: 1.6;
+  max-width: 900px; /* keeps it neat and readable */
+  margin: 0 auto; /* centers the list container */
 }
 
     details {
