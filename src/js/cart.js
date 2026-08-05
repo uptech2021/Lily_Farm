@@ -1,20 +1,6 @@
 (function () {
-    const CART_KEY = "lilyFarmCart";
-
-    function getCart() {
-        try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; }
-    }
-
-    function saveCart(cart) {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    }
-
     function loadProducts() {
-        const stored = localStorage.getItem("lilyFarmProducts");
-        if (stored) {
-            try { return JSON.parse(stored); } catch { return []; }
-        }
-        const defaults = [
+        return [
             { id: "purple-blue-day-bloomer", name: "Purple Blue Day Bloomer", price: 150, image: "img/purple-blue-day-bloomer.jpg", category: "Water Lilies" },
             { id: "light-yellow-day-bloomer", name: "Light Yellow Day Bloomer", price: 150, image: "img/light-yellow-day-bloomer.jpg", category: "Water Lilies" },
             { id: "white-night-bloomer", name: "White Night Bloomer", price: 180, image: "img/white-night-bloomer.jpg", category: "Water Lilies" },
@@ -31,17 +17,11 @@
             { id: "rangoon-creeper", name: "Rangoon Creeper", price: 130, image: "img/rangoon-creeper.jpg", category: "Exotic Plants" },
             { id: "parrots-beak-heliconia", name: "Parrot's Beak Heliconia", price: 140, image: "img/parrot's-beak-heliconia.jpg", category: "Exotic Plants" }
         ];
-        return defaults;
     }
 
     function getRecommended() {
         const products = loadProducts();
-        const picks = [
-            "pink-indian-lotus",
-            "purple-blue-day-bloomer",
-            "golden-champaca",
-            "white-night-bloomer"
-        ];
+        const picks = ["pink-indian-lotus", "purple-blue-day-bloomer", "golden-champaca", "white-night-bloomer"];
         return picks.map(id => products.find(p => p.id === id)).filter(Boolean);
     }
 
@@ -64,8 +44,8 @@
         `).join("");
     }
 
-    function renderCart() {
-        const cart = getCart();
+    async function renderCart() {
+        const cart = await fbGetCart();
         const emptyEl = document.getElementById("emptyCart");
         const contentEl = document.getElementById("cartContent");
         const recEl = document.getElementById("recommendedSection");
@@ -74,15 +54,15 @@
         const totalEl = document.getElementById("total");
 
         if (!cart.length) {
-            emptyEl.style.display = "block";
-            contentEl.style.display = "none";
+            if (emptyEl) emptyEl.style.display = "block";
+            if (contentEl) contentEl.style.display = "none";
             if (recEl) recEl.style.display = "block";
             renderRecommended();
             return;
         }
 
-        emptyEl.style.display = "none";
-        contentEl.style.display = "block";
+        if (emptyEl) emptyEl.style.display = "none";
+        if (contentEl) contentEl.style.display = "block";
         if (recEl) recEl.style.display = "none";
 
         const products = loadProducts();
@@ -121,51 +101,32 @@
         totalEl.textContent = `$${subtotal.toFixed(2)}`;
     }
 
-    function addToCart(productId) {
+    async function addToCart(productId) {
         const products = loadProducts();
         if (!products.find(p => p.id === productId)) return;
-        let cart = getCart();
-        const existing = cart.find(item => item.id === productId);
-        if (existing) {
-            existing.qty += 1;
-        } else {
-            cart.push({ id: productId, qty: 1 });
-        }
-        saveCart(cart);
-        renderCart();
+        await fbAddToCart(productId);
+        await renderCart();
     }
 
-    function updateQty(productId, delta) {
-        let cart = getCart();
-        const item = cart.find(i => i.id === productId);
-        if (!item) return;
-        item.qty += delta;
-        if (item.qty <= 0) {
-            cart = cart.filter(i => i.id !== productId);
-        }
-        saveCart(cart);
-        renderCart();
+    async function updateQty(productId, delta) {
+        await fbUpdateQty(productId, delta);
+        await renderCart();
     }
 
-    function removeItem(productId) {
-        let cart = getCart().filter(i => i.id !== productId);
-        saveCart(cart);
-        renderCart();
+    async function removeItem(productId) {
+        await fbRemoveItem(productId);
+        await renderCart();
     }
 
-    document.addEventListener("click", function (e) {
+    document.addEventListener("click", async function (e) {
         const btn = e.target.closest("[data-action]");
         if (!btn) return;
         const action = btn.dataset.action;
         const id = btn.dataset.id;
-        if (action === "increase") updateQty(id, 1);
-        else if (action === "decrease") updateQty(id, -1);
-        else if (action === "remove") removeItem(id);
-        else if (action === "recommended-add") addToCart(id);
-    });
-
-    window.addEventListener("storage", function (e) {
-        if (e.key === CART_KEY) renderCart();
+        if (action === "increase") await updateQty(id, 1);
+        else if (action === "decrease") await updateQty(id, -1);
+        else if (action === "remove") await removeItem(id);
+        else if (action === "recommended-add") await addToCart(id);
     });
 
     window.cartAdd = addToCart;

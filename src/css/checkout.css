@@ -479,6 +479,12 @@
         flex-direction: column;
         align-items: center;
     }
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        padding: 13px 20px;
+        font-size: 0.95rem;
+    }
     .page-header.checkout-hero {
         padding: 40px 20px;
     }
@@ -489,11 +495,23 @@
         flex-direction: column;
         align-items: center;
     }
+    .success-actions .btn-primary,
+    .success-actions .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
+    .checkout-container {
+        padding: 0 12px;
+    }
     .checkout-intro h2 {
         font-size: 1.6rem;
+    }
+    .checkout-intro p {
+        font-size: 0.9rem;
     }
     .page-header.checkout-hero {
         padding: 32px 16px;
@@ -501,7 +519,88 @@
     .page-header.checkout-hero h1 {
         font-size: 1.7rem;
     }
+    .page-header.checkout-hero p {
+        font-size: 0.95rem;
+    }
     .checkout-form {
         padding: 16px;
+    }
+    .form-header {
+        padding: 14px 16px;
+    }
+    .form-header h3 {
+        font-size: 1.05rem;
+    }
+    .form-group {
+        margin-bottom: 14px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    .payment-options {
+        gap: 8px;
+    }
+    .payment-option {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+    .place-order-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    .checkout-summary .summary-header {
+        padding: 14px 16px;
+    }
+    .checkout-items {
+        padding: 12px 16px 4px;
+    }
+    .checkout-item {
+        gap: 10px;
+    }
+    .checkout-item-info h4 {
+        font-size: 0.9rem;
+    }
+    .checkout-summary .summary-row {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+    }
+    .empty-checkout {
+        padding: 40px 16px;
+    }
+    .empty-checkout i {
+        font-size: 3.2rem;
+    }
+    .empty-checkout h3 {
+        font-size: 1.3rem;
+    }
+    .order-success {
+        padding: 40px 16px;
+    }
+    .order-success i {
+        font-size: 3.2rem;
+    }
+    .order-success h3 {
+        font-size: 1.4rem;
+    }
+    .order-success p {
+        font-size: 0.9rem;
+    }
+    .cta-section {
+        padding: 32px 16px;
+        border-radius: 8px;
+    }
+    .cta-section h3 {
+        font-size: 1.3rem;
+    }
+    .cta-section p {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+    }
+    .cta-buttons .btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
 }

@@ -529,6 +529,11 @@
         width: 100%;
         max-width: 300px;
     }
+    .checkout-btn,
+    .continue-btn {
+        width: auto;
+        box-sizing: border-box;
+    }
     .page-header.cart-hero {
         padding: 40px 20px;
     }
@@ -543,8 +548,14 @@
 }
 
 @media (max-width: 480px) {
+    .cart-container {
+        padding: 0 12px;
+    }
     .cart-intro h2 {
         font-size: 1.6rem;
+    }
+    .cart-intro p {
+        font-size: 0.9rem;
     }
     .empty-cart {
         padding: 36px 16px 32px;
@@ -552,10 +563,74 @@
     .empty-cart i {
         font-size: 4rem;
     }
+    .empty-cart h3 {
+        font-size: 1.3rem;
+    }
+    .empty-cart p {
+        font-size: 0.9rem;
+    }
     .page-header.cart-hero {
         padding: 32px 16px;
     }
     .page-header.cart-hero h1 {
         font-size: 1.7rem;
+    }
+    .page-header.cart-hero p {
+        font-size: 0.95rem;
+    }
+    .cart-items-header {
+        padding: 14px 16px;
+    }
+    .cart-items-header h3 {
+        font-size: 1.05rem;
+    }
+    .cart-items {
+        padding: 12px;
+    }
+    .cart-item {
+        padding: 14px 0;
+        gap: 12px;
+    }
+    .cart-item-info h4 {
+        font-size: 1rem;
+    }
+    .cart-item-price {
+        font-size: 1.05rem;
+    }
+    .summary-content {
+        padding: 14px;
+    }
+    .checkout-btn {
+        margin: 0 0 8px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        width: 100%;
+        border-radius: 0;
+    }
+    .continue-btn {
+        margin: 0 0 0;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        width: 100%;
+        border-radius: 0;
+    }
+    .btn-cart-green {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    .cta-section {
+        padding: 32px 16px;
+        border-radius: 8px;
+    }
+    .cta-section h3 {
+        font-size: 1.3rem;
+    }
+    .cta-section p {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+    }
+    .cta-buttons .btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
 }

@@ -5,82 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQs - Rishi's Lily Farm Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .faq-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .faq-section-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .faq-section-card .section-header {
+            background: var(--primary-green, #2e7d32);
+            color: #fff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .faq-section-card .section-header h3 {
+            margin: 0;
+            flex: 1;
+            font-size: 1.2rem;
+        }
+        .faq-section-card .section-header .section-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .faq-section-card .section-header .section-actions button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .faq-section-card .section-header .section-actions button:hover {
+            background: rgba(255,255,255,0.35);
+        }
+        .faq-section-card .faq-items {
+            padding: 12px 20px 8px;
+        }
+        .faq-section-card .faq-item {
+            border-bottom: 1px solid #e8f0e8;
+        }
+        .faq-section-card .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            cursor: pointer;
+            gap: 12px;
+        }
+        .faq-item-header h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            flex: 1;
+        }
+        .faq-item-header .faq-item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .faq-item-header .faq-item-actions button {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.2s;
+        }
+        .faq-item-header .faq-item-actions button:hover {
+            background: var(--bg);
+        }
+        .faq-item-header .faq-item-actions .btn-edit:hover {
+            color: var(--brand);
+            border-color: var(--brand);
+        }
+        .faq-item-header .faq-item-actions .btn-delete:hover {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        .faq-item-header .faq-toggle-icon {
+            color: var(--primary-green, #2e7d32);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+        .faq-item-header .faq-toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .faq-item-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            color: var(--light-text);
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+        .faq-item-answer.open {
+            max-height: 600px;
+            padding-bottom: 16px;
+        }
+        .faq-item-answer p {
+            margin: 0;
+        }
+        .empty-section-message {
+            color: var(--light-text);
+            font-style: italic;
+            padding: 8px 0 12px;
+            font-size: 0.9rem;
+        }
+        .no-faqs-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--light-text);
+        }
+        .no-faqs-message i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.4;
+        }
+        .no-faqs-message h3 {
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .icon-grid button {
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--dark-text);
+            transition: all 0.2s;
+        }
+        .icon-grid button:hover {
+            border-color: var(--brand);
+        }
+        .icon-grid button.selected {
+            border-color: var(--brand);
+            background: rgba(46, 125, 107, 0.1);
+        }
+        .section-icon-preview {
+            font-size: 1.4rem;
+            color: var(--primary-green, #2e7d32);
+            width: 40px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .faq-item-header {
+                flex-wrap: wrap;
+            }
+            .faq-item-header .faq-item-actions {
+                margin-left: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="admin-app">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <a href="dashboard.html" class="brand-logo">Lily Farm Admin</a>
+                <a href="dashboard.html" class="brand-logo"><i class="fas fa-leaf"></i> Lily Farm Admin</a>
             </div>
-
             <nav class="sidebar-nav">
                 <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="dashboard.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-                            </svg>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="products.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
-                            </svg>
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="pricing-availability.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
-                            </svg>
-                            Pricing & Availability
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="orders.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
-                            </svg>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="reviews.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            Reviews
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="gallery.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                            </svg>
-                            Gallery
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="faqs.html" class="nav-link active">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-                            </svg>
-                            FAQs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="settings.html" class="nav-link">
-                            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
-                            </svg>
-                            Settings
-                        </a>
-                    </li>
+                    <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="products.html" class="nav-link"><i class="fas fa-box"></i> Products</a></li>
+                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Pricing &amp; Availability</a></li>
+                    <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-truck"></i> Orders</a></li>
+                    <li class="nav-item"><a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a></li>
+                    <li class="nav-item"><a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
+                    <li class="nav-item"><a href="faqs.html" class="nav-link active"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                    <li class="nav-item"><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </nav>
         </aside>
@@ -89,32 +205,68 @@
         <main class="admin-main">
             <!-- Topbar -->
             <div class="admin-topbar">
-                <button class="btn btn-secondary d-block d-md-none" data-sidebar-toggle>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                    </svg>
+                <button class="btn btn-secondary d-md-none" data-sidebar-toggle>
+                    <i class="fas fa-bars"></i>
                 </button>
-                
                 <div class="topbar-search">
-                    <input type="search" class="search-input" placeholder="Search FAQs...">
+                    <input type="search" class="search-input" placeholder="Search FAQs..." id="faqSearch" oninput="filterFAQs()">
                 </div>
-                
                 <div class="topbar-actions">
                     <button class="notification-btn" data-modal-target="notifications-modal">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                        </svg>
+                        <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-                    
                     <div class="profile-menu">
                         <button class="profile-btn" data-dropdown-toggle>
                             <div class="avatar">KN</div>
                             <span class="d-none d-md-inline">Kyle Nagee</span>
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
+                            <i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                         </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-overlay d-md-none"></div>
+
+            <div id="notifications-modal" class="modal-backdrop d-none">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Notifications</h3>
+                        <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-list">
+                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                                <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Order Received</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                                <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">Low Stock Alert</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;">
+                                <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Review</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,38 +281,28 @@
                 <!-- FAQ Actions -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-3">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:12px;">
+                            <div class="d-flex gap-3 flex-wrap">
                                 <div class="form-group mb-0">
-                                    <select class="form-control form-select" style="min-width: 150px;">
-                                        <option>All Categories</option>
-                                        <option>Care</option>
-                                        <option>Maintenance</option>
-                                        <option>Payment</option>
-                                        <option>Delivery</option>
-                                        <option>General</option>
+                                    <select class="form-control form-select" id="sectionFilter" style="min-width:180px;" onchange="filterFAQs()">
+                                        <option value="">All Sections</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <select class="form-control form-select" style="min-width: 120px;">
-                                        <option>All Status</option>
-                                        <option>Published</option>
-                                        <option>Draft</option>
-                                        <option>Hidden</option>
+                                    <select class="form-control form-select" id="statusFilter" style="min-width:140px;" onchange="filterFAQs()">
+                                        <option value="">All Status</option>
+                                        <option value="published">Published</option>
+                                        <option value="draft">Draft</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
-                                <button class="btn btn-secondary" data-action="sync-site">
-                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-                                    </svg>
-                                    Sync with Site
+                                <button class="btn btn-secondary" onclick="openNewSectionModal()">
+                                    <i class="fas fa-layer-group"></i>
+                                    New Section
                                 </button>
-                                <button class="btn btn-primary" data-modal-target="add-faq-modal">
-                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                                    </svg>
+                                <button class="btn btn-primary" onclick="openAddFAQModal()">
+                                    <i class="fas fa-plus"></i>
                                     Add FAQ
                                 </button>
                             </div>
@@ -168,238 +310,470 @@
                     </div>
                 </div>
 
-                <!-- FAQs Table -->
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" data-sort="category">Category</th>
-                                <th scope="col" data-sort="question">Question</th>
-                                <th scope="col" data-sort="answer">Answer</th>
-                                <th scope="col" data-sort="status">Status</th>
-                                <th scope="col" data-sort="updated">Last Updated</th>
-                                <th scope="col" style="width: 120px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- SEED DATA -->
-                            <tr data-id="1" class="seed">
-                                <td data-value="care">
-                                    <span class="badge info">Care</span>
-                                </td>
-                                <td data-value="How often should I fertilize lilies?">How often should I fertilize lilies?</td>
-                                <td data-value="Water lilies should be fertilized every 2-3 weeks during the growing season...">Water lilies should be fertilized every 2-3 weeks during the growing season...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2024-01-10T14:30:00">2 days ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-id="2" class="seed">
-                                <td data-value="care">
-                                    <span class="badge info">Care</span>
-                                </td>
-                                <td data-value="Do lotus need full sun?">Do lotus need full sun?</td>
-                                <td data-value="Lotus plants prefer full sun (6-8 hours daily) but can tolerate partial shade...">Lotus plants prefer full sun (6-8 hours daily) but can tolerate partial shade...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2024-01-08T09:15:00">4 days ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-id="3" class="seed">
-                                <td data-value="maintenance">
-                                    <span class="badge warning">Maintenance</span>
-                                </td>
-                                <td data-value="How do I repot a mature lily?">How do I repot a mature lily?</td>
-                                <td data-value="For mature lilies, repotting should be done in early spring before new growth...">For mature lilies, repotting should be done in early spring before new growth...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2024-01-05T16:45:00">1 week ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-id="4" class="seed">
-                                <td data-value="payment">
-                                    <span class="badge primary">Payment</span>
-                                </td>
-                                <td data-value="Do you take online transfers?">Do you take online transfers?</td>
-                                <td data-value="Yes, we accept online transfers, mobile wallet payments, and traditional methods...">Yes, we accept online transfers, mobile wallet payments, and traditional methods...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2024-01-03T11:20:00">1 week ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-id="5" class="seed">
-                                <td data-value="delivery">
-                                    <span class="badge success">Delivery</span>
-                                </td>
-                                <td data-value="What areas do you deliver to?">What areas do you deliver to?</td>
-                                <td data-value="We deliver to Port of Spain, San Fernando, Chaguanas, and Arima...">We deliver to Port of Spain, San Fernando, Chaguanas, and Arima...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2024-01-01T08:30:00">2 weeks ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-id="6" class="seed">
-                                <td data-value="general">
-                                    <span class="badge secondary">General</span>
-                                </td>
-                                <td data-value="What are your opening hours?">What are your opening hours?</td>
-                                <td data-value="We're open Monday to Saturday from 8am to 6pm. Closed on Sundays...">We're open Monday to Saturday from 8am to 6pm. Closed on Sundays...</td>
-                                <td>
-                                    <span class="badge success">Published</span>
-                                </td>
-                                <td data-value="2023-12-28T13:15:00">3 weeks ago</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary" data-action="edit-faq">Edit</button>
-                                        <button class="btn btn-sm btn-danger" data-action="delete-faq">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- FAQ Sections Container -->
+                <div id="faqSectionsContainer">
+                    <div class="no-faqs-message" id="loadingMessage">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        <h3>Loading FAQs...</h3>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Add FAQ Modal -->
-    <div id="add-faq-modal" class="modal-backdrop d-none">
+    <!-- Add/Edit FAQ Modal -->
+    <div id="faq-modal" class="modal-backdrop d-none">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Add New FAQ</h3>
-                <button class="modal-close" type="button">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
+                <h3 class="modal-title" id="faqModalTitle">Add New FAQ</h3>
+                <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <form data-validate>
+                <form id="faqForm" onsubmit="return false;">
                     <div class="form-group">
-                        <label for="faq-category" class="form-label">Category</label>
-                        <select id="faq-category" class="form-control form-select" required>
-                            <option value="">Select Category</option>
-                            <option value="care" selected>Care</option>
-                            <option value="maintenance">Maintenance</option>
-                            <option value="payment">Payment</option>
-                            <option value="delivery">Delivery</option>
-                            <option value="general">General</option>
-                        </select>
+                        <label class="form-label">Section</label>
+                        <div class="d-flex gap-2">
+                            <select id="faqSectionSelect" class="form-control form-select" style="flex:1;" onchange="onSectionSelectChange()">
+                                <option value="">Select Section</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="toggleCustomSection()" title="Add new section">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="customSectionGroup" class="d-none" style="margin-top:8px;">
+                            <div class="d-flex gap-2">
+                                <input type="text" id="faqNewSection" class="form-control" placeholder="New section name..." style="flex:1;">
+                                <select id="faqSectionIcon" class="form-control form-select" style="width:100px;">
+                                    <option value="fa-leaf"><i class="fas fa-leaf"></i> Leaf</option>
+                                    <option value="fa-credit-card">Card</option>
+                                    <option value="fa-question-circle">Q</option>
+                                    <option value="fa-truck">Truck</option>
+                                    <option value="fa-water">Water</option>
+                                    <option value="fa-seedling">Seedling</option>
+                                    <option value="fa-hand-holding-heart">Heart</option>
+                                    <option value="fa-info-circle">Info</option>
+                                    <option value="fa-shield-alt">Shield</option>
+                                    <option value="fa-gem">Gem</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="faq-question" class="form-label">Question</label>
-                        <input type="text" id="faq-question" class="form-control" placeholder="Enter the frequently asked question..." required>
+                        <label for="faqQuestion" class="form-label">Question</label>
+                        <input type="text" id="faqQuestion" class="form-control" placeholder="Enter the frequently asked question..." required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="faq-answer" class="form-label">Answer</label>
-                        <textarea id="faq-answer" class="form-control" rows="6" placeholder="Provide a detailed answer to the question..." required></textarea>
+                        <label for="faqAnswer" class="form-label">Answer</label>
+                        <textarea id="faqAnswer" class="form-control" rows="6" placeholder="Provide a detailed answer to the question..." required></textarea>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="faq-status" class="form-label">Status</label>
-                        <select id="faq-status" class="form-control form-select">
+                        <label for="faqStatus" class="form-label">Status</label>
+                        <select id="faqStatus" class="form-control form-select">
                             <option value="draft">Draft</option>
                             <option value="published" selected>Published</option>
-                            <option value="hidden">Hidden</option>
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-modal-target="add-faq-modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-action="save-faq">Save FAQ</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('faq-modal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveFAQ()"><i class="fas fa-save"></i> Save FAQ</button>
             </div>
         </div>
     </div>
 
+    <!-- New Section Modal -->
+    <div id="new-section-modal" class="modal-backdrop d-none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">New FAQ Section</h3>
+                <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="newSectionForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="newSectionName" class="form-label">Section Name</label>
+                        <input type="text" id="newSectionName" class="form-control" placeholder="e.g. Plant Care &amp; Maintenance" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Icon</label>
+                        <div class="icon-grid" id="iconGrid">
+                            <button type="button" data-icon="fa-leaf" class="selected"><i class="fas fa-leaf"></i></button>
+                            <button type="button" data-icon="fa-credit-card"><i class="fas fa-credit-card"></i></button>
+                            <button type="button" data-icon="fa-question-circle"><i class="fas fa-question-circle"></i></button>
+                            <button type="button" data-icon="fa-truck"><i class="fas fa-truck"></i></button>
+                            <button type="button" data-icon="fa-water"><i class="fas fa-water"></i></button>
+                            <button type="button" data-icon="fa-seedling"><i class="fas fa-seedling"></i></button>
+                            <button type="button" data-icon="fa-hand-holding-heart"><i class="fas fa-hand-holding-heart"></i></button>
+                            <button type="button" data-icon="fa-info-circle"><i class="fas fa-info-circle"></i></button>
+                            <button type="button" data-icon="fa-shield-alt"><i class="fas fa-shield-alt"></i></button>
+                            <button type="button" data-icon="fa-gem"><i class="fas fa-gem"></i></button>
+                            <button type="button" data-icon="fa-sun"><i class="fas fa-sun"></i></button>
+                            <button type="button" data-icon="fa-tree"><i class="fas fa-tree"></i></button>
+                            <button type="button" data-icon="fa-droplet"><i class="fas fa-droplet"></i></button>
+                            <button type="button" data-icon="fa-cart-shopping"><i class="fas fa-cart-shopping"></i></button>
+                            <button type="button" data-icon="fa-clock"><i class="fas fa-clock"></i></button>
+                            <button type="button" data-icon="fa-location-dot"><i class="fas fa-location-dot"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('new-section-modal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createNewSection()"><i class="fas fa-check"></i> Create Section</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal-backdrop d-none">
+        <div class="modal" style="max-width:420px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete FAQ</h3>
+                <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this FAQ?</p>
+                <p style="font-weight:600;" id="deleteFaqQuestion"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase.js"></script>
     <script src="../js/admin.js"></script>
-    <script src="../js/forms.js"></script>
-    <script src="../js/tables.js"></script>
-    
-    <style>
-        .badge.info {
-            background-color: rgba(23, 162, 184, 0.1);
-            color: var(--info);
+
+    <script>
+    let allFAQs = [];
+    let editingFaqId = null;
+    let deletingFaqId = null;
+    let isCustomSection = false;
+
+    // ─── Modal Helpers (use admin.js functions) ───
+    function openModal(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('d-none');
+            document.body.style.overflow = 'hidden';
         }
-        
-        .badge.warning {
-            background-color: rgba(255, 176, 32, 0.1);
-            color: var(--warn);
+    }
+    function closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.add('d-none');
+            document.body.style.overflow = '';
         }
-        
-        .badge.primary {
-            background-color: rgba(46, 125, 107, 0.1);
-            color: var(--brand);
+    }
+
+    // ─── Icon Picker for New Section Modal ───
+    document.addEventListener('DOMContentLoaded', function() {
+        const grid = document.getElementById('iconGrid');
+        if (grid) {
+            grid.addEventListener('click', function(e) {
+                const btn = e.target.closest('button');
+                if (!btn) return;
+                grid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
         }
-        
-        .badge.success {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: var(--ok);
+        loadFAQs();
+    });
+
+    // ─── Load FAQs from Firestore ───
+    async function loadFAQs() {
+        const container = document.getElementById('faqSectionsContainer');
+        container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-spinner fa-pulse"></i><h3>Loading FAQs...</h3></div>';
+
+        try {
+            const snap = await db.collection('faqs').orderBy('section').orderBy('order').get();
+            allFAQs = [];
+            snap.forEach(doc => {
+                allFAQs.push({ id: doc.id, ...doc.data() });
+            });
+            renderFAQs(allFAQs);
+            populateSectionFilter();
+        } catch (e) {
+            console.error('Load FAQs error:', e);
+            container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i><h3>Failed to load FAQs</h3><p>Check console for details.</p></div>';
         }
-        
-        .badge.secondary {
-            background-color: rgba(108, 117, 125, 0.1);
-            color: var(--muted);
+    }
+
+    // ─── Group & Render ───
+    function renderFAQs(faqs) {
+        const container = document.getElementById('faqSectionsContainer');
+        const search = (document.getElementById('faqSearch')?.value || '').toLowerCase();
+        const sectionFilter = document.getElementById('sectionFilter')?.value || '';
+        const statusFilter = document.getElementById('statusFilter')?.value || '';
+
+        let filtered = faqs.filter(f => {
+            if (search && !f.question.toLowerCase().includes(search) && !f.answer.toLowerCase().includes(search)) return false;
+            if (sectionFilter && f.section !== sectionFilter) return false;
+            if (statusFilter && f.status !== statusFilter) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-inbox"></i><h3>No FAQs found</h3><p>Try adjusting filters or add a new FAQ.</p></div>';
+            return;
         }
-        
-        .btn-group {
-            display: flex;
-            gap: var(--gap-xs);
+
+        const grouped = {};
+        filtered.forEach(f => {
+            if (!grouped[f.section]) grouped[f.section] = { icon: f.sectionIcon || 'fa-question-circle', items: [] };
+            grouped[f.section].items.push(f);
+        });
+
+        let html = '<div class="faq-sections">';
+        Object.entries(grouped).forEach(([sectionName, section]) => {
+            html += `
+                <div class="faq-section-card">
+                    <div class="section-header">
+                        <i class="fas ${section.icon}"></i>
+                        <h3>${escapeHtml(sectionName)}</h3>
+                        <div class="section-actions">
+                            <button onclick="openAddFAQModal('${escapeHtml(sectionName)}')" title="Add FAQ to this section"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="faq-items">
+            `;
+            section.items.forEach(f => {
+                const statusClass = f.status === 'published' ? 'badge success' : 'badge warning';
+                const statusLabel = f.status === 'published' ? 'Published' : 'Draft';
+                html += `
+                    <div class="faq-item">
+                        <div class="faq-item-header" onclick="toggleFaqItem(this)">
+                            <h4>${escapeHtml(f.question)}</h4>
+                            <div class="faq-item-actions" onclick="event.stopPropagation()">
+                                <span class="${statusClass}" style="font-size:0.7rem;padding:2px 8px;">${statusLabel}</span>
+                                <button class="btn-edit" onclick="openEditFAQModal('${f.id}')" title="Edit"><i class="fas fa-pen"></i></button>
+                                <button class="btn-delete" onclick="openDeleteModal('${f.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <i class="fas fa-chevron-down faq-toggle-icon"></i>
+                        </div>
+                        <div class="faq-item-answer">
+                            <p>${escapeHtml(f.answer)}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function toggleFaqItem(header) {
+        const item = header.closest('.faq-item');
+        const answer = item.querySelector('.faq-item-answer');
+        const icon = header.querySelector('.faq-toggle-icon');
+        const isOpen = answer.classList.contains('open');
+        answer.classList.toggle('open');
+        icon.classList.toggle('rotated');
+    }
+
+    function populateSectionFilter() {
+        const select = document.getElementById('sectionFilter');
+        const current = select.value;
+        const sections = [...new Set(allFAQs.map(f => f.section).filter(Boolean))].sort();
+        select.innerHTML = '<option value="">All Sections</option>' + sections.map(s => `<option value="${escapeHtml(s)}"${s === current ? ' selected' : ''}>${escapeHtml(s)}</option>`).join('');
+    }
+
+    function filterFAQs() {
+        renderFAQs(allFAQs);
+    }
+
+    // ─── Add/Edit FAQ Modal ───
+    function openAddFAQModal(prefillSection) {
+        editingFaqId = null;
+        document.getElementById('faqModalTitle').textContent = 'Add New FAQ';
+        document.getElementById('faqQuestion').value = '';
+        document.getElementById('faqAnswer').value = '';
+        document.getElementById('faqStatus').value = 'published';
+        isCustomSection = false;
+        document.getElementById('customSectionGroup').classList.add('d-none');
+        document.getElementById('faqNewSection').value = '';
+        populateSectionSelect();
+
+        if (prefillSection) {
+            document.getElementById('faqSectionSelect').value = prefillSection;
         }
-        
-        @media (max-width: 640px) {
-            .table-container {
-                overflow-x: auto;
+        openModal('faq-modal');
+    }
+
+    function openEditFAQModal(id) {
+        const f = allFAQs.find(x => x.id === id);
+        if (!f) return;
+        editingFaqId = id;
+        document.getElementById('faqModalTitle').textContent = 'Edit FAQ';
+        isCustomSection = false;
+        document.getElementById('customSectionGroup').classList.add('d-none');
+        document.getElementById('faqNewSection').value = '';
+        populateSectionSelect();
+        document.getElementById('faqSectionSelect').value = f.section;
+        document.getElementById('faqQuestion').value = f.question;
+        document.getElementById('faqAnswer').value = f.answer;
+        document.getElementById('faqStatus').value = f.status || 'published';
+        openModal('faq-modal');
+    }
+
+    function populateSectionSelect() {
+        const select = document.getElementById('faqSectionSelect');
+        const sections = [...new Set(allFAQs.map(f => f.section).filter(Boolean))].sort();
+        select.innerHTML = '<option value="">Select Section</option>' + sections.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+    }
+
+    function onSectionSelectChange() {
+        const val = document.getElementById('faqSectionSelect').value;
+        if (val) {
+            document.getElementById('customSectionGroup').classList.add('d-none');
+            isCustomSection = false;
+        }
+    }
+
+    function toggleCustomSection() {
+        isCustomSection = !isCustomSection;
+        document.getElementById('customSectionGroup').classList.toggle('d-none', !isCustomSection);
+        if (isCustomSection) {
+            document.getElementById('faqSectionSelect').value = '';
+            document.getElementById('faqNewSection').focus();
+        }
+    }
+
+    async function saveFAQ() {
+        let section = document.getElementById('faqSectionSelect').value;
+        let sectionIcon = 'fa-leaf';
+        if (isCustomSection) {
+            const newName = document.getElementById('faqNewSection').value.trim();
+            if (!newName) { alert('Please enter a section name.'); return; }
+            section = newName;
+            sectionIcon = document.getElementById('faqSectionIcon').value;
+        } else {
+            if (!section) { alert('Please select a section.'); return; }
+            const existing = allFAQs.find(f => f.section === section);
+            if (existing) sectionIcon = existing.sectionIcon || 'fa-question-circle';
+        }
+
+        const question = document.getElementById('faqQuestion').value.trim();
+        const answer = document.getElementById('faqAnswer').value.trim();
+        const status = document.getElementById('faqStatus').value;
+
+        if (!question) { alert('Please enter a question.'); return; }
+        if (!answer) { alert('Please enter an answer.'); return; }
+
+        const btn = document.querySelector('#faq-modal .modal-footer .btn-primary');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Saving...';
+
+        try {
+            if (editingFaqId) {
+                await db.collection('faqs').doc(editingFaqId).update({
+                    section,
+                    sectionIcon,
+                    question,
+                    answer,
+                    status,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                if (window.adminUI && adminUI.showToast) {
+                    adminUI.showToast('FAQ updated successfully', 'success', 'FAQ Updated');
+                }
+            } else {
+                const maxOrder = allFAQs.filter(f => f.section === section).length;
+                await db.collection('faqs').add({
+                    section,
+                    sectionIcon,
+                    question,
+                    answer,
+                    status,
+                    order: maxOrder + 1,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                if (window.adminUI && adminUI.showToast) {
+                    adminUI.showToast('FAQ created successfully', 'success', 'FAQ Saved');
+                }
             }
-            
-            .table {
-                min-width: 600px;
-            }
-            
-            .d-flex {
-                flex-direction: column;
-                gap: var(--gap);
-            }
-            
-            .d-flex .form-group {
-                width: 100%;
-            }
+            closeModal('faq-modal');
+            await loadFAQs();
+        } catch (e) {
+            console.error('Save FAQ error:', e);
+            alert('Failed to save FAQ. Check console.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save FAQ';
         }
-    </style>
+    }
+
+    // ─── Delete FAQ ───
+    function openDeleteModal(id) {
+        const f = allFAQs.find(x => x.id === id);
+        if (!f) return;
+        deletingFaqId = id;
+        document.getElementById('deleteFaqQuestion').textContent = f.question;
+        openModal('delete-modal');
+    }
+
+    async function confirmDelete() {
+        if (!deletingFaqId) return;
+        try {
+            await db.collection('faqs').doc(deletingFaqId).delete();
+            if (window.adminUI && adminUI.showToast) {
+                adminUI.showToast('FAQ deleted permanently', 'success', 'FAQ Deleted');
+            }
+            closeModal('delete-modal');
+            deletingFaqId = null;
+            await loadFAQs();
+        } catch (e) {
+            console.error('Delete FAQ error:', e);
+            alert('Failed to delete FAQ.');
+        }
+    }
+
+    // ─── New Section Modal ───
+    function openNewSectionModal() {
+        document.getElementById('newSectionName').value = '';
+        const grid = document.getElementById('iconGrid');
+        grid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+        grid.querySelector('button')?.classList.add('selected');
+        openModal('new-section-modal');
+    }
+
+    async function createNewSection() {
+        const name = document.getElementById('newSectionName').value.trim();
+        if (!name) { alert('Please enter a section name.'); return; }
+
+        const selectedIcon = document.querySelector('#iconGrid button.selected');
+        const icon = selectedIcon ? selectedIcon.getAttribute('data-icon') : 'fa-leaf';
+
+        closeModal('new-section-modal');
+
+        // Pre-fill the add FAQ modal with the new section using custom section mode
+        openAddFAQModal();
+        isCustomSection = true;
+        document.getElementById('customSectionGroup').classList.remove('d-none');
+        document.getElementById('faqNewSection').value = name;
+        document.getElementById('faqSectionIcon').value = icon;
+        document.getElementById('faqSectionSelect').value = '';
+        document.getElementById('faqQuestion').focus();
+
+        if (window.adminUI && adminUI.showToast) {
+            adminUI.showToast('New section "' + name + '" ready. Add your first FAQ.', 'info', 'Section Created');
+        }
+    }
+
+    // ─── Utility ───
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+    </script>
 </body>
 </html>
-
-
-

@@ -94,21 +94,23 @@
                         <label for="paymentMethod">Payment Method <span class="required">*</span></label>
                         <div class="payment-options" id="paymentMethod">
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="cash" checked>
+                                <input type="radio" name="payment" value="cash" checked onchange="togglePaymentDetails()">
                                 <i class="fas fa-money-bill-wave"></i> Cash
                             </label>
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="card">
-                                <i class="fas fa-credit-card"></i> Card
+                                <input type="radio" name="payment" value="wire" onchange="togglePaymentDetails()">
+                                <i class="fas fa-university"></i> Wire Transfer
                             </label>
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="bank">
-                                <i class="fas fa-university"></i> Bank Transfer
-                            </label>
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="mobile">
-                                <i class="fas fa-mobile-alt"></i> Mobile Wallet
-                            </label>
+                        </div>
+                        <div id="wireDetails" class="wire-transfer-info" style="display:none;margin-top:12px;background:#f9f9f9;border:1px solid #ddd;border-radius:8px;padding:16px;">
+                            <h4 style="margin:0 0 10px;font-size:1rem;"><i class="fas fa-university"></i> Wire Transfer Details</h4>
+                            <p style="margin:4px 0;"><strong>Pay to:</strong> <span id="wireAcctName">Rishi's Lily Farm &amp; Exotic Plants</span></p>
+                            <p style="margin:4px 0;"><strong>Bank:</strong> <span id="wireBank">Scotiabank Couva</span></p>
+                            <p style="margin:4px 0;"><strong>Account #:</strong> <span id="wireAcctNum">2416939</span> (<span id="wireAcctType">Chequing</span>)</p>
+                            <div style="margin-top:10px;padding:10px;background:#fff3cd;border-radius:6px;font-size:0.85rem;">
+                                <i class="fas fa-envelope"></i>
+                                <strong>Important:</strong> After making the transfer, please email a screenshot or reference of the payment to <strong id="wireEmail">darren.kowlessar6@gmail.com</strong> so we can confirm your order.
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="place-order-btn"><i class="fas fa-check-circle"></i> Place Order</button>
@@ -163,7 +165,12 @@
         <div id="footer"></div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="src/js/firebase-config.js"></script>
+    <script src="src/js/firebase.js"></script>
     <script src="src/js/checkout.js"></script>
+    <script src="src/js/footer.js"></script>
     <script>
         fetch("src/components/navbar.html")
             .then(response => response.text())
@@ -184,11 +191,6 @@
                 }
             });
 
-        fetch("src/components/footer.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("footer").innerHTML = data;
-            });
     </script>
 </body>
 </html>

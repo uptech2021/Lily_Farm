@@ -67,7 +67,7 @@
                             <span id="total">$0.00</span>
                         </div>
                     </div>
-                    <a href="checkout.html" class="btn btn-primary checkout-btn"><i class="fas fa-lock"></i> Proceed to Checkout</a>
+                    <a href="checkout.html" class="btn btn-primary"><i class="fas fa-lock"></i> Proceed to Checkout</a>
                     <a href="products.html" class="btn btn-secondary continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
                 </div>
             </div>
@@ -87,7 +87,12 @@
         <div id="footer"></div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="src/js/firebase-config.js"></script>
+    <script src="src/js/firebase.js"></script>
     <script src="src/js/cart.js"></script>
+    <script src="src/js/footer.js"></script>
     <script>
         fetch("src/components/navbar.html")
             .then(response => response.text())
@@ -108,11 +113,6 @@
                 }
             });
 
-        fetch("src/components/footer.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("footer").innerHTML = data;
-            });
     </script>
 </body>
 </html>

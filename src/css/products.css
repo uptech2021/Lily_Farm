@@ -1,1 +1,126 @@
-/* Products & Fertilizer styles - Jasmine */
+.products-header {
+  text-align: center;
+  padding: 30px 20px 10px;
+}
+
+.products-header h1 {
+  font-size: 2em;
+  color: var(--dark-text);
+  margin-bottom: 10px;
+}
+
+.products-header p {
+  color: var(--light-text);
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+figure {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+figure:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+figure a {
+  display: block;
+}
+
+figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+}
+
+figcaption {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #444;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+h2 {
+  text-align: center;
+  color: var(--primary-green);
+  font-size: 1.8rem;
+  margin-top: 40px;
+  padding: 0 16px;
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .products-header h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 30px;
+  }
+
+  figcaption {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .products-header {
+    padding: 20px 12px 10px;
+  }
+
+  .products-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .products-header p {
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 24px;
+  }
+
+  figure {
+    padding: 8px;
+  }
+
+  figcaption {
+    font-size: 0.8rem;
+  }
+}

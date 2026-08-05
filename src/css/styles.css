@@ -109,7 +109,7 @@
             display: none;
             background: none;
             border: none;
-            color: white;
+            color: var(--primary-green);
             font-size: 1.5rem;
             cursor: pointer;
             padding: 10px;
@@ -240,19 +240,38 @@
                 gap: 5px;
             }
             
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                z-index: 99;
+                padding: 0;
+            }
+            
             .nav-links {
                 display: none;
                 flex-direction: column;
                 width: 100%;
+                background-color: var(--light-green);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             }
             
             .nav-links.active {
                 display: flex;
             }
             
+            .nav-links a {
+                padding: 16px 24px;
+                font-size: 1rem;
+                border-bottom: 1px solid rgba(255,255,255,0.15);
+            }
+            
             .mobile-menu-btn {
                 display: block;
                 margin-left: auto;
+                padding: 12px;
+                font-size: 1.6rem;
             }
             
             .page-header {
@@ -280,13 +299,54 @@
 
         @media (max-width: 480px) {
             .logo-container {
+                position: relative;
                 flex-direction: column;
                 text-align: center;
                 gap: 10px;
+                padding: 12px 16px;
+            }
+            
+            .mobile-menu-btn {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                margin-left: 0;
             }
             
             .logo-text h1 {
                 font-size: 1.5rem;
+            }
+            
+            .logo-text p {
+                font-size: 0.8rem;
+            }
+            
+            .top-bar {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .contact-info {
+                gap: 3px;
+            }
+            
+            .footer-content {
+                gap: 24px;
+                padding: 0 12px;
+            }
+            
+            .footer-column h4 {
+                font-size: 1.05rem;
+            }
+            
+            .social-icons {
+                gap: 10px;
+            }
+            
+            .social-icons a {
+                width: 34px;
+                height: 34px;
+                font-size: 0.85rem;
             }
             
             .section-header {
@@ -297,6 +357,22 @@
             
             .payment-methods, .care-tips {
                 justify-content: center;
+            }
+            
+            .page-header {
+                padding: 40px 16px;
+            }
+            
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .page-header p {
+                font-size: 0.95rem;
+            }
+            
+            footer {
+                padding: 30px 16px 16px;
             }
         }
   
