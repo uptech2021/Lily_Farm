@@ -4,7 +4,7 @@
     description: 'The only place in Trinidad to find these exclusive lilies and exotic plants. Family-owned since 2019.',
     phone: '(868) 710-4296',
     email: 'darren.kowlessar6@gmail.com',
-    address: '#6 Kowlessar Street, Dallo Road, Gasparillo, Trindad',
+    address: '#6 Kowlessar Street, Dalloo Road, Gasparillo, Trinidad and Tobago 570543',
     hours: 'Mon-Sat: 8am-5pm | Sun: Closed',
     facebookUrl: '#',
     instagramUrl: '#',

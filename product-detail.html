@@ -11,6 +11,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <script src="src/js/firebase-config.js"></script>
   <script src="src/js/firebase.js"></script>
+  <script src="src/js/utils.js"></script>
   <script src="src/js/products.js"></script>
   <script src="src/js/promotions.js"></script>
   <script src="src/js/footer.js"></script>
@@ -124,6 +125,33 @@
 
   function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
+  function getProductImage(product) {
+    if (!product) return 'img/lily%20flowers.jpg';
+    if (product.image) return product.image;
+
+    const imageMap = {
+      'amaryllis': 'img/amaryllis.jpg',
+      'red-amaryllis': 'img/red-amaryllis.jpg',
+      'light-yellow-day-bloomer': 'img/light-yellow-day-bloomer.jpg',
+      'dark-yellow-day-bloomer': 'img/dark-yellow-day-bloomer.jpg',
+      'purple-blue-day-bloomer': 'img/purple-blue-day-bloomer.jpg',
+      'light-purple-day-bloomer': 'img/light-purple-day-bloomer.jpg',
+      'dark-purple-day-bloomer': 'img/dark-purple-day-bloomer.jpg',
+      'white-night-bloomer': 'img/white-night-bloomer.jpg',
+      'light-pink-night-bloomer': 'img/light-pink-night-bloomer.jpg',
+      'dark-pink-night-bloomer': 'img/dark-pink-night-bloomer.jpg',
+      'pink-indian-lotus': 'img/pink-indian-lotus.jpg',
+      'golden-champaca': 'img/golden-champaca.jpg',
+      'rangoon-creeper': 'img/rangoon-creeper.jpg',
+      'parrots-beak-heliconia': 'img/parrot\'s-beak-heliconia.jpg',
+      'variegated-purple-day-bloomer': 'img/variegated-purple-day-bloomer.jpg',
+      'white-purple-day-bloomer': 'img/white-purple-day-bloomer.jpg'
+    };
+
+    const slug = (product.slug || product.id || '').toLowerCase();
+    return imageMap[slug] || 'img/lily%20flowers.jpg';
+  }
+
   function renderProduct(product) {
     if (!product) {
       document.getElementById("productLoading").style.display = "none";
@@ -160,10 +188,11 @@
     }
 
     const imgEl = document.getElementById("productImage");
-    if (product.image) {
-      imgEl.src = product.image;
+    const imageSrc = getProductImage(product);
+    if (imageSrc) {
+      imgEl.src = imageSrc;
       imgEl.alt = product.name;
-      document.getElementById("productImageWrapper").innerHTML = '<img id="productImage" src="' + esc(product.image) + '" alt="' + esc(product.name) + '" onerror="this.outerHTML=\'<div class=\\\'no-img\\\'><i class=\\\'fas fa-image\\\'></i></div>\'">';
+      document.getElementById("productImageWrapper").innerHTML = '<img id="productImage" src="' + esc(imageSrc) + '" alt="' + esc(product.name) + '" onerror="this.outerHTML=\'<div class=\\\'no-img\\\'><i class=\\\'fas fa-image\\\'></i></div>\'">';
     } else {
       document.getElementById("productImageWrapper").innerHTML = '<div class="no-img"><i class="fas fa-image"></i></div>';
     }
@@ -194,13 +223,36 @@
     document.getElementById("productContent").style.display = "flex";
     document.getElementById("productLoading").style.display = "none";
 
+    // Track product view
+    if (window.fbLogActivity) {
+      fbLogActivity("product_view", {
+        productId: product.slug,
+        productName: product.name,
+        category: product.category,
+        price: product.price
+      });
+    }
+
     document.getElementById("addToCartBtn").onclick = async function() {
       if (this.disabled) return;
       this.disabled = true;
       await fbAddToCart(product.slug);
       await updateCartCount();
+      updateCartBadge();
+      // Track add to cart
+      if (window.fbLogActivity) {
+        fbLogActivity("add_to_cart", {
+          productId: product.slug,
+          productName: product.name,
+          price: product.price
+        });
+      }
       showToast(product.name + " added to cart!");
-      this.disabled = false;
+      
+      // Redirect to cart page after brief delay to show toast
+      setTimeout(() => {
+        window.location.href = "cart.html";
+      }, 500);
     };
 
     updateCartCount();

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="src/css/styles.css">
     <link rel="stylesheet" href="src/css/faq.css">
+    <link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
 <body>
     <div id="navbar"></div>
@@ -19,21 +20,58 @@
 
     <!-- FAQ Container -->
     <main class="faq-container">
-        <div class="faq-intro">
-            <h2>How Can We Help You?</h2>
-            <p>At Rishi's Lily Farm, we're passionate about helping you succeed with your plants and lilies. Browse our FAQ sections below for expert advice and information.</p>
+        <!-- Search & Filter Section -->
+        <div class="faq-search-section">
+            <div class="faq-intro">
+                <h2>✨ Expert Answers to Your Questions</h2>
+                <p>Discover everything you need to know about plant care, ordering, delivery, and more</p>
+            </div>
+            
+            <div class="search-box-wrapper">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input 
+                        type="text" 
+                        id="faqSearch" 
+                        placeholder="Search FAQs by keyword..." 
+                        class="faq-search-input"
+                    >
+                    <button class="search-clear" id="searchClear" title="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="category-filters" id="categoryFilters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i> All Categories
+                </button>
+            </div>
+        </div>
+
+        <!-- FAQ Sections (dynamic) -->
+        <div class="faq-sections-wrapper">
+            <div class="faq-sections" id="faqSections"></div>
         </div>
         
-        <!-- FAQ Sections (dynamic) -->
-        <div class="faq-sections" id="faqSections"></div>
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults" style="display:none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No Results Found</h3>
+            <p>Try different keywords or browse all categories</p>
+        </div>
         
         <!-- CTA Section -->
         <section class="cta-section">
-            <h3>Still Have Questions?</h3>
-            <p>Can't find what you're looking for? Our plant experts are here to help you with any questions about plant care, ordering, or visiting our farm.</p>
-            <div class="cta-buttons">
-                <a href="contact.html" class="btn btn-primary">Contact Us</a>
-                <a href="products.html" class="btn btn-secondary">Browse Products</a>
+            <div class="cta-content">
+                <i class="fas fa-comments"></i>
+                <h3>Still Have Questions?</h3>
+                <p>Can't find the answer? Our plant experts are just one click away and ready to help with any questions about plant care, ordering, or visiting our farm.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> Contact Us</a>
+                    <a href="products.html" class="btn btn-secondary"><i class="fas fa-leaf"></i> Browse Plants</a>
+                </div>
             </div>
         </section>
     </main>
@@ -47,12 +85,18 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="src/js/firebase-config.js"></script>
     <script src="src/js/firebase.js"></script>
+    <script src="src/js/utils.js"></script>
     <script src="src/js/footer.js"></script>
 
     <script>
+    let allFAQs = [];
+    let currentFilter = 'all';
+
     document.addEventListener('DOMContentLoaded', async function() {
         await loadFAQs();
         initAccordion();
+        initSearch();
+        initFilters();
     });
 
     async function loadFAQs() {
@@ -63,28 +107,40 @@
             const snap = await db.collection('faqs').where('status', '==', 'published').orderBy('section').orderBy('order').get();
             const faqs = [];
             snap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
+            allFAQs = faqs;
 
             const grouped = {};
+            const categories = new Set();
+            
             faqs.forEach(f => {
+                categories.add(f.section);
                 if (!grouped[f.section]) grouped[f.section] = { icon: f.sectionIcon || 'fa-question-circle', items: [] };
                 grouped[f.section].items.push(f);
             });
 
+            // Build category filter buttons
+            buildCategoryFilters([...categories]);
+
             let html = '';
-            Object.entries(grouped).forEach(([sectionName, section]) => {
+            Object.entries(grouped).forEach(([sectionName, section], index) => {
                 html += `
-                    <section class="faq-section">
+                    <section class="faq-section" data-category="${esc(sectionName)}">
                         <div class="section-header">
+                            <span class="section-badge">${index + 1}</span>
                             <i class="fas ${section.icon}"></i>
                             <h3>${esc(sectionName)}</h3>
+                            <span class="question-count">${section.items.length}</span>
                         </div>
                         <div class="faq-items">
                 `;
-                section.items.forEach(f => {
+                section.items.forEach((f, qIndex) => {
                     html += `
-                        <div class="faq-item">
+                        <div class="faq-item" data-question="${esc(f.question).toLowerCase()}" data-category="${esc(sectionName)}">
                             <div class="faq-question">
-                                <h4>${esc(f.question)}</h4>
+                                <div class="question-header">
+                                    <span class="q-number">${qIndex + 1}</span>
+                                    <h4>${esc(f.question)}</h4>
+                                </div>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
                             <div class="faq-answer">
@@ -99,8 +155,81 @@
             container.innerHTML = html || '<p style="text-align:center;padding:40px;color:var(--light-text);">FAQs coming soon!</p>';
         } catch (e) {
             console.error('Failed to load FAQs:', e);
-            container.innerHTML = '<p style="text-align:center;padding:40px;color:var(--light-text);">Unable to load FAQs right now. Please try again later.</p>';
+            document.getElementById('faqSections').innerHTML = '<p style="text-align:center;padding:40px;color:var(--light-text);">Unable to load FAQs right now. Please try again later.</p>';
         }
+    }
+
+    function buildCategoryFilters(categories) {
+        const filterContainer = document.getElementById('categoryFilters');
+        if (!filterContainer) return;
+        
+        filterContainer.innerHTML = `
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-list"></i> All Categories
+            </button>
+        `;
+        
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.dataset.filter = cat;
+            btn.innerHTML = `<i class="fas fa-filter"></i> ${esc(cat)}`;
+            filterContainer.appendChild(btn);
+        });
+    }
+
+    function initFilters() {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                filterFAQs();
+            });
+        });
+    }
+
+    function initSearch() {
+        const searchInput = document.getElementById('faqSearch');
+        const searchClear = document.getElementById('searchClear');
+        
+        if (searchInput) {
+            searchInput.addEventListener('keyup', filterFAQs);
+        }
+        if (searchClear) {
+            searchClear.addEventListener('click', function() {
+                searchInput.value = '';
+                filterFAQs();
+                searchInput.focus();
+            });
+        }
+    }
+
+    function filterFAQs() {
+        const searchTerm = document.getElementById('faqSearch').value.toLowerCase();
+        const faqItems = document.querySelectorAll('.faq-item');
+        const faqSections = document.querySelectorAll('.faq-section');
+        let visibleCount = 0;
+
+        faqItems.forEach(item => {
+            const questionText = item.dataset.question || '';
+            const category = item.dataset.category || '';
+            const matchesSearch = questionText.includes(searchTerm);
+            const matchesFilter = currentFilter === 'all' || category === currentFilter;
+            const shouldShow = matchesSearch && matchesFilter;
+
+            item.style.display = shouldShow ? 'block' : 'none';
+            if (shouldShow) visibleCount++;
+        });
+
+        // Hide empty sections
+        faqSections.forEach(section => {
+            const visibleItems = section.querySelectorAll('.faq-item[style="display: block"]').length;
+            section.style.display = visibleItems > 0 ? 'block' : 'none';
+        });
+
+        // Show/hide no results message
+        document.getElementById('noResults').style.display = visibleCount === 0 ? 'flex' : 'none';
     }
 
     function initAccordion() {
@@ -128,11 +257,12 @@
         return d.innerHTML;
     }
 
-    // Navbar and footer (unchanged from original)
+    // Navbar and footer
     fetch("src/components/navbar.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("navbar").innerHTML = data;
+            updateCartBadge();
             const mobileMenuBtn = document.getElementById("mobileMenuBtn");
             const navLinksMenu = document.getElementById("navLinks");
             if (mobileMenuBtn && navLinksMenu) {
@@ -149,5 +279,6 @@
         });
 
     </script>
+    <script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>

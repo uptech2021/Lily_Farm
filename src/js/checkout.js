@@ -167,6 +167,9 @@
             var email = document.getElementById("email").value.trim();
             var phone = document.getElementById("phone").value.trim();
             var delivery = document.getElementById("deliveryOption").value;
+            var paymentMethod = document.querySelector('[name="payment"]:checked')?.value || "card";
+            var region = document.getElementById("region")?.value || null;
+            var address = document.getElementById("address")?.value || null;
 
             if (!name || !email || !phone || !delivery) {
                 var firstInvalid = form.querySelector(":invalid") || form.querySelector("#fullName");
@@ -177,11 +180,69 @@
             var cart = await fbGetCart();
             if (!cart.length) return;
 
-            await fbClearCart();
+            // Calculate totals
+            var subtotal = 0;
+            cart.forEach(function(item) {
+                var prod = window.products ? window.products[item.id] : null;
+                if (prod) subtotal += Number(prod.price) * item.qty;
+            });
+            var deliveryFee = calcDeliveryFee(subtotal, delivery, region);
+            var total = subtotal + deliveryFee;
 
-            document.getElementById("checkoutContent").style.display = "none";
-            document.getElementById("orderSuccess").style.display = "block";
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            // Disable form during submission
+            form.style.opacity = "0.6";
+            form.style.pointerEvents = "none";
+
+            try {
+                // Save customer data
+                await fbSaveCustomer({ name, email, phone });
+
+                // Save order to Firebase
+                var orderId = await fbSaveOrder({
+                    customerName: name,
+                    customerEmail: email,
+                    customerPhone: phone,
+                    items: cart,
+                    subtotal: subtotal,
+                    deliveryFee: deliveryFee,
+                    total: total,
+                    deliveryOption: delivery,
+                    paymentMethod: paymentMethod,
+                    region: region,
+                    address: address
+                });
+
+                // Log activity
+                await fbLogActivity("purchase", {
+                    orderId: orderId,
+                    total: total,
+                    itemCount: cart.length
+                });
+
+                // Clear cart
+                await fbClearCart();
+
+                // Show success
+                document.getElementById("checkoutContent").style.display = "none";
+                document.getElementById("orderSuccess").style.display = "block";
+                
+                // Display order confirmation details
+                var orderIdEl = document.getElementById("orderIdDisplay");
+                if (orderIdEl) {
+                    orderIdEl.textContent = orderId;
+                }
+                var orderEmailEl = document.getElementById("orderEmailDisplay");
+                if (orderEmailEl) {
+                    orderEmailEl.textContent = email;
+                }
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } catch (error) {
+                console.error("Checkout error:", error);
+                alert("Error processing order. Please try again.");
+                form.style.opacity = "1";
+                form.style.pointerEvents = "auto";
+            }
         });
     }
 

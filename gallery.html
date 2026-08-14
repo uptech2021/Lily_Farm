@@ -7,6 +7,7 @@
   <title>Gallery – Rishi Lily Farm</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="src/css/styles.css" />
+  <link rel="stylesheet" href="src/css/whatsapp-button.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -127,6 +128,37 @@
       color: #9a8a70;
     }
 
+    .card-price {
+      font-weight: 700;
+      color: #2e7d32;
+      font-size: 1.05rem;
+      margin-top: 0.5rem;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      margin-top: 0.75rem;
+      padding: 0.6rem 1rem;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.3s ease;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+    }
+
+    .add-to-cart-btn:hover {
+      background: #1b5e20;
+    }
+
+    .add-to-cart-btn:active {
+      transform: scale(0.98);
+    }
+
     /* ── Footer ── */
     footer {
       text-align: center;
@@ -140,6 +172,35 @@
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Toast Notification ── */
+    .toast-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2e7d32;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 0.9rem;
+      animation: slideIn 0.3s ease both;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(400px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(400px); }
+    }
+
+    .toast-notification.fade-out {
+      animation: slideOut 0.3s ease both;
     }
   </style>
 </head>
@@ -167,11 +228,14 @@
 
       <div class="card" data-tag="Red">
         <div class="card-img-wrap">
-          <img class="card-img" src="amaryllis.jpg" alt="Amaryllis" />
+          <img class="card-img" src="img/red-amaryllis.jpg" alt="Amaryllis" />
         </div>
         <div class="card-info">
           <p class="name">Amaryllis</p>
           <span class="tag">Red</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">A stunning water lily with vibrant, graceful petals. Perfect for pond gardens and outdoor water features. Easy to grow and blooms prolifically throughout the season.</p>
+          <div class="card-price">TTD $45.00</div>
+          <button class="add-to-cart-btn" data-product-id="amaryllis" data-product-name="Amaryllis" data-product-price="45.00">Add to Cart</button>
         </div>
       </div>
 
@@ -182,6 +246,9 @@
         <div class="card-info">
           <p class="name">Light Yellow Day Bloomer</p>
           <span class="tag">Yellow</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Cheerful light yellow blooms that open during the day and close at night. Creates a bright, sunny appearance in water gardens. Hardy variety ideal for tropical climates.</p>
+          <div class="card-price">TTD $50.00</div>
+          <button class="add-to-cart-btn" data-product-id="light-yellow-day-bloomer" data-product-name="Light Yellow Day Bloomer" data-product-price="50.00">Add to Cart</button>
         </div>
       </div>
 
@@ -192,6 +259,9 @@
         <div class="card-info">
           <p class="name">Pink Indian Lotus</p>
           <span class="tag">Pink</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Elegant pink lotus with sacred spiritual significance. Large, fragrant blooms on tall stems. Requires warm water and full sunlight. A majestic centerpiece for any water garden.</p>
+          <div class="card-price">TTD $55.00</div>
+          <button class="add-to-cart-btn" data-product-id="pink-indian-lotus" data-product-name="Pink Indian Lotus" data-product-price="55.00">Add to Cart</button>
         </div>
       </div>
 
@@ -202,6 +272,9 @@
         <div class="card-info">
           <p class="name">Dark Yellow Day Bloomer</p>
           <span class="tag">Yellow</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Rich, deep golden-yellow petals that create dramatic color contrast in water gardens. Day-blooming variety with excellent hardiness. Perfect for warm water environments.</p>
+          <div class="card-price">TTD $52.00</div>
+          <button class="add-to-cart-btn" data-product-id="dark-yellow-day-bloomer" data-product-name="Dark Yellow Day Bloomer" data-product-price="52.00">Add to Cart</button>
         </div>
       </div>
 
@@ -212,6 +285,9 @@
         <div class="card-info">
           <p class="name">Golden Champaca</p>
           <span class="tag">Yellow</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Named for its champagne-colored golden blooms. Highly fragrant with delicate, silky petals. Thrives in warm, tropical waters and produces multiple blooms per season.</p>
+          <div class="card-price">TTD $48.00</div>
+          <button class="add-to-cart-btn" data-product-id="golden-champaca" data-product-name="Golden Champaca" data-product-price="48.00">Add to Cart</button>
         </div>
       </div>
 
@@ -222,6 +298,9 @@
         <div class="card-info">
           <p class="name">Purple Blue Day Bloomer</p>
           <span class="tag">Purple</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Rare purple-blue hybrid with exceptional ornamental value. Diurnal blooming pattern from dawn to dusk. Adds sophisticated color to any aquatic garden collection.</p>
+          <div class="card-price">TTD $58.00</div>
+          <button class="add-to-cart-btn" data-product-id="purple-blue-day-bloomer" data-product-name="Purple Blue Day Bloomer" data-product-price="58.00">Add to Cart</button>
         </div>
       </div>
 
@@ -232,6 +311,9 @@
         <div class="card-info">
           <p class="name">White Night Bloomer</p>
           <span class="tag">White</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Pure white petals that bloom only at night and close at dawn. Highly fragrant, perfect for evening garden enjoyment. Night-blooming varieties create magical nocturnal displays.</p>
+          <div class="card-price">TTD $60.00</div>
+          <button class="add-to-cart-btn" data-product-id="white-night-bloomer" data-product-name="White Night Bloomer" data-product-price="60.00">Add to Cart</button>
         </div>
       </div>
 
@@ -242,6 +324,9 @@
         <div class="card-info">
           <p class="name">Whitebloomer</p>
           <span class="tag">White</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Classic white water lily with pristine petals and golden stamens. Reliable bloomer throughout warm seasons. Ideal for creating elegant, serene water garden aesthetics.</p>
+          <div class="card-price">TTD $56.00</div>
+          <button class="add-to-cart-btn" data-product-id="whitebloomer" data-product-name="Whitebloomer" data-product-price="56.00">Add to Cart</button>
         </div>
       </div>
 
@@ -252,6 +337,9 @@
         <div class="card-info">
           <p class="name">Rangoon Creeper</p>
           <span class="tag">Pink</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Tropical climbing plant with fragrant flowers that change color from white to pink to red as they mature. Highly ornamental foliage. Perfect for trellises and water garden edges.</p>
+          <div class="card-price">TTD $44.00</div>
+          <button class="add-to-cart-btn" data-product-id="rangoon-creeper" data-product-name="Rangoon Creeper" data-product-price="44.00">Add to Cart</button>
         </div>
       </div>
 
@@ -262,6 +350,9 @@
         <div class="card-info">
           <p class="name">Dark Purple Day Bloomer</p>
           <span class="tag">Purple</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Deep, regal purple blooms that open during daylight hours. Striking focal point for water gardens. Vigorous grower with prolific flowering and excellent hardiness.</p>
+          <div class="card-price">TTD $59.00</div>
+          <button class="add-to-cart-btn" data-product-id="dark-purple-day-bloomer" data-product-name="Dark Purple Day Bloomer" data-product-price="59.00">Add to Cart</button>
         </div>
       </div>
 
@@ -272,6 +363,9 @@
         <div class="card-info">
           <p class="name">Dark Pink Night Bloomer</p>
           <span class="tag">Pink</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Romantic deep pink flowers that open exclusively at night with intoxicating fragrance. Rare night-blooming variety. Creates enchanting moonlit water garden scenes.</p>
+          <div class="card-price">TTD $62.00</div>
+          <button class="add-to-cart-btn" data-product-id="dark-pink-night-bloomer" data-product-name="Dark Pink Night Bloomer" data-product-price="62.00">Add to Cart</button>
         </div>
       </div>
 
@@ -282,6 +376,9 @@
         <div class="card-info">
           <p class="name">Light Pink Night Bloomer</p>
           <span class="tag">Pink</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Soft, delicate pink petals that bloom under moonlight. Sweetly scented night flowers add mystique to evening gardens. Thrives in warm tropical and subtropical waters.</p>
+          <div class="card-price">TTD $61.00</div>
+          <button class="add-to-cart-btn" data-product-id="light-pink-night-bloomer" data-product-name="Light Pink Night Bloomer" data-product-price="61.00">Add to Cart</button>
         </div>
       </div>
 
@@ -292,6 +389,9 @@
         <div class="card-info">
           <p class="name">Light Purple Day Bloomer</p>
           <span class="tag">Purple</span>
+          <p style="font-size:0.85rem;color:#666;margin:6px 0;">Pale lavender blooms with graceful form, opening during daylight. Elegant variety for formal water gardens. Produces multiple flowers throughout the warm season.</p>
+          <div class="card-price">TTD $57.00</div>
+          <button class="add-to-cart-btn" data-product-id="light-purple-day-bloomer" data-product-name="Light Purple Day Bloomer" data-product-price="57.00">Add to Cart</button>
         </div>
       </div>
 
@@ -309,6 +409,7 @@
         .then(response => response.text())
         .then(data => {
             document.getElementById("navbar").innerHTML = data;
+            updateCartBadge();
 
             // Mobile menu toggle
             const mobileMenuBtn = document.getElementById("mobileMenuBtn");
@@ -333,8 +434,93 @@
                 }
             });
         });
+
+    // ================= GALLERY FILTERS =================
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const galleryCards = document.querySelectorAll(".card");
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        
+        // Add active class to clicked button
+        this.classList.add("active");
+        
+        // Get the selected tag
+        const selectedTag = this.getAttribute("data-tag");
+        
+        // Show/hide cards based on selected tag
+        galleryCards.forEach(card => {
+          if (selectedTag === "All" || card.getAttribute("data-tag") === selectedTag) {
+            card.classList.remove("hidden");
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+      });
+    });
+
+    // ================= ADD TO CART =================
+    const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
+    
+    addToCartButtons.forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        const productId = this.getAttribute("data-product-id");
+        const productName = this.getAttribute("data-product-name");
+        const productPrice = this.getAttribute("data-product-price");
+        addToCart(productId, productName, productPrice);
+      });
+    });
+    
+    function addToCart(productId, productName, productPrice) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = cart.find(item => item.id === productId);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id: productId, name: productName, price: productPrice, quantity: 1 });
+      }
+      
+      localStorage.setItem("cart", JSON.stringify(cart));
+      
+      // Calculate total items in cart
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      
+      // Show toast notification with cart count
+      showToast(`${productName} added to cart! (${totalItems} item${totalItems !== 1 ? 's' : ''} in cart)`);
+      
+      // Update cart badge
+      updateCartBadge();
+    }
+
+    function showToast(message) {
+      // Remove existing toast if any
+      const existingToast = document.querySelector('.toast-notification');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = 'toast-notification';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 3000);
+    }
   </script>
 
+  <script src="src/js/utils.js"></script>
   <script src="src/js/footer.js"></script>
+  <script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>
