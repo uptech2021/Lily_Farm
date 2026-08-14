@@ -4,9 +4,12 @@
   "description": "Rishi's Lily Farm and Exotic Plants - Collaborative Web Development Project",
   "main": "index.html",
   "scripts": {
-    "start": "live-server --port=3000",
-    "build": "echo 'Build process for static site'",
-    "dev": "live-server --port=3000 --open"
+    "config": "node scripts/generate-firebase-config.js",
+    "prestart": "npm run config",
+    "start": "live-server --port=3000 --middleware=scripts/deny-env-middleware.js",
+    "build": "npm run config",
+    "predev": "npm run config",
+    "dev": "live-server --port=3000 --open --middleware=scripts/deny-env-middleware.js"
   },
   "keywords": [
     "lily-farm",
