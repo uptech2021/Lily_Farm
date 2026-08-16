@@ -16,6 +16,47 @@
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
+        @keyframes buttonFloat {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        button,
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-outline,
+        .add-to-cart-btn,
+        .view-details-btn,
+        .use-location-btn,
+        .search-btn,
+        .submit-btn {
+            position: relative;
+            cursor: pointer;
+            animation: buttonFloat 3.2s ease-in-out infinite;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
+
+        button:hover,
+        .btn:hover,
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-outline:hover,
+        .add-to-cart-btn:hover,
+        .view-details-btn:hover,
+        .use-location-btn:hover,
+        .search-btn:hover,
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            filter: brightness(1.06) saturate(1.08);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+        }
+
         body {
             background-color: #f5f5f5;
             color: var(--dark-text);
@@ -251,6 +292,96 @@
 
         .social-icons a:hover {
             background-color: var(--primary-green);
+        }
+
+        .payment-badges-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            margin: 18px auto 10px;
+            flex-wrap: wrap;
+        }
+
+        .payment-badge {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 240px;
+            height: 92px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .payment-badge span {
+            position: relative;
+            z-index: 1;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .visa-badge {
+            background: #f5f5f5;
+            color: #1a1f71;
+        }
+
+        .visa-badge span {
+            font-size: clamp(2.2rem, 2vw + 1rem, 3.5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.06em;
+            color: #1a1f71;
+        }
+
+        .visa-badge::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255, 191, 0, 0.9);
+            transform: translateY(-50%);
+        }
+
+        .mastercard-badge {
+            background: linear-gradient(90deg, #0a244a 0%, #0d2f77 100%);
+            color: #fff;
+        }
+
+        .mastercard-badge span {
+            font-size: clamp(1.7rem, 1.4vw + 1rem, 2.5rem);
+            text-transform: none;
+            color: #fff;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .mastercard-badge::before,
+        .mastercard-badge::after {
+            content: "";
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .mastercard-badge::before {
+            left: 40%;
+            background: #ed1c24;
+            margin-left: -38px;
+        }
+
+        .mastercard-badge::after {
+            left: 58%;
+            background: #f79e1b;
+            margin-left: -12px;
         }
 
         .copyright {

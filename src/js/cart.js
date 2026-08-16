@@ -355,3 +355,81 @@
         initializeCart();
     }
 })();
+
+// ============ CHECKOUT ACTIVATION ============
+// This function is called when user clicks "Proceed to Checkout" button
+async function proceedToCheckout(event) {
+    event.preventDefault();
+    
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    // Validate cart is not empty
+    if (!cart || cart.length === 0) {
+        alert('🛒 Your cart is empty! Please add items before proceeding to checkout.');
+        console.warn('Checkout blocked: Cart is empty');
+        return false;
+    }
+    
+    // Show loading state
+    if (checkoutBtn) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.opacity = '0.6';
+        checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    }
+    
+    try {
+        console.log('🛒 Cart contents:', cart);
+        console.log('📦 Total items:', cart.length);
+        console.log('💰 Subtotal:', calculateSubtotal(cart));
+        
+        // Sync cart to Firebase for backup
+        if (typeof fbSaveCart !== 'undefined') {
+            try {
+                await fbSaveCart(cart);
+                console.log('✅ Cart synced to Firebase');
+            } catch (fbError) {
+                console.warn('⚠️ Firebase sync failed, but proceeding with local cart:', fbError);
+            }
+        }
+        
+        // Log checkout initiated
+        if (typeof fbLogActivity !== 'undefined') {
+            try {
+                await fbLogActivity('checkout_initiated', {
+                    itemCount: cart.length,
+                    subtotal: calculateSubtotal(cart),
+                    timestamp: new Date().toISOString()
+                });
+            } catch (logError) {
+                console.warn('Analytics log failed:', logError);
+            }
+        }
+        
+        console.log('🚀 Redirecting to checkout page...');
+        
+        // Redirect to checkout
+        window.location.href = 'checkout.html';
+        
+    } catch (error) {
+        console.error('❌ Checkout error:', error);
+        alert('⚠️ An error occurred. Please try again.');
+        
+        // Restore button state
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+            checkoutBtn.innerHTML = '<i class="fas fa-lock"></i> Proceed to Checkout';
+        }
+        
+        return false;
+    }
+}
+
+// Helper function to calculate subtotal
+function calculateSubtotal(cart) {
+    if (!cart || !Array.isArray(cart)) return 0;
+    return cart.reduce((sum, item) => {
+        return sum + (Number(item.price) * Number(item.qty || item.quantity || 1));
+    }, 0);
+}

@@ -52,7 +52,7 @@
   <script src="src/js/utils.js"></script>
   <script src="src/js/products.js"></script>
   <script src="src/js/promotions.js"></script>
-  <script src="src/js/footer.js"></script>
+  <script src="src/js/footer.js?v=20260816d"></script>
 
   <script>
   function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -238,11 +238,9 @@
   fetch("src/components/navbar.html").then(r => r.text()).then(html => {
     document.getElementById("navbar").innerHTML = html;
     updateCartBadge();
+    initializeMobileMenu();
     const page = "products.html";
     document.querySelectorAll("#navbar a").forEach(a => { if (a.getAttribute("href") === page) a.classList.add("active"); });
-    const menuBtn = document.getElementById("mobileMenuBtn");
-    const navLinks = document.getElementById("navLinks");
-    if (menuBtn && navLinks) menuBtn.addEventListener("click", () => navLinks.classList.toggle("active"));
   });
   </script>
   <script src="src/js/whatsapp-button.js"></script>

@@ -404,6 +404,14 @@
     padding: 20px;
 }
 
+.summary-content .btn-primary {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+}
+
 .summary-row {
     display: flex;
     justify-content: space-between;
@@ -438,34 +446,56 @@
     font-size: 1.4rem;
 }
 
-.checkout-btn {
-    display: block;
-    text-align: center;
-    margin: 0 20px 10px;
-    padding: 14px 30px;
-    font-size: 1.05rem;
+.summary-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 20px 20px;
+    margin-top: 10px;
 }
 
-.continue-btn {
-    display: block;
+.checkout-btn,
+.summary-checkout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin: 0 20px 20px;
+    margin-left: auto;
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    min-width: 210px;
+    white-space: nowrap;
+    animation: buttonFloat 3.2s ease-in-out infinite;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.continue-btn,
+.summary-continue-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     background-color: transparent;
     color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    padding: 12px 30px;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s;
+    transition: all 0.25s ease;
     cursor: pointer;
     font-size: 1rem;
+    min-width: 180px;
+    animation: buttonFloat 3.2s ease-in-out infinite;
 }
 
-.continue-btn:hover {
+.continue-btn:hover,
+.summary-continue-btn:hover {
     background-color: var(--primary-green);
     color: white;
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 22px rgba(46, 125, 50, 0.18);
 }
 
 .btn {
@@ -483,11 +513,13 @@
 .btn-primary {
     background-color: var(--accent-gold);
     color: var(--dark-text);
+    box-shadow: 0 6px 16px rgba(242, 180, 42, 0.25);
 }
 
 .btn-primary:hover {
-    background-color: #ffa000;
-    transform: translateY(-3px);
+    background-color: #f4af1c;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(242, 180, 42, 0.35);
 }
 
 .btn-secondary {
@@ -528,6 +560,72 @@
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    padding: 15px 28px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    animation: floatCta 3.4s ease-in-out infinite;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    overflow: hidden;
+}
+
+.cta-buttons .btn::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+.cta-buttons .btn:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+    filter: saturate(1.08);
+}
+
+.cta-buttons .btn:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+@keyframes floatCta {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.cta-buttons .btn-primary {
+    background: linear-gradient(180deg, #f7d05f 0%, #f3b91e 100%);
+    color: #173118;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 10px 22px rgba(243, 185, 30, 0.32), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.cta-buttons .btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 22px rgba(10, 30, 12, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.cta-buttons .btn-secondary:hover {
+    background: white;
+    color: var(--primary-green);
+    border-color: white;
 }
 
 @media (max-width: 992px) {

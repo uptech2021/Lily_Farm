@@ -515,16 +515,7 @@
             // Insert navbar
             document.getElementById("navbar").innerHTML = data;
             updateCartBadge();
-
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-            const navLinksMenu = document.getElementById("navLinks");
-
-            if (mobileMenuBtn && navLinksMenu) {
-                mobileMenuBtn.addEventListener("click", function () {
-                    navLinksMenu.classList.toggle("active");
-                });
-            }
+            initializeMobileMenu();
 
             // Active page
             const currentPage = window.location.pathname.split("/").pop();
@@ -542,7 +533,7 @@
 
   </script>
   <script src="src/js/utils.js"></script>
-  <script src="src/js/footer.js"></script>
+  <script src="src/js/footer.js?v=20260816d"></script>
   <script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>

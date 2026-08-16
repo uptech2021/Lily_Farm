@@ -370,7 +370,7 @@
 <script src="src/js/utils.js"></script>
 <script src="src/js/products.js"></script>
 <script src="src/js/promotions.js"></script>
-<script src="src/js/footer.js"></script>
+<script src="src/js/footer.js?v=20260816d"></script>
 
 <script>
 function esc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -495,6 +495,7 @@ document.addEventListener('promotionsLoaded', renderPromoBanner);
     .then(html => {
       document.getElementById("navbar").innerHTML = html;
       updateCartBadge();
+      initializeMobileMenu();
       const page = "index.html";
       document.querySelectorAll("#navbar a").forEach(a => {
         if (a.getAttribute("href") === page) a.classList.add("active");

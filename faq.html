@@ -20,34 +20,10 @@
 
     <!-- FAQ Container -->
     <main class="faq-container">
-        <!-- Search & Filter Section -->
-        <div class="faq-search-section">
-            <div class="faq-intro">
-                <h2>✨ Expert Answers to Your Questions</h2>
-                <p>Discover everything you need to know about plant care, ordering, delivery, and more</p>
-            </div>
-            
-            <div class="search-box-wrapper">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input 
-                        type="text" 
-                        id="faqSearch" 
-                        placeholder="Search FAQs by keyword..." 
-                        class="faq-search-input"
-                    >
-                    <button class="search-clear" id="searchClear" title="Clear search">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Category Filter Tabs -->
-            <div class="category-filters" id="categoryFilters">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-list"></i> All Categories
-                </button>
-            </div>
+        <!-- FAQ Intro Section -->
+        <div class="faq-intro-section">
+            <h2>How Can We Help You?</h2>
+            <p>At Rishi's Lily Farm, we're passionate about helping you succeed with your plants and lilies. Browse our FAQ sections below for expert advice and information.</p>
         </div>
 
         <!-- FAQ Sections (dynamic) -->
@@ -86,11 +62,96 @@
     <script src="src/js/firebase-config.js"></script>
     <script src="src/js/firebase.js"></script>
     <script src="src/js/utils.js"></script>
-    <script src="src/js/footer.js"></script>
+    <script src="src/js/footer.js?v=20260816d"></script>
 
     <script>
     let allFAQs = [];
     let currentFilter = 'all';
+
+    // Mock FAQ data for testing
+    const mockFAQData = [
+      {
+        id: '1',
+        section: 'General Questions',
+        sectionIcon: 'fa-question-circle',
+        question: 'Are you the only place in Trinidad to get these lilies?',
+        answer: 'Yes! Rishi\'s Lily Farm is uniquely positioned as the only dedicated lily and exotic plant nursery in Trinidad. We specialize in rare varieties that you won\'t find elsewhere on the island. Our collection includes over 50 varieties of lilies and lotus species, along with exotic ornamentals from around the world.',
+        order: 1,
+        status: 'published'
+      },
+      {
+        id: '2',
+        section: 'General Questions',
+        sectionIcon: 'fa-question-circle',
+        question: 'Can I visit the farm to see the plants?',
+        answer: 'Yes, we welcome visitors to our farm! You can see our full collection of lilies and exotic plants in their natural growing environment. Please contact us in advance to schedule a visit, especially during peak growing seasons.',
+        order: 2,
+        status: 'published'
+      },
+      {
+        id: '3',
+        section: 'General Questions',
+        sectionIcon: 'fa-question-circle',
+        question: 'Do you offer planting services or consultations?',
+        answer: 'Yes! We offer professional planting services and expert consultations to help you choose the right plants for your garden and ensure they thrive in Trinidad\'s climate.',
+        order: 3,
+        status: 'published'
+      },
+      {
+        id: '4',
+        section: 'Payment & Delivery',
+        sectionIcon: 'fa-credit-card',
+        question: 'What payment methods do you accept?',
+        answer: 'We accept various payment methods for your convenience: Cash, Debit/Credit Cards, Online Bank Transfer, Mobile Wallets (WiPay, etc.). For online orders, you can send a screenshot to payments: darren.kowlessar6@gmail.com',
+        order: 1,
+        status: 'published'
+      },
+      {
+        id: '5',
+        section: 'Payment & Delivery',
+        sectionIcon: 'fa-credit-card',
+        question: 'Do you offer delivery? What are the charges?',
+        answer: 'Yes, we offer delivery services throughout Trinidad. Delivery charges vary based on location and order size. Please contact us for a custom quote for your specific delivery area.',
+        order: 2,
+        status: 'published'
+      },
+      {
+        id: '6',
+        section: 'Payment & Delivery',
+        sectionIcon: 'fa-credit-card',
+        question: 'How long does delivery take?',
+        answer: 'Delivery times depend on the location. Most deliveries within the greater Port of Spain area take 2-3 business days. Remote locations may take longer. We\'ll provide a specific timeframe when you place your order.',
+        order: 3,
+        status: 'published'
+      },
+      {
+        id: '7',
+        section: 'Plant Care & Maintenance',
+        sectionIcon: 'fa-leaf',
+        question: 'How do I care for lilies in Trinidad\'s climate?',
+        answer: 'Lilies thrive in Trinidad\'s tropical climate but need proper care. Plant them in well-draining soil with partial sunlight (4-6 hours daily). Water regularly but avoid waterlogging. In rainy seasons, reduce watering frequency. Apply organic fertilizer every 4-6 weeks during growing season.',
+        order: 1,
+        status: 'published'
+      },
+      {
+        id: '8',
+        section: 'Plant Care & Maintenance',
+        sectionIcon: 'fa-leaf',
+        question: 'What\'s the best way to plant lotus species?',
+        answer: 'Lotus species are best planted in water containers, ponds, or water-logged soil. They need good sunlight (minimum 6 hours daily), however they thrive really well in direct sun. Use nutrient-rich soil and regular fertilization. Apply organic fertilizer every 4-6 weeks during growing season.',
+        order: 2,
+        status: 'published'
+      },
+      {
+        id: '9',
+        section: 'Plant Care & Maintenance',
+        sectionIcon: 'fa-leaf',
+        question: 'How often should I water exotic ornamental plants?',
+        answer: 'Watering frequency depends on the specific plant type and season. In general, water when the top inch of soil feels dry. During rainy seasons in Trinidad, reduce watering frequency to prevent root rot. Always ensure proper drainage.',
+        order: 3,
+        status: 'published'
+      }
+    ];
 
     document.addEventListener('DOMContentLoaded', async function() {
         await loadFAQs();
@@ -104,9 +165,15 @@
         if (!container) return;
 
         try {
-            const snap = await db.collection('faqs').where('status', '==', 'published').orderBy('section').orderBy('order').get();
-            const faqs = [];
-            snap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
+            // Try to load from Firebase, fall back to mock data
+            let faqs = [];
+            if (typeof db !== 'undefined' && db && db.collection) {
+              const snap = await db.collection('faqs').where('status', '==', 'published').orderBy('section').orderBy('order').get();
+              snap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
+            } else {
+              faqs = mockFAQData;
+            }
+            
             allFAQs = faqs;
 
             const grouped = {};
@@ -263,13 +330,7 @@
         .then(data => {
             document.getElementById("navbar").innerHTML = data;
             updateCartBadge();
-            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-            const navLinksMenu = document.getElementById("navLinks");
-            if (mobileMenuBtn && navLinksMenu) {
-                mobileMenuBtn.addEventListener("click", function () {
-                    navLinksMenu.classList.toggle("active");
-                });
-            }
+            initializeMobileMenu();
             const currentPage = window.location.pathname.split("/").pop();
             document.querySelectorAll(".nav-links a").forEach(link => {
                 if (link.getAttribute("href") === currentPage) {
@@ -282,3 +343,4 @@
     <script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>
+            

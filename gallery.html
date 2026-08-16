@@ -142,17 +142,21 @@
       background: #2e7d32;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.85rem;
-      transition: background 0.3s ease;
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
       font-family: inherit;
       letter-spacing: 0.05em;
+      box-shadow: 0 8px 18px rgba(46, 125, 50, 0.18);
+      animation: buttonFloat 3.2s ease-in-out infinite;
     }
 
     .add-to-cart-btn:hover {
       background: #1b5e20;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 22px rgba(46, 125, 50, 0.22);
     }
 
     .add-to-cart-btn:active {
@@ -410,15 +414,7 @@
         .then(data => {
             document.getElementById("navbar").innerHTML = data;
             updateCartBadge();
-
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-            const navLinksMenu = document.getElementById("navLinks");
-            if (mobileMenuBtn && navLinksMenu) {
-                mobileMenuBtn.addEventListener("click", function () {
-                    navLinksMenu.classList.toggle("active");
-                });
-            }
+            initializeMobileMenu();
 
             // Get current page
             const currentPage = window.location.pathname.split("/").pop();
@@ -494,6 +490,11 @@
       
       // Update cart badge
       updateCartBadge();
+
+      // Keep the user flow logical: Add to Cart should go to the cart page.
+      setTimeout(() => {
+        window.location.href = "cart.html";
+      }, 400);
     }
 
     function showToast(message) {
@@ -520,7 +521,7 @@
   </script>
 
   <script src="src/js/utils.js"></script>
-  <script src="src/js/footer.js"></script>
+  <script src="src/js/footer.js?v=20260816d"></script>
   <script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>

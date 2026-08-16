@@ -44,6 +44,10 @@
           '<a href="contact.html">Contact Us</a>' +
         '</div>' +
       '</div>' +
+      '<div class="payment-badges-wrapper" aria-label="Accepted payment methods">' +
+        '<div class="payment-badge visa-badge"><span>VISA</span></div>' +
+        '<div class="payment-badge mastercard-badge"><span>MasterCard</span></div>' +
+      '</div>' +
       '<div class="copyright">' +
         '<p>&copy; ' + new Date().getFullYear() + ' ' + esc(settings.storeName) + '. All rights reserved.</p>' +
       '</div>';

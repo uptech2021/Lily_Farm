@@ -1,0 +1,22 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red background -->
+  <rect width="400" height="400" fill="#E31E24"/>
+  
+  <!-- White S shape (top left to bottom right curve) -->
+  <g fill="white">
+    <!-- Top S curve -->
+    <path d="M 280 60 Q 180 60 140 100 Q 100 140 120 180 L 180 160 Q 200 150 220 160 Q 240 170 220 190 L 140 220 Q 100 240 120 280 Q 140 320 220 340 Q 280 350 320 320 L 280 280 Q 260 290 240 280 Q 220 270 240 250 L 320 220 Q 360 200 340 160 Q 320 120 260 100 Q 220 80 180 80 L 280 60" stroke-width="15" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- White globe in center -->
+  <g transform="translate(200, 200)">
+    <circle cx="0" cy="0" r="45" fill="none" stroke="white" stroke-width="3"/>
+    <circle cx="0" cy="0" r="45" fill="none" stroke="white" stroke-width="3"/>
+    <!-- Latitude lines -->
+    <ellipse cx="0" cy="0" rx="45" ry="15" fill="none" stroke="white" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="45" ry="30" fill="none" stroke="white" stroke-width="2"/>
+    <!-- Longitude lines -->
+    <path d="M -45,0 Q -32,-32 0,-45 Q 32,-32 45,0 Q 32,32 0,45 Q -32,32 -45,0" fill="none" stroke="white" stroke-width="2"/>
+    <line x1="-45" y1="0" x2="45" y2="0" stroke="white" stroke-width="2"/>
+  </g>
+</svg>

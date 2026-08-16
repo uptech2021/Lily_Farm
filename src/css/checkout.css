@@ -185,15 +185,18 @@
     gap: 8px;
     padding: 11px 14px;
     border: 1px solid #d1d5db;
-    border-radius: 6px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s, transform 0.25s ease, box-shadow 0.25s ease;
+    animation: buttonFloat 3.2s ease-in-out infinite;
 }
 
 .payment-option:hover {
     border-color: var(--primary-green);
     background-color: #f0f7f0;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(46, 125, 50, 0.12);
 }
 
 .payment-option input[type="radio"] {
@@ -214,7 +217,7 @@
     background: linear-gradient(135deg, #2e7d32, #1b5e20);
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
@@ -222,13 +225,15 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.26);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    animation: buttonFloat 3.2s ease-in-out infinite;
 }
 
 .place-order-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.5);
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 14px 28px rgba(46, 125, 50, 0.32);
+    filter: brightness(1.06) saturate(1.08);
 }
 
 .checkout-summary {
@@ -239,6 +244,9 @@
     align-self: start;
     position: sticky;
     top: 100px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
 }
 
 .checkout-summary .summary-header {
@@ -260,6 +268,9 @@
 
 .checkout-items {
     padding: 16px 20px 8px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 200px;
 }
 
 .checkout-item {
@@ -349,13 +360,19 @@
 }
 
 .checkout-summary .summary-total {
-    font-size: 1.1rem;
-    padding-bottom: 20px;
+    font-size: 1.2rem;
+    padding: 18px 20px 24px;
+    font-weight: 600;
+    background-color: #f9f9f9;
+    border-top: 2px solid #eee;
 }
 
 .checkout-summary .summary-total span:last-child {
     color: var(--primary-green);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    display: block;
+    margin-top: 8px;
 }
 
 .back-link {
@@ -459,16 +476,100 @@
     flex-wrap: wrap;
 }
 
+.cta-buttons .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    padding: 15px 28px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    animation: floatCta 3.4s ease-in-out infinite;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    overflow: hidden;
+}
+
+.cta-buttons .btn::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+.cta-buttons .btn:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+    filter: saturate(1.08);
+}
+
+.cta-buttons .btn:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+@keyframes floatCta {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.cta-buttons .btn-primary {
+    background: linear-gradient(180deg, #f7d05f 0%, #f3b91e 100%);
+    color: #173118;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 10px 22px rgba(243, 185, 30, 0.32), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.cta-buttons .btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 22px rgba(10, 30, 12, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.cta-buttons .btn-secondary:hover {
+    background: white;
+    color: var(--primary-green);
+    border-color: white;
+}
+
 @media (max-width: 992px) {
     .checkout-layout {
         grid-template-columns: 1fr;
     }
     .checkout-summary {
-        position: static;
+        position: sticky;
+        top: 60px;
+        margin-bottom: 30px;
+        min-height: 280px;
     }
 }
 
 @media (max-width: 768px) {
+    .checkout-layout {
+        gap: 20px;
+    }
+    .checkout-summary {
+        position: sticky;
+        top: 50px;
+        min-height: 300px;
+        margin-bottom: 20px;
+    }
+    .checkout-items {
+        max-height: 150px;
+    }
+    .checkout-summary .summary-total span:last-child {
+        font-size: 1.4rem;
+    }
     .form-row {
         grid-template-columns: 1fr;
     }
@@ -602,5 +703,203 @@
     .cta-buttons .btn {
         padding: 12px 20px;
         font-size: 0.9rem;
+    }
+}
+
+/* ========== GEOLOCATION & MAP STYLES ========== */
+
+.geolocation-section {
+    padding: 18px 14px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-top: 18px;
+}
+
+.geolocation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 10px;
+}
+
+.geolocation-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--dark-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.geolocation-header h4 i {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+}
+
+.use-location-btn {
+    padding: 8px 16px;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.use-location-btn:hover {
+    background-color: #1b5e20;
+    transform: translateY(-2px);
+}
+
+.use-location-btn:active {
+    transform: translateY(0);
+}
+
+.use-location-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.use-location-btn i {
+    font-size: 0.95rem;
+}
+
+.delivery-map {
+    width: 100%;
+    height: 350px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.delivery-map .leaflet-container {
+    background-color: #e0e0e0;
+}
+
+.location-info {
+    background-color: white;
+    border-left: 4px solid var(--primary-green);
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.location-info p {
+    margin: 6px 0;
+    color: var(--dark-text);
+}
+
+.location-info strong {
+    color: var(--primary-green);
+}
+
+.error-message {
+    padding: 12px;
+    background-color: #ffe0e0;
+    border-left: 4px solid #e74c3c;
+    border-radius: 4px;
+    color: #c0392b;
+    font-size: 0.85rem;
+}
+
+.wire-transfer-info {
+    margin-top: 12px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.wire-transfer-info h4 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: var(--dark-text);
+}
+
+.wire-transfer-info p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: var(--dark-text);
+}
+
+/* Leaflet marker customization */
+.leaflet-marker-icon {
+    filter: hue-rotate(80deg) saturate(1.5);
+}
+
+.leaflet-control-zoom {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    background-color: white;
+    color: var(--primary-green);
+    font-weight: bold;
+    border: none;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+    background-color: #f5f5f5;
+}
+
+/* Responsive Geolocation Styles */
+@media (max-width: 768px) {
+    .geolocation-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .use-location-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .delivery-map {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .geolocation-section {
+        padding: 14px 12px;
+        margin-top: 14px;
+    }
+
+    .geolocation-header h4 {
+        font-size: 0.95rem;
+    }
+
+    .use-location-btn {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+    }
+
+    .delivery-map {
+        height: 250px;
+        margin-bottom: 12px;
+    }
+
+    .location-info {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+
+    .location-info p {
+        margin: 4px 0;
     }
 }

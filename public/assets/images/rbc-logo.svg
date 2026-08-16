@@ -1,0 +1,25 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark blue background -->
+  <rect width="400" height="400" fill="#003D7A"/>
+  
+  <!-- White shield/badge outline -->
+  <g fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M 110 80 L 290 80 L 290 200 Q 290 270 200 330 Q 110 270 110 200 Z"/>
+  </g>
+  
+  <!-- Yellow lightning bolt -->
+  <g fill="#FFC72C" transform="translate(200, 160)">
+    <polygon points="-5,-50 15,-15 0,0 30,60 -10,30 0,50 -35,-50"/>
+  </g>
+  
+  <!-- White globe in shield -->
+  <g transform="translate(200, 210)" fill="none" stroke="white" stroke-width="3">
+    <circle cx="0" cy="0" r="32"/>
+    <!-- Latitude lines -->
+    <ellipse cx="0" cy="0" rx="32" ry="10"/>
+    <ellipse cx="0" cy="0" rx="32" ry="22"/>
+    <!-- Longitude meridians -->
+    <path d="M -32,0 Q -22,-22 0,-32 Q 22,-22 32,0 Q 22,22 0,32 Q -22,22 -32,0"/>
+    <line x1="-32" y1="0" x2="32" y2="0"/>
+  </g>
+</svg>

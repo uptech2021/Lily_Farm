@@ -14,7 +14,7 @@
   <script src="src/js/utils.js"></script>
   <script src="src/js/products.js"></script>
   <script src="src/js/promotions.js"></script>
-  <script src="src/js/footer.js"></script>
+  <script src="src/js/footer.js?v=20260816d"></script>
   <style>
     body { background-color: #f5f5f5; }
     .detail-search-container { max-width: 450px; margin: 20px auto; padding: 0 16px; }
@@ -118,9 +118,52 @@
     setTimeout(() => document.getElementById("cartToast").classList.remove("show"), 2500);
   }
 
+  function getStoredCart() {
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      return Array.isArray(cart) ? cart : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveStoredCart(items) {
+    localStorage.setItem("cart", JSON.stringify(items));
+  }
+
   async function updateCartCount() {
-    const items = await fbGetCart();
-    document.getElementById("cartCount").textContent = items.reduce((s, i) => s + i.qty, 0);
+    let items = [];
+    if (typeof fbGetCart === "function") {
+      items = await fbGetCart();
+    } else {
+      items = getStoredCart();
+    }
+    const total = items.reduce((s, i) => s + Number(i.qty || i.quantity || 0), 0);
+    document.getElementById("cartCount").textContent = total;
+  }
+
+  function addProductToCart(product) {
+    const cart = getStoredCart();
+    const existingItem = cart.find(item => item.id === product.slug);
+
+    if (existingItem) {
+      existingItem.quantity = Number(existingItem.quantity || existingItem.qty || 1) + 1;
+      existingItem.qty = existingItem.quantity;
+    } else {
+      cart.push({
+        id: product.slug,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        qty: 1,
+        category: product.category,
+        image: getProductImage(product)
+      });
+    }
+
+    saveStoredCart(cart);
+    updateCartCount();
+    return cart;
   }
 
   function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -207,14 +250,18 @@
     }
 
     const stockBadge = document.getElementById("stockBadge");
-    if (product.inStock !== false) {
+    const addButton = document.getElementById("addToCartBtn");
+    const isAvailable = product.inStock !== false;
+    if (isAvailable) {
       stockBadge.textContent = "In Stock";
       stockBadge.className = "stock-badge-detail in-stock";
-      document.getElementById("addToCartBtn").disabled = false;
+      addButton.disabled = false;
+      addButton.removeAttribute("disabled");
     } else {
       stockBadge.textContent = "Out of Stock";
       stockBadge.className = "stock-badge-detail out-of-stock";
-      document.getElementById("addToCartBtn").disabled = true;
+      addButton.disabled = true;
+      addButton.setAttribute("disabled", "disabled");
     }
 
     const featuredBadge = document.getElementById("featuredBadge");
@@ -233,13 +280,17 @@
       });
     }
 
-    document.getElementById("addToCartBtn").onclick = async function() {
+    const productAddButton = document.getElementById("addToCartBtn");
+    productAddButton.onclick = async function() {
       if (this.disabled) return;
       this.disabled = true;
-      await fbAddToCart(product.slug);
+      const cart = addProductToCart(product);
       await updateCartCount();
-      updateCartBadge();
-      // Track add to cart
+
+      if (typeof updateCartBadge === "function") {
+        updateCartBadge();
+      }
+
       if (window.fbLogActivity) {
         fbLogActivity("add_to_cart", {
           productId: product.slug,
@@ -248,11 +299,10 @@
         });
       }
       showToast(product.name + " added to cart!");
-      
-      // Redirect to cart page after brief delay to show toast
-      setTimeout(() => {
+
+      if (cart.some(item => item.id === product.slug)) {
         window.location.href = "cart.html";
-      }, 500);
+      }
     };
 
     updateCartCount();

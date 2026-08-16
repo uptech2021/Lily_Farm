@@ -30,6 +30,45 @@ window.addEventListener("storage", function(e) {
 
 window.updateCartBadge = updateCartBadge;
 
+// ========== MOBILE MENU (HAMBURGER BUTTON) ==========
+// Toggle the mobile navigation menu. Uses event delegation so it works
+// even though the navbar is injected asynchronously via fetch().
+function initializeMobileMenu() {
+  const btn = document.getElementById("mobileMenuBtn");
+  const navLinks = document.getElementById("navLinks");
+
+  if (!btn || !navLinks) return;
+
+  btn.setAttribute("aria-expanded", "false");
+
+  btn.addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const isOpen = navLinks.classList.toggle("active");
+    btn.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  document.addEventListener("click", function(e) {
+    if (!btn.contains(e.target) && !navLinks.contains(e.target)) {
+      navLinks.classList.remove("active");
+      btn.setAttribute("aria-expanded", "false");
+    }
+  }, { passive: true });
+}
+
+document.addEventListener("DOMContentLoaded", initializeMobileMenu);
+document.addEventListener("click", function(e) {
+  const btn = e.target.closest("#mobileMenuBtn");
+  if (!btn) return;
+
+  const navLinks = document.getElementById("navLinks");
+  if (navLinks) {
+    const isOpen = navLinks.classList.toggle("active");
+    btn.setAttribute("aria-expanded", String(isOpen));
+  }
+});
+
 // ========== SESSION & TRACKING ==========
 // Get or create session ID
 function getOrCreateSessionId() {

@@ -68,8 +68,10 @@
                             <span id="total">$0.00</span>
                         </div>
                     </div>
-                    <a href="checkout.html" class="btn btn-primary"><i class="fas fa-lock"></i> Proceed to Checkout</a>
-                    <a href="products.html" class="btn btn-secondary continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+                    <div class="summary-actions">
+                        <a href="products.html" class="btn btn-secondary continue-btn"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+                        <button id="checkoutBtn" class="btn btn-primary summary-checkout-btn" onclick="proceedToCheckout(event)"><i class="fas fa-lock"></i> Proceed to Checkout</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,26 +96,20 @@
     <script src="src/js/firebase.js"></script>
     <script src="src/js/utils.js"></script>
     <script src="src/js/cart.js"></script>
-    <script src="src/js/footer.js"></script>
+    <script src="src/js/footer.js?v=20260816d"></script>
     <script>
         fetch("src/components/navbar.html")
             .then(response => response.text())
             .then(data => {
                 document.getElementById("navbar").innerHTML = data;
                 updateCartBadge();
+                initializeMobileMenu();
                 const currentPage = window.location.pathname.split("/").pop();
                 document.querySelectorAll(".nav-links a").forEach(link => {
                     if (link.getAttribute("href") === currentPage) {
                         link.classList.add("active");
                     }
                 });
-                const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-                const navLinksMenu = document.getElementById("navLinks");
-                if (mobileMenuBtn && navLinksMenu) {
-                    mobileMenuBtn.addEventListener("click", function () {
-                        navLinksMenu.classList.toggle("active");
-                    });
-                }
             });
 
     </script>
