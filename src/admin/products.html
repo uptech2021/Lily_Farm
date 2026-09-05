@@ -13,6 +13,9 @@
             border-radius: 10px;
             overflow: hidden;
             transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .product-card:hover { box-shadow: var(--shadow); }
         .product-card .card-img {
@@ -21,8 +24,40 @@
             object-fit: cover;
             background: var(--panel);
         }
-        .product-card .card-body { padding: 14px 16px 16px; }
-        .product-card .card-body h4 { margin: 0 0 4px; font-size: 0.95rem; }
+        .product-image-link {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+        }
+        .product-image-link::after {
+            content: 'Edit product';
+            position: absolute;
+            inset: auto 10px 10px auto;
+            padding: 5px 8px;
+            border-radius: 6px;
+            background: rgba(27, 94, 32, 0.9);
+            color: #fff;
+            font-size: 0.72rem;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .product-image-link:hover::after,
+        .product-image-link:focus-visible::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .product-image-link:focus-visible {
+            box-shadow: inset 0 0 0 3px var(--brand);
+        }
+        .product-card .card-body { padding: 14px 16px 16px; flex: 1; }
+        .product-card .card-body h4 {
+            margin: 0 0 4px;
+            min-height: 2.66em;
+            font-size: 0.95rem;
+            line-height: 1.33;
+        }
         .product-card .card-body .cat-badge {
             font-size: 0.75rem; color: var(--light-text); margin-bottom: 6px;
         }
@@ -76,7 +111,7 @@
                     <div class="profile-menu">
                         <button class="profile-btn" data-dropdown-toggle><div class="avatar">KN</div><span class="d-none d-md-inline">Kyle Nagee</span><i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i></button>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
                             <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
                             <div class="dropdown-divider"></div>
                             <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
@@ -90,7 +125,38 @@
             <div id="notifications-modal" class="modal-backdrop d-none">
                 <div class="modal">
                     <div class="modal-header"><h3 class="modal-title">Notifications</h3><button class="modal-close" type="button"><i class="fas fa-times"></i></button></div>
-                    <div class="modal-body">...</div>
+                    <div class="modal-body">
+                        <div class="notification-list">
+                            <button class="notification-item" type="button" data-notification-detail="Order #1234 from John Doe — Customer placed a new order for 2 lilies. Please confirm stock and shipping details.">
+                                <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Order Received</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
+                                </div>
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="Water Lily 'Pink Princess' is low in stock. Current inventory: 4 remaining. Consider reordering before the next weekend rush.">
+                                <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">Low Stock Alert</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
+                                </div>
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="A new 5-star review was submitted for Lotus 'Sacred Pink'. The customer praised the bloom quality and delivery speed.">
+                                <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Review</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="notification-detail-panel d-none" id="notification-detail-panel">
+                            <div class="notification-detail-title">Details</div>
+                            <div class="notification-detail-text"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +193,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Product</button>
+                            <button class="btn btn-primary add-product-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Product</button>
                         </div>
                     </div>
                 </div>
@@ -262,10 +328,12 @@
                 ? '<span class="badge success" style="font-size:0.7rem;">In Stock</span>'
                 : '<span class="badge" style="background:rgba(220,53,69,0.1);color:var(--danger);font-size:0.7rem;">Out of Stock</span>';
             const featuredStar = p.featured ? '<i class="fas fa-star" style="color:var(--accent-gold);font-size:0.75rem;" title="Featured"></i>' : '';
-            const imgSrc = p.image && p.image.startsWith('http') ? p.image : (p.image ? '../' + p.image : '');
+            const imagePath = p.image || `img/${getProductImage(p.slug)}`;
+            const imgSrc = imagePath.startsWith('http') ? imagePath : '../../' + imagePath;
+            const imageAction = `onclick="openEditModal('${esc(p.slug)}')" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openEditModal('${esc(p.slug)}'); }"`;
             const img = imgSrc
-                ? `<img class="card-img" src="${esc(imgSrc)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="no-img" style="display:none;"><i class="fas fa-image"></i></div>`
-                : `<div class="no-img"><i class="fas fa-image"></i></div>`;
+                ? `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Edit ${esc(p.name)} image"><img class="card-img" src="${esc(imgSrc)}" alt="${esc(p.name)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="no-img" style="display:none;"><i class="fas fa-image"></i></div></div>`
+                : `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Add image for ${esc(p.name)}"><div class="no-img"><i class="fas fa-image"></i></div></div>`;
             return `
                 <div class="product-card">
                     ${img}
@@ -285,6 +353,30 @@
     }
 
     function filterProducts() { renderProducts(); }
+
+    const productImageMap = {
+        'amaryllis': 'amaryllis.jpg',
+        'light-yellow-day-bloomer': 'light-yellow-day-bloomer.jpg',
+        'pink-indian-lotus': 'pink-indian-lotus.jpg',
+        'dark-yellow-day-bloomer': 'dark-yellow-day-bloomer.jpg',
+        'golden-champaca': 'golden-champaca.jpg',
+        'purple-blue-day-bloomer': 'purple-blue-day-bloomer.jpg',
+        'white-night-bloomer': 'white-night-bloomer.jpg',
+        'whitebloomer': 'white_lotus.jpg',
+        'rangoon-creeper': 'rangoon-creeper.jpg',
+        'dark-purple-day-bloomer': 'dark-purple-day-bloomer.jpg',
+        'dark-pink-night-bloomer': 'dark-pink-night-bloomer.jpg',
+        'light-pink-night-bloomer': 'light-pink-night-bloomer.jpg',
+        'light-purple-day-bloomer': 'light-purple-day-bloomer.jpg',
+        'variegated-purple-day-bloomer': 'variegated-purple-day-bloomer.jpg',
+        'white-purple-day-bloomer': 'white-purple-day-bloomer.jpg',
+        'red-amaryllis': 'red-amaryllis.jpg',
+        'parrots-beak-heliconia': "parrot's-beak-heliconia.jpg"
+    };
+
+    function getProductImage(slug) {
+        return productImageMap[slug] || 'lily flowers.jpg';
+    }
 
     async function uploadImageFile(input) {
         const file = input.files[0];

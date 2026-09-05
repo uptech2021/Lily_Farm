@@ -11,7 +11,10 @@ async function loadPromotions() {
     window.PROMOTIONS_LOADED = true;
     document.dispatchEvent(new Event('promotionsLoaded'));
   } catch (e) {
-    console.error('Failed to load promotions:', e);
+    window.promotions = {};
+    window.PROMOTIONS_LOADED = true;
+    document.dispatchEvent(new Event('promotionsLoaded'));
+    console.warn('Using local promotion data:', e.message);
   }
 }
 

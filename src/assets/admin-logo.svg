@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Lily Farm logo</title>
+  <circle cx="32" cy="32" r="30" fill="#ffffff"/>
+  <path d="M12 38c13-1 25 2 34 11-12 3-25 0-34-11Z" fill="#2e7d32"/>
+  <path d="M18 37c7-9 15-15 27-17-3 11-11 18-22 21Z" fill="#65a961"/>
+  <path d="M32 16c7 2 13 6 17 12-9 1-16-3-21-10Z" fill="#f0b84b"/>
+  <path d="M16 47c13-4 24-3 34 2" fill="none" stroke="#1b5e20" stroke-linecap="round" stroke-width="3"/>
+</svg>

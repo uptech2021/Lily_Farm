@@ -49,7 +49,7 @@
                             <i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
                             <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
                             <div class="dropdown-divider"></div>
                             <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
@@ -68,30 +68,34 @@
                     </div>
                     <div class="modal-body">
                         <div class="notification-list">
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            <button class="notification-item" type="button" data-notification-detail="Order #1234 from John Doe — Customer placed a new order for 2 lilies. Please confirm stock and shipping details.">
                                 <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Order Received</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="Water Lily 'Pink Princess' is low in stock. Current inventory: 4 remaining. Consider reordering before the next weekend rush.">
                                 <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">Low Stock Alert</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="A new 5-star review was submitted for Lotus 'Sacred Pink'. The customer praised the bloom quality and delivery speed.">
                                 <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Review</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
                                 </div>
-                            </div>
+                            </button>
+                        </div>
+                        <div class="notification-detail-panel d-none" id="notification-detail-panel">
+                            <div class="notification-detail-title">Details</div>
+                            <div class="notification-detail-text"></div>
                         </div>
                     </div>
                 </div>
@@ -256,10 +260,10 @@
       phone: '(868) 710-4296',
       email: 'darren.kowlessar6@gmail.com',
       address: '#6 Kowlessar Street, Dalloo Road, Gasparillo, Trinidad and Tobago 570543',
-      facebookUrl: '#',
-      instagramUrl: '#',
-      whatsappUrl: '#',
-      youtubeUrl: '#',
+    facebookUrl: '',
+    instagramUrl: '',
+    whatsappUrl: '',
+    youtubeUrl: '',
       paymentMethod: 'cash',
       wireAcctName: "Rishi's Lily Farm & Exotic Plants",
       wireBank: 'Scotiabank Couva',
@@ -287,10 +291,10 @@
         document.getElementById('store-phone').value = s.phone || defaults.phone;
         document.getElementById('store-email').value = s.email || defaults.email;
         document.getElementById('store-address').value = s.address || defaults.address;
-        document.getElementById('facebook-url').value = s.facebookUrl || defaults.facebookUrl;
-        document.getElementById('instagram-url').value = s.instagramUrl || defaults.instagramUrl;
-        document.getElementById('whatsapp-url').value = s.whatsappUrl || defaults.whatsappUrl;
-        document.getElementById('youtube-url').value = s.youtubeUrl || defaults.youtubeUrl;
+        document.getElementById('facebook-url').value = s.facebookUrl && s.facebookUrl !== '#' ? s.facebookUrl : defaults.facebookUrl;
+        document.getElementById('instagram-url').value = s.instagramUrl && s.instagramUrl !== '#' ? s.instagramUrl : defaults.instagramUrl;
+        document.getElementById('whatsapp-url').value = s.whatsappUrl && s.whatsappUrl !== '#' ? s.whatsappUrl : defaults.whatsappUrl;
+        document.getElementById('youtube-url').value = s.youtubeUrl && s.youtubeUrl !== '#' ? s.youtubeUrl : defaults.youtubeUrl;
         document.querySelector('[name="paymentMethod"][value="' + (s.paymentMethod || defaults.paymentMethod) + '"]').checked = true;
         document.getElementById('wire-acct-name').value = s.wireAcctName || defaults.wireAcctName;
         document.getElementById('wire-bank').value = s.wireBank || defaults.wireBank;

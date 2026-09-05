@@ -223,7 +223,7 @@
                             <i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
                             <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
                             <div class="dropdown-divider"></div>
                             <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
@@ -242,30 +242,34 @@
                     </div>
                     <div class="modal-body">
                         <div class="notification-list">
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            <button class="notification-item" type="button" data-notification-detail="Order #1234 from John Doe — Customer placed a new order for 2 lilies. Please confirm stock and shipping details.">
                                 <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Order Received</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="Water Lily 'Pink Princess' is low in stock. Current inventory: 4 remaining. Consider reordering before the next weekend rush.">
                                 <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">Low Stock Alert</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="A new 5-star review was submitted for Lotus 'Sacred Pink'. The customer praised the bloom quality and delivery speed.">
                                 <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Review</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
                                 </div>
-                            </div>
+                            </button>
+                        </div>
+                        <div class="notification-detail-panel d-none" id="notification-detail-panel">
+                            <div class="notification-detail-title">Details</div>
+                            <div class="notification-detail-text"></div>
                         </div>
                     </div>
                 </div>
@@ -326,7 +330,7 @@
         <div class="modal">
             <div class="modal-header">
                 <h3 class="modal-title" id="faqModalTitle">Add New FAQ</h3>
-                <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
+                <button class="modal-close" type="button" onclick="closeModal('faq-modal')"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="faqForm" onsubmit="return false;">

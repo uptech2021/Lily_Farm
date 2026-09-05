@@ -43,14 +43,14 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-                    <div class="profile-menu">
+                    <div class="profile-menu dropdown">
                         <button class="profile-btn" data-dropdown-toggle>
                             <div class="avatar">KN</div>
                             <span class="d-none d-md-inline">Kyle Nagee</span>
                             <i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
                             <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
                             <div class="dropdown-divider"></div>
                             <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
@@ -69,30 +69,34 @@
                     </div>
                     <div class="modal-body">
                         <div class="notification-list">
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            <button class="notification-item" type="button" data-notification-detail="Order #1234 from John Doe — Customer placed a new order for 2 lilies. Please confirm stock and shipping details.">
                                 <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Order Received</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="Water Lily 'Pink Princess' is low in stock. Current inventory: 4 remaining. Consider reordering before the next weekend rush.">
                                 <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">Low Stock Alert</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
                                 </div>
-                            </div>
-                            <div class="notification-item" style="display:flex;gap:12px;padding:12px 0;">
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="A new 5-star review was submitted for Lotus 'Sacred Pink'. The customer praised the bloom quality and delivery speed.">
                                 <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
                                 <div>
                                     <div style="font-weight:600;">New Review</div>
                                     <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
                                     <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
                                 </div>
-                            </div>
+                            </button>
+                        </div>
+                        <div class="notification-detail-panel d-none" id="notification-detail-panel">
+                            <div class="notification-detail-title">Details</div>
+                            <div class="notification-detail-text"></div>
                         </div>
                     </div>
                 </div>
@@ -378,7 +382,7 @@
     <style>
         .reviews-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
             gap: var(--gap-lg);
         }
         
@@ -387,12 +391,16 @@
             border: 1px solid var(--border);
             border-radius: var(--r);
             padding: var(--gap-lg);
-            transition: var(--transition);
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         }
         
         .review-card:hover {
             border-color: var(--brand);
             box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
         }
         
         .review-header {
@@ -414,6 +422,8 @@
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 2px var(--border);
         }
         
         .reviewer-name {
@@ -473,6 +483,7 @@
         
         .review-content {
             margin-bottom: var(--gap-lg);
+            flex: 1;
         }
         
         .review-text {
@@ -490,6 +501,21 @@
             display: flex;
             gap: var(--gap-sm);
             flex-wrap: wrap;
+            align-items: center;
+            padding-top: var(--gap-md);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .review-actions .btn {
+            min-height: 36px;
+        }
+
+        .review-actions .dropdown {
+            margin-left: auto;
+        }
+
+        .review-actions .moderation-status {
+            margin-right: auto;
         }
         
         .dropdown {
@@ -524,6 +550,11 @@
         .dropdown-item:hover {
             background-color: var(--panel);
         }
+
+        .review-card:focus-within {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
+        }
         
         @media (max-width: 768px) {
             .reviews-grid {
@@ -542,6 +573,10 @@
             
             .review-actions {
                 justify-content: flex-start;
+            }
+
+            .review-actions .dropdown {
+                margin-left: 0;
             }
         }
     </style>

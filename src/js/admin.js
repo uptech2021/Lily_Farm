@@ -54,10 +54,25 @@ function initializeModals() {
     // Open modals
     document.addEventListener('click', function(e) {
         const trigger = e.target.closest('[data-modal-target]');
-        if (trigger) {
+        if (trigger && !trigger.classList.contains('modal-close')) {
             e.preventDefault();
             const modalId = trigger.getAttribute('data-modal-target');
             openModal(modalId);
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        const notificationItem = e.target.closest('[data-notification-detail]');
+        if (notificationItem) {
+            const detailPanel = document.getElementById('notification-detail-panel');
+            if (detailPanel) {
+                const text = notificationItem.getAttribute('data-notification-detail');
+                const detailText = detailPanel.querySelector('.notification-detail-text');
+                if (detailText) {
+                    detailText.textContent = text;
+                }
+                detailPanel.classList.remove('d-none');
+            }
         }
     });
     
@@ -107,7 +122,7 @@ function initializeDrawers() {
     // Open drawers
     document.addEventListener('click', function(e) {
         const trigger = e.target.closest('[data-drawer-target]');
-        if (trigger) {
+        if (trigger && !trigger.classList.contains('drawer-close')) {
             e.preventDefault();
             const drawerId = trigger.getAttribute('data-drawer-target');
             openDrawer(drawerId);
@@ -252,8 +267,9 @@ function initializeTabs() {
 }
 
 function switchTab(activeLink, targetId) {
-    const tabContainer = activeLink.closest('.tabs').parentElement;
+    const tabContainer = activeLink.closest('.tabs')?.parentElement;
     const tabList = activeLink.closest('.tab-list');
+    if (!tabContainer || !tabList) return;
     
     // Update active tab link
     tabList.querySelectorAll('.tab-link').forEach(link => {
@@ -270,7 +286,15 @@ function switchTab(activeLink, targetId) {
     const targetContent = document.querySelector(targetId);
     if (targetContent) {
         targetContent.classList.remove('d-none');
+        return;
     }
+
+    // Some pages use data-tab rows instead of separate tab panels.
+    const tabKey = targetId.replace(/^#/, '');
+    const rows = tabContainer.querySelectorAll('tr[data-tab]');
+    rows.forEach(row => {
+        row.classList.toggle('d-none', !row.getAttribute('data-tab').split(/\s+/).includes(tabKey));
+    });
 }
 
 // Dropdown Management
@@ -286,7 +310,7 @@ function initializeDropdowns() {
         }
         
         // Close dropdowns when clicking outside
-        if (!e.target.closest('.dropdown')) {
+        if (!e.target.closest('.dropdown, .profile-menu')) {
             closeAllDropdowns();
         }
     });
@@ -327,11 +351,10 @@ function formatDate(date) {
 
 // Enhanced Button Actions
 function initializeButtonActions() {
-    // Wire up action buttons to show toasts
     document.addEventListener('click', function(e) {
-        const action = e.target.getAttribute('data-action');
-        if (action) {
-            handleButtonAction(action, e.target);
+        const button = e.target.closest('[data-action]');
+        if (button) {
+            handleButtonAction(button.getAttribute('data-action'), button);
         }
     });
 }
@@ -345,6 +368,8 @@ function handleButtonAction(action, button) {
             showToast('Promotion scheduled successfully', 'success', 'Promo Scheduled');
             break;
         case 'mark-fulfilled':
+        case 'fulfill-order':
+            updateOrderStatus(button.closest('tr') || document.querySelector('#order-details-drawer'));
             showToast('Order marked as fulfilled', 'success', 'Order Updated');
             break;
         case 'refund-order':
@@ -354,12 +379,15 @@ function handleButtonAction(action, button) {
             showToast('Invoice sent to printer', 'info', 'Print Job');
             break;
         case 'approve-review':
+            updateReviewStatus(button, 'Approved', 'success');
             showToast('Review approved and published', 'success', 'Review Approved');
             break;
         case 'hide-review':
+            updateReviewStatus(button, 'Hidden', 'secondary');
             showToast('Review hidden from public view', 'info', 'Review Hidden');
             break;
         case 'feature-review':
+            updateReviewStatus(button, 'Featured', 'primary');
             showToast('Review featured on homepage', 'success', 'Review Featured');
             break;
         case 'save-gallery':
@@ -384,13 +412,63 @@ function handleButtonAction(action, button) {
             break;
         case 'edit-faq':
         case 'delete-faq':
-        case 'edit-caption':
-        case 'delete-image':
             showToast('Action completed', 'info', 'Action');
             break;
+        case 'edit-caption':
+            if (button.closest('.gallery-item')?.querySelector('.gallery-caption input')) {
+                button.closest('.gallery-item').querySelector('.gallery-caption input').focus();
+            }
+            showToast('Caption ready to edit', 'info', 'Gallery');
+            break;
+        case 'delete-image': {
+            const galleryItem = button.closest('.gallery-item');
+            if (galleryItem) galleryItem.remove();
+            updateGallerySelectionCount();
+            showToast('Image removed from the gallery', 'success', 'Gallery Updated');
+            break;
+        }
+        case 'create-promotion':
+        case 'update-prices':
+            closeModal(button.closest('.modal-backdrop'));
+            showToast(action === 'create-promotion' ? 'Promotion created successfully' : 'Prices updated successfully', 'success', 'Changes Saved');
+            break;
         default:
-            console.log('Unknown action:', action);
+            break;
     }
+}
+
+function updateOrderStatus(container) {
+    if (!container) return;
+    const status = container.querySelector('.badge');
+    if (status) {
+        status.textContent = 'Fulfilled';
+        status.className = 'badge fulfilled';
+    }
+    const fulfillButton = container.querySelector('[data-action="fulfill-order"], [data-action="mark-fulfilled"]');
+    if (fulfillButton) {
+        fulfillButton.disabled = true;
+        fulfillButton.textContent = 'Fulfilled';
+    }
+}
+
+function updateReviewStatus(button, statusText, statusClass) {
+    const review = button.closest('.review-card');
+    if (!review) return;
+    let status = review.querySelector('.moderation-status');
+    if (!status) {
+        status = document.createElement('span');
+        status.className = 'moderation-status';
+        const actions = review.querySelector('.review-actions');
+        if (actions) actions.prepend(status);
+    }
+    status.textContent = statusText;
+    status.className = `moderation-status badge ${statusClass}`;
+}
+
+function updateGallerySelectionCount() {
+    const count = document.querySelectorAll('.gallery-select:checked').length;
+    const element = document.querySelector('.gallery-actions-bar .selected-count');
+    if (element) element.textContent = `${count} item${count === 1 ? '' : 's'} selected`;
 }
 
 // Enhanced initialization
@@ -402,6 +480,16 @@ function initializeAdmin() {
     initializeTabs();
     initializeDropdowns();
     initializeButtonActions(); // Add this new function
+    initializePlaceholderLinks();
+}
+
+function initializePlaceholderLinks() {
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('.dropdown-item[href="#"]');
+        if (!link) return;
+        e.preventDefault();
+        showToast(`${link.textContent.trim()} selected`, 'info', 'Admin Menu');
+    });
 }
 
 // Export functions for global access

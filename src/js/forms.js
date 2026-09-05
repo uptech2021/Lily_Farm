@@ -270,6 +270,27 @@ function initializeFileUploads() {
         zone.addEventListener('dragover', handleDragOver);
         zone.addEventListener('dragleave', handleDragLeave);
         zone.addEventListener('drop', handleDrop);
+
+        zone.addEventListener('click', function(event) {
+            if (event.target.closest('label, button, input')) {
+                return;
+            }
+
+            const input = zone.querySelector('input[type="file"]');
+            if (input) {
+                input.click();
+            }
+        });
+
+        zone.addEventListener('keydown', function(event) {
+            if ((event.key === 'Enter' || event.key === ' ') && event.target === zone) {
+                event.preventDefault();
+                const input = zone.querySelector('input[type="file"]');
+                if (input) {
+                    input.click();
+                }
+            }
+        });
     });
 }
 
@@ -393,7 +414,8 @@ function initializeSwitches() {
 function handleSwitchChange(e) {
     const switchEl = e.target;
     const isChecked = switchEl.checked;
-    const label = switchEl.closest('.form-group').querySelector('label');
+    const formGroup = switchEl.closest('.form-group');
+    const label = formGroup ? formGroup.querySelector('label') : null;
     
     // Update label text if data attributes are present
     if (label) {

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Rishi's Lily Farm Admin</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-app">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="brand-logo"><i class="fas fa-leaf"></i> Lily Farm Admin</a>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="products.html" class="nav-link"><i class="fas fa-box"></i> Products</a></li>
+                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Pricing &amp; Availability</a></li>
+                    <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-truck"></i> Orders</a></li>
+                    <li class="nav-item"><a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a></li>
+                    <li class="nav-item"><a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
+                    <li class="nav-item"><a href="faqs.html" class="nav-link"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                    <li class="nav-item"><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <button class="btn btn-secondary d-md-none" data-sidebar-toggle>
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-search">
+                    <input type="search" class="search-input" placeholder="Search products, orders, customers..." data-table-search="main-table">
+                </div>
+                <div class="topbar-actions">
+                    <button class="notification-btn" data-modal-target="notifications-modal">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="profile-menu">
+                        <button class="profile-btn" data-dropdown-toggle>
+                            <div class="avatar">KN</div>
+                            <span class="d-none d-md-inline">Kyle Nagee</span>
+                            <i class="fas fa-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="login.html" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-overlay d-md-none"></div>
+
+            <div id="notifications-modal" class="modal-backdrop d-none">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Notifications</h3>
+                        <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="notification-list">
+                            <button class="notification-item" type="button" data-notification-detail="Order #1234 from John Doe — Customer placed a new order for 2 lilies. Please confirm stock and shipping details.">
+                                <i class="fas fa-check-circle" style="color:var(--ok);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Order Received</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Order #1234 from John Doe</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">2 minutes ago</div>
+                                </div>
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="Water Lily 'Pink Princess' is low in stock. Current inventory: 4 remaining. Consider reordering before the next weekend rush.">
+                                <i class="fas fa-exclamation-triangle" style="color:var(--warn);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">Low Stock Alert</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">Water Lily 'Pink Princess' is running low</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">1 hour ago</div>
+                                </div>
+                            </button>
+                            <button class="notification-item" type="button" data-notification-detail="A new 5-star review was submitted for Lotus 'Sacred Pink'. The customer praised the bloom quality and delivery speed.">
+                                <i class="fas fa-star" style="color:var(--accent-gold);font-size:1.2rem;margin-top:2px;"></i>
+                                <div>
+                                    <div style="font-weight:600;">New Review</div>
+                                    <div style="color:var(--light-text);font-size:0.85rem;">5-star review for Lotus 'Sacred Pink'</div>
+                                    <div style="color:var(--light-text);font-size:0.75rem;">3 hours ago</div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="notification-detail-panel d-none" id="notification-detail-panel">
+                            <div class="notification-detail-title">Details</div>
+                            <div class="notification-detail-text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div class="page-header">
+                    <h1 class="page-title">Profile</h1>
+                    <p class="page-subtitle">Manage your account details and preferences</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Account Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" value="Kyle Nagee">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" value="kyle@lilyfarm.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <input type="text" class="form-control" value="Store Administrator" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bio</label>
+                                <textarea class="form-control" rows="4">Managing greenhouse operations, pricing, and customer experience for Rishi's Lily Farm.</textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Save Profile</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>

@@ -1,20 +1,23 @@
-const firebaseConfig = window.__FB_CONFIG;
+const configuredFirebase = window.__FB_CONFIG;
 
-let db;
+var db;
 
 // Try to initialize Firebase, but provide mock data as fallback
-if (firebaseConfig) {
+if (configuredFirebase && configuredFirebase.projectId !== 'demo-project') {
   try {
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(configuredFirebase);
     db = firebase.firestore();
   } catch (e) {
     console.warn("Firebase initialization failed, using mock data:", e);
     db = createMockDatabase();
   }
 } else {
-  console.warn("Firebase config not found, using mock data for testing");
+  console.warn("Using local mock data until Firebase is configured");
   db = createMockDatabase();
 }
+
+// Keep the database handle available to inline page scripts as well as modules.
+window.db = db;
 
 function createMockDatabase() {
   // Mock FAQ data for testing/demo purposes
@@ -133,6 +136,24 @@ function createMockDatabase() {
     collection: (name) => {
       if (name === 'faqs') {
         return {
+          orderBy: () => ({
+            orderBy: () => ({
+              get: async () => ({
+                forEach: (callback) => {
+                  mockFAQs.forEach(faq => {
+                    callback({ id: faq.id, data: () => faq });
+                  });
+                }
+              })
+            }),
+            get: async () => ({
+              forEach: (callback) => {
+                mockFAQs.forEach(faq => {
+                  callback({ id: faq.id, data: () => faq });
+                });
+              }
+            })
+          }),
           where: () => ({
             orderBy: () => ({
               get: async () => ({
@@ -148,6 +169,11 @@ function createMockDatabase() {
       }
       // Return empty collection for other collections
       return {
+        orderBy: () => ({
+          get: async () => ({
+            forEach: () => {}
+          })
+        }),
         where: () => ({
           orderBy: () => ({
             get: async () => ({

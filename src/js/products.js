@@ -35,10 +35,15 @@ async function loadProducts() {
       const key = data.slug || doc.id;
       window.products[key] = { ...data, firestoreId: doc.id };
     });
+    if (!Object.keys(window.products).length) {
+      localProducts.forEach(p => {
+        window.products[p.slug] = p;
+      });
+    }
     window.PRODUCTS_LOADED = true;
     document.dispatchEvent(new Event('productsLoaded'));
   } catch (e) {
-    console.error('Failed to load products from Firebase:', e);
+    console.warn('Using local product data:', e.message);
     // Fallback to local products
     window.products = {};
     localProducts.forEach(p => {
