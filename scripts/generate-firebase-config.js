@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const root = path.resolve(__dirname, "..");
-const envPath = path.join(root, ".env");
+const envPath = path.join(root, "process.env");
 const outputPath = path.join(root, "src", "js", "firebase-config.js");
 
 if (!fs.existsSync(envPath)) {
