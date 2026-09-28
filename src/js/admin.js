@@ -17,10 +17,15 @@ function initializeSidebar() {
     const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
     const sidebar = document.querySelector('.admin-sidebar');
     const overlay = document.querySelector('.sidebar-overlay');
+
+    if (sidebar && window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+    }
     
     if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');
+            sidebarToggle.setAttribute('aria-expanded', String(!sidebar.classList.contains('collapsed')));
             if (overlay) {
                 overlay.classList.toggle('show');
             }

@@ -11,7 +11,7 @@
                 section: 'General Questions',
                 sectionIcon: 'fa-question-circle',
                 question: 'Are you the only place in Trinidad to get these lilies?',
-                answer: 'Yes! Rishi'\''s Lily Farm is uniquely positioned as the only dedicated lily and exotic plant nursery in Trinidad. We specialize in rare varieties that you won'\''t find elsewhere on the island.',
+                answer: "Yes! Rishi's Lily Farm is uniquely positioned as the only dedicated lily and exotic plant nursery in Trinidad. We specialize in rare varieties that you won't find elsewhere on the island.",
                 order: 1,
                 status: 'published'
               },
@@ -46,8 +46,8 @@
                 id: '5',
                 section: 'Plant Care & Maintenance',
                 sectionIcon: 'fa-leaf',
-                question: 'How do I care for lilies in Trinidad'\''s climate?',
-                answer: 'Lilies thrive in Trinidad'\''s tropical climate but need proper care. Plant them in well-draining soil with partial sunlight (4-6 hours daily). Water regularly but avoid waterlogging. Apply organic fertilizer every 4-6 weeks during growing season.',
+                question: "How do I care for lilies in Trinidad's climate?",
+                answer: "Lilies thrive in Trinidad's tropical climate but need proper care. Plant them in well-draining soil with partial sunlight (4-6 hours daily). Water regularly but avoid waterlogging. Apply organic fertilizer every 4-6 weeks during growing season.",
                 order: 1,
                 status: 'published'
               },
@@ -55,7 +55,7 @@
                 id: '6',
                 section: 'Plant Care & Maintenance',
                 sectionIcon: 'fa-leaf',
-                question: 'What'\''s the best way to plant lotus species?',
+                question: "What's the best way to plant lotus species?",
                 answer: 'Lotus species are best planted in water containers or ponds. They need good sunlight and regular fertilization.',
                 order: 2,
                 status: 'published'

@@ -1,248 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rishi's Lily Farm - Product Gallery</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="src/css/styles.css">
-  <link rel="stylesheet" href="src/css/products.css">
-  <link rel="stylesheet" href="src/css/whatsapp-button.css">
-  <style>
-    .stock-badge { font-size:0.75rem; padding:2px 10px; border-radius:12px; font-weight:600; display:inline-block; }
-    .stock-badge.in-stock { background:#e8f5e9; color:#2e7d32; }
-    .stock-badge.out-of-stock { background:#fbe9e7; color:#c62828; }
-    .featured-tag { color:var(--accent-gold); font-size:0.75rem; margin-left:4px; }
-    .category-section { margin-bottom: 40px; }
-    .category-section h2 { margin-bottom: 20px; display:flex; align-items:center; justify-content:center; gap:10px; }
-    .fertilizer-info { font-size:0.85rem; color:var(--light-text); margin-top:4px; }
-    .product-price { font-weight:700; color:var(--primary-green); font-size:1.1rem; }
-    #productsContainer:empty { display: none !important; }
-  </style>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Shop locally grown water lilies, exotic plants and growing essentials from Rishi's Lily Farm in Trinidad.">
+  <title>Shop Tropical Plants | Rishi's Lily Farm</title>
+  <link rel="icon" type="image/jpeg" href="img/lily%20flowers.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/products.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
-<body>
-  <div id="navbar"></div>
-
-  <div class="products-header">
-    <h1>Welcome to Rishi's Lily Farm</h1>
-    <p>Discover the Beauty of Tropical Water Lilies and Exotic Plants</p>
-  </div>
-
-  <div class="search-container">
-    <div class="d-flex justify-content-center">
-      <div class="input-group" style="max-width: 400px;">
-        <input type="text" id="productSearch" class="form-control" placeholder="Search products...">
-        <button class="btn btn-success btn-sm" id="searchBtn">Search</button>
+<body class="shop-page">
+  <a class="skip-link" href="#shop-products">Skip to products</a><div id="navbar"></div>
+  <main>
+    <section class="shop-hero" aria-labelledby="shop-title"><div class="shop-container shop-hero__inner">
+      <p class="eyebrow">Shop the farm</p><h1 id="shop-title">Find Something <em>Extraordinary.</em></h1>
+      <p>Explore tropical water lilies, exotic plants and growing essentials — cultivated locally in Trinidad.</p>
+    </div></section>
+    <section class="shop-discovery" aria-label="Find products"><div class="shop-container">
+      <div id="promoBanner" aria-live="polite"></div>
+      <div class="shop-toolbar">
+        <label class="shop-search" for="productSearch"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><input type="search" id="productSearch" placeholder="Search plants &amp; products..." autocomplete="off"><button id="clearSearchInline" type="button" aria-label="Clear search" hidden><i class="fas fa-xmark" aria-hidden="true"></i></button></label>
+        <label class="shop-sort" for="productSort"><span>Sort:</span><select id="productSort"><option value="featured">Featured</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option><option value="name-asc">Name: A–Z</option></select></label>
       </div>
-    </div>
-    <p id="noResults" class="text-center mt-3 text-danger" style="display:none;">No results found</p>
-  </div>
-
-  <div id="productsContainer"></div>
-
-  <footer>
-    <div id="footer"></div>
-  </footer>
-
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="src/js/firebase-config.js"></script>
-  <script src="src/js/firebase.js"></script>
-  <script src="src/js/utils.js"></script>
-  <script src="src/js/products.js"></script>
-  <script src="src/js/promotions.js"></script>
-  <script src="src/js/footer.js?v=20260816d"></script>
-
+      <div class="shop-filter-row"><div class="category-filters" role="group" aria-label="Filter products by category">
+        <button class="filter-pill is-active" type="button" data-category="all" aria-pressed="true">All</button><button class="filter-pill" type="button" data-category="Lily" aria-pressed="false"><span aria-hidden="true">🌊</span> Lilies</button><button class="filter-pill" type="button" data-category="Exotic" aria-pressed="false"><span aria-hidden="true">🌿</span> Exotic Plants</button><button class="filter-pill" type="button" data-category="Fertilizer" aria-pressed="false"><span aria-hidden="true">🧪</span> Fertilizers</button>
+      </div><p id="productCount" class="product-count" aria-live="polite">Loading products…</p></div>
+    </div></section>
+    <div id="shop-products" class="shop-products" aria-live="polite"><div class="shop-loading"><i class="fas fa-seedling" aria-hidden="true"></i><span>Gathering fresh picks from the farm…</span></div></div>
+  </main>
+  <section class="shop-trust" aria-label="Why shop with Rishi's Lily Farm"><div class="shop-container shop-trust__grid"><div><span>🌱</span><strong>Locally Grown</strong></div><div><span>🚚</span><strong>Trinidad Delivery</strong></div><div><span>💚</span><strong>Carefully Selected</strong></div><div><span>💬</span><strong>WhatsApp Support</strong></div></div></section>
+  <footer><div id="footer"></div></footer>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js"></script><script src="src/js/utils.js"></script><script src="src/js/products.js"></script><script src="src/js/promotions.js"></script><script src="src/js/footer.js?v=20260927"></script>
   <script>
-  function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-  function promoCatLabel(type) {
-    var cats = getCoveredCategories(type);
-    if (cats === 'all') return 'All Categories';
-    if (!cats || cats.length === 0) return '';
-    var labels = cats.map(function(c) { return c + 's'; });
-    if (labels.length === 1) return labels[0];
-    return labels.slice(0, -1).join(', ') + ' & ' + labels[labels.length - 1];
-  }
-
-  function priceHtml(product) {
-    var price = Number(product.price);
-    var sale = getDiscountedPrice(price, product.category);
-    if (sale) {
-      return '<div style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="text-decoration:line-through;color:#999;font-size:0.95rem;">TTD $' + price.toFixed(2) + '</span><span style="font-weight:700;color:#c62828;font-size:1.15rem;">TTD $' + sale.discounted.toFixed(2) + '</span></div>';
-    }
-    return '<div class="product-price">TTD $' + price.toFixed(2) + '</div>';
-  }
-
-  function getProductImage(product) {
-    if (!product) return 'img/lily%20flowers.jpg';
-    if (product.image) return product.image;
-
-    const imageMap = {
-      'amaryllis': 'img/amaryllis.jpg',
-      'red-amaryllis': 'img/red-amaryllis.jpg',
-      'light-yellow-day-bloomer': 'img/light-yellow-day-bloomer.jpg',
-      'dark-yellow-day-bloomer': 'img/dark-yellow-day-bloomer.jpg',
-      'purple-blue-day-bloomer': 'img/purple-blue-day-bloomer.jpg',
-      'light-purple-day-bloomer': 'img/light-purple-day-bloomer.jpg',
-      'dark-purple-day-bloomer': 'img/dark-purple-day-bloomer.jpg',
-      'white-night-bloomer': 'img/white-night-bloomer.jpg',
-      'light-pink-night-bloomer': 'img/light-pink-night-bloomer.jpg',
-      'dark-pink-night-bloomer': 'img/dark-pink-night-bloomer.jpg',
-      'pink-indian-lotus': 'img/pink-indian-lotus.jpg',
-      'golden-champaca': 'img/golden-champaca.jpg',
-      'rangoon-creeper': 'img/rangoon-creeper.jpg',
-      'parrots-beak-heliconia': 'img/parrot\'s-beak-heliconia.jpg',
-      'variegated-purple-day-bloomer': 'img/variegated-purple-day-bloomer.jpg',
-      'white-purple-day-bloomer': 'img/white-purple-day-bloomer.jpg'
+  (function () {
+    'use strict';
+    var state = { category: 'all', query: '', sort: 'featured' };
+    var categoryContent = {
+      Lily: { eyebrow: 'Aquatic collection', title: 'Water Lilies', copy: "Colourful tropical water lilies selected for Trinidad's warm climate." },
+      Exotic: { eyebrow: 'Tropical collection', title: 'Exotic Plants', copy: 'Bring something extraordinary into your garden with our tropical flowering plants.' },
+      Fertilizer: { eyebrow: 'Growing essentials', title: 'Plant Care & Fertilizers', copy: 'Everything your plants need to keep growing, blooming and thriving.' }
     };
-
-    const slug = (product.slug || product.id || '').toLowerCase();
-    return imageMap[slug] || 'img/lily%20flowers.jpg';
-  }
-
-  function renderPromoBanner() {
-    var active = getActivePromotions();
-    var upcoming = getUpcomingPromotions();
-    if (active.length > 0) {
-      var p = active[0];
-      var catLabel = promoCatLabel('active');
-      var title = catLabel ? 'Sale on ' + catLabel : esc(p.bannerText || 'Sale is live!');
-      return '<div style="background:linear-gradient(135deg,#1b5e20,#2e7d32);border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:14px;color:#fff;">' +
-        '<i class="fas fa-bolt" style="font-size:1.5rem;"></i>' +
-        '<div style="flex:1;"><strong style="font-size:1.1rem;">' + title + '</strong>' +
-        '<span style="opacity:0.9;font-size:0.85rem;display:block;">' + Number(p.discount) + '% off &mdash; ' + new Date(p.endDate).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</span></div>' +
-        '<span style="background:rgba(255,255,255,0.2);padding:6px 18px;border-radius:20px;font-weight:700;font-size:1rem;">' + Number(p.discount) + '% OFF</span></div>';
+    function esc(value) { var el = document.createElement('div'); el.textContent = value == null ? '' : String(value); return el.innerHTML; }
+    function getProductImage(product) {
+      if (product && product.image) return product.image;
+      var images = {'amaryllis':'img/amaryllis.jpg','red-amaryllis':'img/red-amaryllis.jpg','light-yellow-day-bloomer':'img/light-yellow-day-bloomer.jpg','dark-yellow-day-bloomer':'img/dark-yellow-day-bloomer.jpg','purple-blue-day-bloomer':'img/purple-blue-day-bloomer.jpg','light-purple-day-bloomer':'img/light-purple-day-bloomer.jpg','dark-purple-day-bloomer':'img/dark-purple-day-bloomer.jpg','white-night-bloomer':'img/white-night-bloomer.jpg','light-pink-night-bloomer':'img/light-pink-night-bloomer.jpg','dark-pink-night-bloomer':'img/dark-pink-night-bloomer.jpg','pink-indian-lotus':'img/pink-indian-lotus.jpg','golden-champaca':'img/golden-champaca.jpg','rangoon-creeper':'img/rangoon-creeper.jpg','parrots-beak-heliconia':"img/parrot's-beak-heliconia.jpg",'variegated-purple-day-bloomer':'img/variegated-purple-day-bloomer.jpg','white-purple-day-bloomer':'img/white-purple-day-bloomer.jpg','whitebloomer':'img/whitepurplebloomer.jpg'};
+      return images[String(product.slug || product.id || '').toLowerCase()] || 'img/lily%20flowers.jpg';
     }
-    if (upcoming.length > 0) {
-      var u = upcoming[0];
-      var catLabel = promoCatLabel('upcoming');
-      var title = catLabel ? 'Sale on ' + catLabel : esc(u.bannerText || 'Sale incoming');
-      return '<div style="background:linear-gradient(135deg,#2e7d32,#4caf50);border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:14px;color:#fff;">' +
-        '<i class="fas fa-clock" style="font-size:1.5rem;"></i>' +
-        '<div style="flex:1;"><strong style="font-size:1.1rem;">Coming Soon: ' + title + '</strong>' +
-        '<span style="opacity:0.9;font-size:0.85rem;display:block;">' + Number(u.discount) + '% off &mdash; starts ' + new Date(u.startDate).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</span></div>' +
-        '<span style="background:rgba(255,255,255,0.2);padding:6px 18px;border-radius:20px;font-weight:700;font-size:1rem;">' + Number(u.discount) + '% OFF</span></div>';
+    function priceHtml(product) {
+      var price = Number(product.price) || 0;
+      var sale = typeof getDiscountedPrice === 'function' ? getDiscountedPrice(price, product.category) : null;
+      if (sale) return '<div class="product-card__price"><span class="old-price">TTD $' + price.toFixed(2) + '</span><strong>TTD $' + Number(sale.discounted).toFixed(2) + '</strong></div>';
+      return '<div class="product-card__price"><strong>TTD $' + price.toFixed(2) + '</strong></div>';
     }
-    return '';
-  }
-
-  function renderEmptyState() {
-    const container = document.getElementById('productsContainer');
-    if (!container) return;
-    container.innerHTML = '';
-    container.style.display = 'none';
-    container.hidden = true;
-  }
-
-  function renderProducts() {
-    const container = document.getElementById('productsContainer');
-    if (!container) return;
-    if (!window.PRODUCTS_LOADED || !window.products || Object.keys(window.products).length === 0) {
-      renderEmptyState();
-      return;
+    function productCard(product) {
+      var slug = esc(product.slug || product.id), inStock = product.inStock !== false;
+      var badge = product.featured ? '<span class="popular-badge"><i class="fas fa-star" aria-hidden="true"></i> Popular</span>' : '';
+      return '<article class="shop-card">' +
+        '<a class="shop-card__media" href="product-detail.html?id=' + slug + '">' + badge + '<img src="' + esc(getProductImage(product)) + '" alt="' + esc(product.name) + '" loading="lazy" onerror="this.src=\'img/lily%20flowers.jpg\';"></a>' +
+        '<div class="shop-card__body"><p class="shop-card__category">' + esc(product.category === 'Lily' ? 'Water lily' : product.category === 'Exotic' ? 'Exotic plant' : 'Plant care') + '</p><h3><a href="product-detail.html?id=' + slug + '">' + esc(product.name) + '</a></h3>' + priceHtml(product) + '<p class="shop-card__description">' + esc(product.description || 'Product details coming soon.') + '</p>' +
+        '<div class="shop-card__stock ' + (inStock ? 'is-in-stock' : 'is-out-of-stock') + '"><span></span>' + (inStock ? 'In Stock' : 'Out of Stock') + '</div>' +
+        (inStock ? '<button class="add-to-cart-btn" type="button" data-product-id="' + slug + '" data-product-name="' + esc(product.name) + '"><span>Add to Cart</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>' : '<button class="add-to-cart-btn" type="button" disabled>Out of Stock</button>') + '</div></article>';
     }
-    container.style.display = 'block';
-    container.hidden = false;
-    var promoBanner = renderPromoBanner();
-    const cats = ['Lily', 'Exotic', 'Fertilizer'];
-    const catIcons = { Lily: 'fas fa-water', Exotic: 'fas fa-seedling', Fertilizer: 'fas fa-flask' };
-    let html = '';
-    if (promoBanner) html += promoBanner;
-
-    cats.forEach(cat => {
-      const items = getProductsByCategory(cat);
-      if (items.length === 0) return;
-      html += '<div class="category-section"><h2><i class="' + (catIcons[cat] || 'fas fa-leaf') + '" style="color:var(--primary-green);"></i> ' + cat + 's</h2>';
-      html += '<section class="gallery">';
-      items.forEach(p => {
-        const stockHtml = p.inStock !== false
-          ? '<span class="stock-badge in-stock"><i class="fas fa-check-circle"></i> In Stock</span>'
-          : '<span class="stock-badge out-of-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
-        const featuredHtml = p.featured ? '<span class="featured-tag"><i class="fas fa-star" title="Featured"></i></span>' : '';
-        const imgPath = getProductImage(p);
-        const descriptionHtml = p.description ? '<p style="font-size:0.85rem;color:var(--light-text);margin:8px 0;line-height:1.4;">' + esc(p.description) + '</p>' : '';
-        const addToCartBtn = p.inStock !== false 
-          ? '<button class="add-to-cart-btn" data-product-id="' + esc(p.slug) + '" data-product-name="' + esc(p.name) + '" style="width:100%;margin-top:10px;padding:8px 16px;background:#2e7d32;color:white;border:none;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.9rem;transition:background 0.3s ease;" onmouseover="this.style.background=\'#1b5e20\';" onmouseout="this.style.background=\'#2e7d32\';">Add to Cart</button>'
-          : '<button style="width:100%;margin-top:10px;padding:8px 16px;background:#ccc;color:#666;border:none;border-radius:4px;cursor:not-allowed;font-weight:600;font-size:0.9rem;" disabled>Out of Stock</button>';
-        html += '<figure><a href="product-detail.html?id=' + esc(p.slug) + '"><img src="' + esc(imgPath) + '" alt="' + esc(p.name) + '" onerror="this.src=\'img/lily%20flowers.jpg\';this.alt=\'No image\';this.style.objectFit=\'cover\';this.style.padding=\'0\';this.style.background=\'#f0f0f0\';"></a><figcaption>' + esc(p.name) + ' ' + featuredHtml + priceHtml(p) + descriptionHtml + '<div style="margin-top:4px;">' + stockHtml + '</div>' + addToCartBtn + '</figcaption></figure>';
-      });
-      html += '</section></div>';
+    function filteredProducts() {
+      var query = state.query.toLowerCase();
+      var list = Object.values(window.products || {}).filter(function (p) { return (state.category === 'all' || p.category === state.category) && (!query || [p.name,p.description,p.category].join(' ').toLowerCase().indexOf(query) !== -1); });
+      list.sort(function (a,b) { if (state.sort === 'price-asc') return Number(a.price)-Number(b.price); if (state.sort === 'price-desc') return Number(b.price)-Number(a.price); if (state.sort === 'name-asc') return String(a.name).localeCompare(String(b.name)); return Number(Boolean(b.featured))-Number(Boolean(a.featured)); });
+      return list;
+    }
+    function renderProducts() {
+      if (!window.PRODUCTS_LOADED) return;
+      var products = filteredProducts(), container = document.getElementById('shop-products');
+      document.getElementById('productCount').textContent = 'Showing ' + products.length + ' product' + (products.length === 1 ? '' : 's');
+      document.getElementById('clearSearchInline').hidden = !state.query;
+      if (!products.length) { var term = state.query ? ' matching “' + esc(state.query) + '”' : ' in this category'; container.innerHTML = '<section class="shop-empty"><span aria-hidden="true">🌱</span><h2>No plants found</h2><p>We couldn\'t find anything' + term + '.</p><button id="clearSearch" type="button">Clear filters</button></section>'; document.getElementById('clearSearch').addEventListener('click', clearFilters); return; }
+      var categories = state.category === 'all' ? ['Lily','Exotic','Fertilizer'] : [state.category];
+      container.innerHTML = categories.map(function (category) { var items = products.filter(function (p) { return p.category === category; }); if (!items.length) return ''; var c = categoryContent[category]; return '<section class="product-section product-section--' + category.toLowerCase() + '"><div class="shop-container"><header class="product-section__header"><p class="eyebrow">' + c.eyebrow + '</p><h2>' + c.title + '</h2><p>' + c.copy + '</p></header><div class="shop-grid">' + items.map(productCard).join('') + '</div></div></section>'; }).join('');
+      bindCartButtons();
+    }
+    function bindCartButtons() { document.querySelectorAll('.add-to-cart-btn:not([disabled])').forEach(function (button) { button.addEventListener('click', function () { var id = button.dataset.productId, name = button.dataset.productName, cart = JSON.parse(localStorage.getItem('cart') || '[]'), item = cart.find(function (entry) { return entry.id === id; }); if (item) item.quantity = (item.quantity || 1) + 1; else cart.push({id:id,name:name,quantity:1}); localStorage.setItem('cart', JSON.stringify(cart)); if (typeof updateCartBadge === 'function') updateCartBadge(); if (typeof trackAddToCart === 'function') trackAddToCart(id,name,1); button.classList.add('is-added'); button.querySelector('span').textContent = 'Added to Cart'; button.querySelector('i').className = 'fas fa-check'; window.setTimeout(function () { button.classList.remove('is-added'); button.querySelector('span').textContent = 'Add to Cart'; button.querySelector('i').className = 'fas fa-arrow-right'; }, 1400); }); }); }
+    function setActivePill(category) { document.querySelectorAll('.filter-pill').forEach(function (pill) { var active = pill.dataset.category === category; pill.classList.toggle('is-active',active); pill.setAttribute('aria-pressed',String(active)); }); }
+    function clearFilters() { state.query=''; state.category='all'; document.getElementById('productSearch').value=''; setActivePill('all'); renderProducts(); }
+    function renderPromo() { var target=document.getElementById('promoBanner'); if (!target || typeof getActivePromotions !== 'function') return; var active=getActivePromotions(); if (!active.length) { target.innerHTML=''; return; } var p=active[0]; target.innerHTML='<div class="shop-promo"><i class="fas fa-sparkles" aria-hidden="true"></i><p><strong>' + esc(p.bannerText || 'Fresh savings from the farm') + '</strong><span>' + Number(p.discount) + '% off selected products</span></p><b>' + Number(p.discount) + '% OFF</b></div>'; }
+    document.addEventListener('DOMContentLoaded', function () {
+      var q=new URLSearchParams(window.location.search).get('category'), map={lily:'Lily',exotic:'Exotic',fertilizer:'Fertilizer'}; if(q && map[q.toLowerCase()]) state.category=map[q.toLowerCase()]; setActivePill(state.category);
+      document.getElementById('productSearch').addEventListener('input',function(e){state.query=e.target.value.trim();renderProducts();});
+      document.getElementById('clearSearchInline').addEventListener('click',function(){state.query='';document.getElementById('productSearch').value='';renderProducts();document.getElementById('productSearch').focus();});
+      document.getElementById('productSort').addEventListener('change',function(e){state.sort=e.target.value;renderProducts();});
+      document.querySelectorAll('.filter-pill').forEach(function(pill){pill.addEventListener('click',function(){state.category=pill.dataset.category;setActivePill(state.category);renderProducts();});}); renderProducts();
     });
-
-    container.innerHTML = html || '<p class="text-center" style="padding:60px 20px;color:var(--light-text);">No products available yet.</p>';
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    function render() {
-      if (window.PRODUCTS_LOADED) {
-        renderProducts();
-        attachAddToCartListeners();
-      } else {
-        renderEmptyState();
-      }
-    }
-    
-    function attachAddToCartListeners() {
-      const buttons = document.querySelectorAll('.add-to-cart-btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-          const productId = this.getAttribute('data-product-id');
-          const productName = this.getAttribute('data-product-name');
-          addToCart(productId, productName);
-        });
-      });
-    }
-    
-    function addToCart(productId, productName) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const existingItem = cart.find(item => item.id === productId);
-      
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cart.push({ id: productId, name: productName, quantity: 1 });
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(cart));
-      window.location.href = 'cart.html';
-    }
-    
-    render();
-    document.addEventListener('productsLoaded', function() {
-      renderProducts();
-      attachAddToCartListeners();
-    });
-    document.addEventListener('promotionsLoaded', function() {
-      renderProducts();
-      attachAddToCartListeners();
-    });
-    document.getElementById('searchBtn').addEventListener('click', function() {
-      var val = document.getElementById('productSearch').value.toLowerCase().trim();
-      var found = false;
-      for (var key in window.products) {
-        if (window.products[key].name.toLowerCase() === val) {
-          window.location.href = 'product-detail.html?id=' + key;
-          found = true; break;
-        }
-      }
-      if (!found) {
-        document.getElementById('noResults').style.display = 'block';
-        setTimeout(function() { document.getElementById('noResults').style.display = 'none'; }, 3000);
-      }
-    });
-  });
-
-  fetch("src/components/navbar.html").then(r => r.text()).then(html => {
-    document.getElementById("navbar").innerHTML = html;
-    updateCartBadge();
-    initializeMobileMenu();
-    const page = "products.html";
-    document.querySelectorAll("#navbar a").forEach(a => { if (a.getAttribute("href") === page) a.classList.add("active"); });
-  });
-  </script>
-  <script src="src/js/whatsapp-button.js"></script>
+    document.addEventListener('productsLoaded',renderProducts); document.addEventListener('promotionsLoaded',function(){renderPromo();renderProducts();});
+    fetch('src/components/navbar.html').then(function(r){return r.text();}).then(function(html){document.getElementById('navbar').innerHTML=html;if(typeof updateCartBadge==='function')updateCartBadge();if(typeof initializeMobileMenu==='function')initializeMobileMenu();document.querySelectorAll('#navbar a').forEach(function(a){if(a.getAttribute('href')==='products.html')a.classList.add('active');});});
+  }());
+  </script><script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>

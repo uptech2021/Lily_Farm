@@ -15,10 +15,10 @@
                 <p class="brand-subtitle">Admin Dashboard</p>
             </div>
             
-            <form class="login-form" data-validate>
+            <form class="login-form">
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="admin@lilyfarm.com" value="admin@lilyfarm.com" required autocomplete="email">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your admin email" required autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
@@ -32,9 +32,7 @@
                     <span style="font-size:0.85rem;color:var(--dark-text);">Remember me</span>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Sign In</button>
-                <div style="text-align:center;margin-top:20px;">
-                    <a href="#" style="color:var(--primary-green);text-decoration:none;font-size:0.85rem;">Forgot your password?</a>
-                </div>
+                <p id="loginMessage" class="login-message" role="alert" hidden></p>
             </form>
         </div>
         <div class="login-info">
@@ -50,7 +48,6 @@
         </div>
     </div>
 
-    <script src="../js/admin.js"></script>
-    <script src="../js/forms.js"></script>
+    <script src="../js/admin-login.js?v=20260928"></script>
 </body>
 </html>

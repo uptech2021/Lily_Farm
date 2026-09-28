@@ -38,6 +38,8 @@ function initializeMobileMenu() {
   const navLinks = document.getElementById("navLinks");
 
   if (!btn || !navLinks) return;
+  if (btn.dataset.menuReady === 'true') return;
+  btn.dataset.menuReady = 'true';
 
   btn.setAttribute("aria-expanded", "false");
 
@@ -58,16 +60,6 @@ function initializeMobileMenu() {
 }
 
 document.addEventListener("DOMContentLoaded", initializeMobileMenu);
-document.addEventListener("click", function(e) {
-  const btn = e.target.closest("#mobileMenuBtn");
-  if (!btn) return;
-
-  const navLinks = document.getElementById("navLinks");
-  if (navLinks) {
-    const isOpen = navLinks.classList.toggle("active");
-    btn.setAttribute("aria-expanded", String(isOpen));
-  }
-});
 
 // ========== SESSION & TRACKING ==========
 // Get or create session ID
@@ -246,6 +238,24 @@ window.formatDate = formatDate;
 window.formatTime = formatTime;
 window.getStorageItem = getStorageItem;
 window.setStorageItem = setStorageItem;
+
+// Shared farm map used by Home and Contact pages.
+function initFarmMap(containerId) {
+  const targetId = containerId || 'mapContainer';
+  const element = document.getElementById(targetId);
+  if (typeof L === 'undefined' || !element || element.dataset.mapReady === 'true') return null;
+  element.dataset.mapReady = 'true';
+  const coords = [10.325615, -61.415639];
+  const map = L.map(targetId, { scrollWheelZoom: false }).setView(coords, 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+  L.marker(coords).addTo(map).bindPopup('<strong>Rishi\'s Lily Farm</strong><br>#6 Kowlessar Street<br>Gasparillo, Trinidad');
+  return map;
+}
+
+window.initFarmMap = initFarmMap;
 
 // Log initial page visit
 if (document.readyState === "loading") {

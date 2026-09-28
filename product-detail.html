@@ -1,341 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="View product details and shop locally grown plants from Rishi's Lily Farm in Trinidad.">
   <title>Product Detail | Rishi's Lily Farm</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="src/css/styles.css">
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="src/js/firebase-config.js"></script>
-  <script src="src/js/firebase.js"></script>
-  <script src="src/js/utils.js"></script>
-  <script src="src/js/products.js"></script>
-  <script src="src/js/promotions.js"></script>
-  <script src="src/js/footer.js?v=20260816d"></script>
-  <style>
-    body { background-color: #f5f5f5; }
-    .detail-search-container { max-width: 450px; margin: 20px auto; padding: 0 16px; }
-    .page-banner { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: white; text-align: center; padding: 2.5rem 1rem; margin-bottom: 2rem; position: relative; }
-    .page-banner h1 { font-size: 2rem; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
-    .page-banner .back-link { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.95rem; }
-    .page-banner .back-link:hover { color: white; }
-    .product-detail { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .product-detail-layout { display: flex; gap: 40px; align-items: flex-start; background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 40px; }
-    .product-image-section { flex: 0 0 400px; }
-    .product-image-section img { width: 100%; height: 400px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-    .product-image-section .no-img { width: 100%; height: 400px; border-radius: 10px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #ccc; }
-    .product-info-section { flex: 1; min-width: 0; }
-    .product-info-section h1 { font-size: 2rem; font-weight: 700; color: var(--dark-text); margin-bottom: 12px; }
-    .category-badge { display: inline-block; background: var(--light-green); color: white; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
-    .price-display { font-size: 1.6rem; font-weight: 700; color: var(--primary-green); margin-bottom: 24px; padding: 10px 0; border-top: 2px solid #e8f5e9; border-bottom: 2px solid #e8f5e9; }
-    .info-card { background: var(--light-bg); border-left: 4px solid var(--primary-green); border-radius: 8px; padding: 18px 20px; margin-bottom: 16px; }
-    .info-card .info-title { font-weight: 700; color: var(--dark-text); margin-bottom: 8px; font-size: 1.05rem; }
-    .info-card .info-title i { color: var(--primary-green); width: 22px; margin-right: 6px; }
-    .info-card p { margin: 0; color: #555; line-height: 1.7; font-size: 1rem; }
-    .detail-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-    .btn-add-cart { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: white; border: none; border-radius: 8px; padding: 14px 36px; font-size: 1.05rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
-    .btn-add-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35); }
-    .btn-add-cart:disabled { opacity: 0.7; cursor: default; transform: none; }
-    .btn-add-cart .cart-count { background: var(--accent-gold); color: var(--dark-text); font-size: 0.75rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; position: absolute; top: -6px; right: -6px; min-width: 18px; text-align: center; }
-    .toast-notification { position: fixed; bottom: 24px; right: 24px; background: var(--primary-green); color: white; padding: 14px 24px; border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.2); z-index: 999; transform: translateY(80px); opacity: 0; transition: transform 0.35s ease, opacity 0.35s ease; pointer-events: none; display: flex; align-items: center; gap: 10px; }
-    .toast-notification.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
-    .btn-back { background: transparent; color: var(--light-text); border: 2px solid #ddd; border-radius: 8px; padding: 14px 28px; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
-    .btn-back:hover { border-color: var(--primary-green); color: var(--primary-green); }
-    .stock-badge-detail { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; margin-left: 8px; }
-    .stock-badge-detail.in-stock { background: #e8f5e9; color: #2e7d32; }
-    .stock-badge-detail.out-of-stock { background: #fbe9e7; color: #c62828; }
-    .featured-badge-detail { color: var(--accent-gold); margin-left: 8px; }
-    @media (max-width: 900px) { .product-detail-layout { flex-direction: column; padding: 28px; } .product-image-section { flex: none; width: 100%; max-width: 400px; margin: 0 auto; } .product-image-section img { height: auto; aspect-ratio: 1; } .page-banner h1 { font-size: 1.5rem; } .page-banner .back-link { position: static; display: block; transform: none; margin-bottom: 12px; } }
-    @media (max-width: 480px) { .product-detail-layout { padding: 20px; } .product-info-section h1 { font-size: 1.4rem; } .price-display { font-size: 1.3rem; } .detail-actions { flex-direction: column; } .btn-add-cart, .btn-back { width: 100%; justify-content: center; } }
-  </style>
+  <link rel="icon" type="image/jpeg" href="img/lily%20flowers.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/products.css"><link rel="stylesheet" href="src/css/product-detail.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
-<body>
-  <div class="detail-search-container">
-    <div class="input-group">
-      <input type="text" id="detailSearch" class="form-control" placeholder="Search products...">
-      <button class="btn btn-success btn-sm" id="detailSearchBtn">Search</button>
+<body class="detail-page">
+  <a class="skip-link" href="#productContent">Skip to product details</a><div id="navbar"></div>
+  <main>
+    <div class="detail-container detail-nav">
+      <a class="detail-back" href="products.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Shop</a>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="products.html">Shop</a></li><li id="breadcrumbCategory"></li><li id="breadcrumbProduct" aria-current="page"></li></ol></nav>
     </div>
-  </div>
 
-  <div class="page-banner">
-    <a href="products.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Products</a>
-    <h1 id="productHeader"></h1>
-  </div>
+    <div id="productLoading" class="detail-loading"><i class="fas fa-seedling" aria-hidden="true"></i><p>Gathering product details…</p></div>
+    <section id="productNotFound" class="detail-not-found" hidden><span aria-hidden="true">🌱</span><h1>Product not found</h1><p>Sorry, we couldn't find this product.</p><a href="products.html">Browse the Shop</a></section>
 
-  <div class="product-detail">
-    <div class="product-detail-layout" id="productContent" style="display:none;">
-      <div class="product-image-section">
-        <div id="productImageWrapper"><img id="productImage" src="" alt=""></div>
-      </div>
-      <div class="product-info-section">
-        <div>
-          <span class="category-badge" id="productCategory"></span>
-          <span class="stock-badge-detail" id="stockBadge"></span>
-          <span class="featured-badge-detail" id="featuredBadge"></span>
-        </div>
+    <article class="detail-container product-detail" id="productContent" hidden>
+      <section class="product-gallery" aria-label="Product images">
+        <div class="product-gallery__main"><img id="productImage" src="" alt=""></div>
+        <div class="product-gallery__thumbs" id="productThumbnails" aria-label="Choose product image"></div>
+      </section>
+
+      <section class="product-summary" aria-labelledby="productName">
+        <div class="product-summary__badges"><span class="detail-category" id="productCategory"></span><span class="detail-stock" id="stockBadge"><span></span></span><span class="detail-featured" id="featuredBadge" hidden><i class="fas fa-star" aria-hidden="true"></i> Popular</span></div>
         <h1 id="productName"></h1>
-        <div class="price-display" id="productPrice"></div>
-        <div class="info-card">
-          <div class="info-title"><i class="fas fa-leaf"></i> Description</div>
-          <p id="productDescription"></p>
+        <div class="detail-price" id="productPrice"></div>
+        <div id="productPromo"></div>
+        <section class="product-about"><p class="detail-eyebrow" id="descriptionLabel">Product description</p><p id="productDescription"></p></section>
+        <div class="purchase-area" id="purchaseArea">
+          <label>Quantity</label>
+          <div class="purchase-controls"><div class="quantity-control" aria-label="Choose quantity"><button type="button" id="quantityMinus" aria-label="Decrease quantity">−</button><output id="quantityValue" aria-live="polite">1</output><button type="button" id="quantityPlus" aria-label="Increase quantity">+</button></div><button class="detail-add-cart" id="addToCartBtn" type="button"><i class="fas fa-cart-shopping" aria-hidden="true"></i><span>Add to Cart</span></button></div>
         </div>
-        <div class="info-card" id="fertilizerCard">
-          <div class="info-title"><i class="fas fa-flask"></i> Fertilizer Information</div>
-          <p id="productFertilizer"></p>
-        </div>
-        <div class="detail-actions">
-          <button class="btn-add-cart" id="addToCartBtn"><i class="fas fa-cart-plus"></i> Add to Cart <span class="cart-count" id="cartCount">0</span></button>
-          <a href="products.html" class="btn-back"><i class="fas fa-arrow-left"></i> All Products</a>
-        </div>
-      </div>
-    </div>
+        <div class="detail-trust" aria-label="Why shop with us"><span>🌱 Locally Grown</span><span>💬 WhatsApp Support</span><span>📍 Trinidad Based</span></div>
+        <a class="product-question" href="https://wa.me/18687104296" target="_blank" rel="noopener noreferrer">Questions about this product? Chat with us <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+      </section>
+    </article>
 
-    <div class="toast-notification" id="cartToast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Added to cart!</span></div>
+    <section class="detail-information" id="additionalInformation" hidden><div class="detail-container detail-information__grid">
+      <div><p class="detail-eyebrow">More information</p><h2 id="infoHeading">Product Description</h2><p id="longDescription"></p></div>
+      <aside class="care-callout" id="fertilizerCard" hidden><span class="care-callout__icon" aria-hidden="true">🌱</span><div><p class="detail-eyebrow">Care tip</p><h3>Fertilizer</h3><p id="productFertilizer"></p></div></aside>
+    </div></section>
 
-    <div id="productLoading" style="text-align:center;padding:60px 20px;">
-      <i class="fas fa-spinner fa-pulse" style="font-size:2rem;color:var(--primary-green);"></i>
-      <p style="margin-top:12px;color:var(--light-text);">Loading product...</p>
-    </div>
-
-    <div id="productNotFound" style="display:none;text-align:center;padding:60px 20px;">
-      <i class="fas fa-seedling" style="font-size:3rem;color:var(--light-green);"></i>
-      <h2 style="margin-top:16px;color:var(--dark-text);">Product Not Found</h2>
-      <p style="color:var(--light-text);">Sorry, we couldn't find this product.</p>
-      <a href="products.html" class="btn-back" style="display:inline-flex;margin-top:16px;"><i class="fas fa-arrow-left"></i> Browse Products</a>
-    </div>
-  </div>
-
+    <section class="related-products" id="relatedSection" hidden><div class="detail-container"><header class="related-heading"><div><p class="detail-eyebrow">More from the farm</p><h2>You May Also Like</h2></div><a href="products.html">View all products <i class="fas fa-arrow-right" aria-hidden="true"></i></a></header><div class="shop-grid" id="relatedGrid"></div></div></section>
+  </main>
+  <section class="shop-trust" aria-label="Why shop with Rishi's Lily Farm"><div class="shop-container shop-trust__grid"><div><span>🌱</span><strong>Locally Grown</strong></div><div><span>🚚</span><strong>Trinidad Delivery</strong></div><div><span>💚</span><strong>Carefully Selected</strong></div><div><span>💬</span><strong>WhatsApp Support</strong></div></div></section>
   <footer><div id="footer"></div></footer>
 
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js"></script><script src="src/js/utils.js"></script><script src="src/js/products.js"></script><script src="src/js/promotions.js"></script><script src="src/js/footer.js?v=20260927"></script>
   <script>
-  function showToast(msg) {
-    document.getElementById("toastMsg").textContent = msg;
-    document.getElementById("cartToast").classList.add("show");
-    setTimeout(() => document.getElementById("cartToast").classList.remove("show"), 2500);
-  }
-
-  function getStoredCart() {
-    try {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      return Array.isArray(cart) ? cart : [];
-    } catch (error) {
-      return [];
+  (function () {
+    'use strict';
+    var currentProduct = null, quantity = 1;
+    function esc(value) { var el=document.createElement('div'); el.textContent=value==null?'':String(value); return el.innerHTML; }
+    function getProductImage(product) {
+      if (!product) return 'img/lily%20flowers.jpg'; if (product.image) return product.image;
+      var map={'amaryllis':'img/amaryllis.jpg','red-amaryllis':'img/red-amaryllis.jpg','light-yellow-day-bloomer':'img/light-yellow-day-bloomer.jpg','dark-yellow-day-bloomer':'img/dark-yellow-day-bloomer.jpg','purple-blue-day-bloomer':'img/purple-blue-day-bloomer.jpg','light-purple-day-bloomer':'img/light-purple-day-bloomer.jpg','dark-purple-day-bloomer':'img/dark-purple-day-bloomer.jpg','white-night-bloomer':'img/white-night-bloomer.jpg','light-pink-night-bloomer':'img/light-pink-night-bloomer.jpg','dark-pink-night-bloomer':'img/dark-pink-night-bloomer.jpg','pink-indian-lotus':'img/pink-indian-lotus.jpg','golden-champaca':'img/golden-champaca.jpg','rangoon-creeper':'img/rangoon-creeper.jpg','parrots-beak-heliconia':"img/parrot's-beak-heliconia.jpg",'variegated-purple-day-bloomer':'img/variegated-purple-day-bloomer.jpg','white-purple-day-bloomer':'img/white-purple-day-bloomer.jpg','whitebloomer':'img/whitepurplebloomer.jpg'};
+      return map[String(product.slug||product.id||'').toLowerCase()]||'img/lily%20flowers.jpg';
     }
-  }
-
-  function saveStoredCart(items) {
-    localStorage.setItem("cart", JSON.stringify(items));
-  }
-
-  async function updateCartCount() {
-    let items = [];
-    if (typeof fbGetCart === "function") {
-      items = await fbGetCart();
-    } else {
-      items = getStoredCart();
+    function productImages(product) { var list=[]; ['images','imageUrls','galleryImages'].some(function(key){if(Array.isArray(product[key])){list=product[key].filter(Boolean);return list.length;}}); if(!list.length) list=[getProductImage(product)]; return list.filter(function(src,index,self){return self.indexOf(src)===index;}); }
+    function categoryLabel(category) { return category==='Lily'?'Water Lily':category==='Exotic'?'Exotic Plant':category==='Fertilizer'?'Plant Care':category||'Product'; }
+    function renderGallery(product) { var images=productImages(product), main=document.getElementById('productImage'), thumbs=document.getElementById('productThumbnails'); main.src=images[0]; main.alt=product.name; main.onerror=function(){this.src='img/lily%20flowers.jpg';}; if(images.length<2){thumbs.hidden=true;thumbs.innerHTML='';return;} thumbs.hidden=false; thumbs.innerHTML=images.map(function(src,index){return '<button type="button" class="gallery-thumb '+(index===0?'is-active':'')+'" data-image="'+esc(src)+'" aria-label="View image '+(index+1)+'"><img src="'+esc(src)+'" alt=""></button>';}).join(''); thumbs.querySelectorAll('.gallery-thumb').forEach(function(button){button.addEventListener('click',function(){main.src=button.dataset.image;thumbs.querySelectorAll('.gallery-thumb').forEach(function(item){item.classList.toggle('is-active',item===button);});});}); }
+    function priceMarkup(product) { var price=Number(product.price)||0, promo=typeof getDiscountedPrice==='function'?getDiscountedPrice(price,product.category):null; if(promo)return '<span class="detail-price__old">TTD $'+price.toFixed(2)+'</span><strong>TTD $'+Number(promo.discounted).toFixed(2)+'</strong><span class="detail-sale">'+Number(promo.discount)+'% off</span>'; return '<strong>TTD $'+price.toFixed(2)+'</strong>'; }
+    function renderPromotion(product) { var target=document.getElementById('productPromo'); target.innerHTML=''; if(typeof getPromotionsForCategory!=='function')return; var promos=getPromotionsForCategory(product.category), promo=promos.active[0]||promos.upcoming[0]; if(!promo)return; target.innerHTML='<div class="detail-promo"><i class="fas fa-sparkles" aria-hidden="true"></i><div><strong>'+(promos.active.length?'Farm sale available':'Sale coming soon')+'</strong><span>'+Number(promo.discount)+'% off '+esc(product.category||'selected')+' products</span></div></div>'; }
+    function relatedCard(product) { var slug=esc(product.slug||product.id), stock=product.inStock!==false; return '<article class="shop-card"><a class="shop-card__media" href="product-detail.html?id='+slug+'">'+(product.featured?'<span class="popular-badge"><i class="fas fa-star" aria-hidden="true"></i> Popular</span>':'')+'<img src="'+esc(getProductImage(product))+'" alt="'+esc(product.name)+'" loading="lazy"></a><div class="shop-card__body"><p class="shop-card__category">'+esc(categoryLabel(product.category))+'</p><h3><a href="product-detail.html?id='+slug+'">'+esc(product.name)+'</a></h3><div class="product-card__price"><strong>TTD $'+Number(product.price||0).toFixed(2)+'</strong></div><div class="shop-card__stock '+(stock?'is-in-stock':'is-out-of-stock')+'"><span></span>'+(stock?'In Stock':'Out of Stock')+'</div><a class="related-view" href="product-detail.html?id='+slug+'">View Product <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></article>'; }
+    function renderRelated(product) { var all=Object.values(window.products||{}).filter(function(item){return (item.slug||item.id)!==(product.slug||product.id);}); all.sort(function(a,b){return Number(b.category===product.category)-Number(a.category===product.category)||Number(Boolean(b.featured))-Number(Boolean(a.featured));}); var items=all.slice(0,4); if(!items.length)return; document.getElementById('relatedGrid').innerHTML=items.map(relatedCard).join(''); document.getElementById('relatedSection').hidden=false; }
+    function addToCart(product) { var cart; try{cart=JSON.parse(localStorage.getItem('cart')||'[]');if(!Array.isArray(cart))cart=[];}catch(error){cart=[];} var id=product.slug||product.id, existing=cart.find(function(item){return item.id===id;}); if(existing){existing.quantity=Number(existing.quantity||existing.qty||1)+quantity;existing.qty=existing.quantity;}else{cart.push({id:id,name:product.name,price:product.price,quantity:quantity,qty:quantity,category:product.category,image:getProductImage(product)});} localStorage.setItem('cart',JSON.stringify(cart)); if(typeof updateCartBadge==='function')updateCartBadge(); if(typeof trackAddToCart==='function')trackAddToCart(id,product.name,quantity); }
+    function renderProduct(product) {
+      if(!product){showNotFound();return;} currentProduct=product; document.title=product.name+' | Rishi\'s Lily Farm';
+      document.getElementById('breadcrumbCategory').innerHTML='<a href="products.html?category='+encodeURIComponent(String(product.category||'').toLowerCase())+'">'+esc(categoryLabel(product.category))+'</a>'; document.getElementById('breadcrumbProduct').textContent=product.name;
+      document.getElementById('productCategory').textContent=categoryLabel(product.category); document.getElementById('productName').textContent=product.name; document.getElementById('productPrice').innerHTML=priceMarkup(product);
+      document.getElementById('productDescription').textContent=product.description||''; document.getElementById('longDescription').textContent=product.description||''; document.getElementById('descriptionLabel').textContent=product.category==='Fertilizer'?'About this product':'About this plant'; document.getElementById('infoHeading').textContent=product.category==='Fertilizer'?'Product Description':'Plant Description';
+      var stock=document.getElementById('stockBadge'), available=product.inStock!==false; stock.className='detail-stock '+(available?'is-in-stock':'is-out-of-stock'); stock.innerHTML='<span></span>'+(available?'In Stock':'Out of Stock'); document.getElementById('featuredBadge').hidden=!product.featured;
+      var add=document.getElementById('addToCartBtn'); add.disabled=!available; add.querySelector('span').textContent=available?'Add to Cart':'Out of Stock'; document.getElementById('purchaseArea').classList.toggle('is-disabled',!available);
+      var fertilizer=String(product.fertilizerInfo||'').trim(); if(fertilizer){document.getElementById('productFertilizer').textContent=fertilizer;document.getElementById('fertilizerCard').hidden=false;}
+      renderGallery(product);renderPromotion(product);renderRelated(product);document.getElementById('additionalInformation').hidden=!product.description&&!fertilizer;document.getElementById('productContent').hidden=false;document.getElementById('productLoading').hidden=true;
+      if(window.fbLogActivity)fbLogActivity('product_view',{productId:product.slug||product.id,productName:product.name,category:product.category,price:product.price});
     }
-    const total = items.reduce((s, i) => s + Number(i.qty || i.quantity || 0), 0);
-    document.getElementById("cartCount").textContent = total;
-  }
-
-  function addProductToCart(product) {
-    const cart = getStoredCart();
-    const existingItem = cart.find(item => item.id === product.slug);
-
-    if (existingItem) {
-      existingItem.quantity = Number(existingItem.quantity || existingItem.qty || 1) + 1;
-      existingItem.qty = existingItem.quantity;
-    } else {
-      cart.push({
-        id: product.slug,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-        qty: 1,
-        category: product.category,
-        image: getProductImage(product)
-      });
-    }
-
-    saveStoredCart(cart);
-    updateCartCount();
-    return cart;
-  }
-
-  function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-  function getProductImage(product) {
-    if (!product) return 'img/lily%20flowers.jpg';
-    if (product.image) return product.image;
-
-    const imageMap = {
-      'amaryllis': 'img/amaryllis.jpg',
-      'red-amaryllis': 'img/red-amaryllis.jpg',
-      'light-yellow-day-bloomer': 'img/light-yellow-day-bloomer.jpg',
-      'dark-yellow-day-bloomer': 'img/dark-yellow-day-bloomer.jpg',
-      'purple-blue-day-bloomer': 'img/purple-blue-day-bloomer.jpg',
-      'light-purple-day-bloomer': 'img/light-purple-day-bloomer.jpg',
-      'dark-purple-day-bloomer': 'img/dark-purple-day-bloomer.jpg',
-      'white-night-bloomer': 'img/white-night-bloomer.jpg',
-      'light-pink-night-bloomer': 'img/light-pink-night-bloomer.jpg',
-      'dark-pink-night-bloomer': 'img/dark-pink-night-bloomer.jpg',
-      'pink-indian-lotus': 'img/pink-indian-lotus.jpg',
-      'golden-champaca': 'img/golden-champaca.jpg',
-      'rangoon-creeper': 'img/rangoon-creeper.jpg',
-      'parrots-beak-heliconia': 'img/parrot\'s-beak-heliconia.jpg',
-      'variegated-purple-day-bloomer': 'img/variegated-purple-day-bloomer.jpg',
-      'white-purple-day-bloomer': 'img/white-purple-day-bloomer.jpg'
-    };
-
-    const slug = (product.slug || product.id || '').toLowerCase();
-    return imageMap[slug] || 'img/lily%20flowers.jpg';
-  }
-
-  function renderProduct(product) {
-    if (!product) {
-      document.getElementById("productLoading").style.display = "none";
-      document.getElementById("productNotFound").style.display = "block";
-      return;
-    }
-
-    document.title = product.name + " | Rishi's Lily Farm";
-    document.getElementById("productHeader").textContent = product.name;
-    document.getElementById("productName").textContent = product.name;
-    document.getElementById("productDescription").textContent = product.description;
-    document.getElementById("productCategory").textContent = product.category;
-
-    var priceEl = document.getElementById("productPrice");
-    var price = Number(product.price);
-    var promo = getDiscountedPrice(price, product.category);
-    if (promo) {
-      priceEl.innerHTML = '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><span style="text-decoration:line-through;color:#999;font-size:1.2rem;">TTD $' + price.toFixed(2) + '</span><span style="font-weight:700;color:#c62828;font-size:1.8rem;">TTD $' + promo.discounted.toFixed(2) + '</span><span style="background:#c62828;color:#fff;padding:4px 14px;border-radius:20px;font-size:0.85rem;font-weight:700;">' + promo.discount + '% OFF</span></div>';
-    } else {
-      priceEl.innerHTML = 'TTD $' + price.toFixed(2);
-    }
-
-    var promos = getPromotionsForCategory(product.category);
-    var bannerHtml = '';
-    if (promos.active.length > 0) {
-      var pa = promos.active[0];
-      bannerHtml = '<div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:1px solid #a5d6a7;border-radius:10px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:12px;"><i class="fas fa-bolt" style="color:#2e7d32;font-size:1.3rem;"></i><div><strong style="color:#1b5e20;">Sale on ' + esc(pa.categories && pa.categories.length ? pa.categories.join(' & ') : 'All Categories') + '</strong><span style="color:#2e7d32;font-size:0.85rem;display:block;">' + Number(pa.discount) + '% off &mdash; ends ' + new Date(pa.endDate).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</span></div></div>';
-    } else if (promos.upcoming.length > 0) {
-      var pu = promos.upcoming[0];
-      bannerHtml = '<div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:1px solid #a5d6a7;border-radius:10px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:12px;"><i class="fas fa-clock" style="color:#2e7d32;font-size:1.3rem;"></i><div><strong style="color:#1b5e20;">Coming Soon: Sale on ' + esc(pu.categories && pu.categories.length ? pu.categories.join(' & ') : 'All Categories') + '</strong><span style="color:#2e7d32;font-size:0.85rem;display:block;">' + Number(pu.discount) + '% off &mdash; starts ' + new Date(pu.startDate).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</span></div></div>';
-    }
-    if (bannerHtml) {
-      priceEl.insertAdjacentHTML('beforebegin', bannerHtml);
-    }
-
-    const imgEl = document.getElementById("productImage");
-    const imageSrc = getProductImage(product);
-    if (imageSrc) {
-      imgEl.src = imageSrc;
-      imgEl.alt = product.name;
-      document.getElementById("productImageWrapper").innerHTML = '<img id="productImage" src="' + esc(imageSrc) + '" alt="' + esc(product.name) + '" onerror="this.outerHTML=\'<div class=\\\'no-img\\\'><i class=\\\'fas fa-image\\\'></i></div>\'">';
-    } else {
-      document.getElementById("productImageWrapper").innerHTML = '<div class="no-img"><i class="fas fa-image"></i></div>';
-    }
-
-    const fertilizerEl = document.getElementById("productFertilizer");
-    const fertilizerCard = document.getElementById("fertilizerCard");
-    if (product.fertilizerInfo) {
-      fertilizerEl.textContent = product.fertilizerInfo;
-      fertilizerCard.style.display = "block";
-    } else {
-      fertilizerCard.style.display = "none";
-    }
-
-    const stockBadge = document.getElementById("stockBadge");
-    const addButton = document.getElementById("addToCartBtn");
-    const isAvailable = product.inStock !== false;
-    if (isAvailable) {
-      stockBadge.textContent = "In Stock";
-      stockBadge.className = "stock-badge-detail in-stock";
-      addButton.disabled = false;
-      addButton.removeAttribute("disabled");
-    } else {
-      stockBadge.textContent = "Out of Stock";
-      stockBadge.className = "stock-badge-detail out-of-stock";
-      addButton.disabled = true;
-      addButton.setAttribute("disabled", "disabled");
-    }
-
-    const featuredBadge = document.getElementById("featuredBadge");
-    featuredBadge.innerHTML = product.featured ? '<i class="fas fa-star" title="Featured Product"></i>' : '';
-
-    document.getElementById("productContent").style.display = "flex";
-    document.getElementById("productLoading").style.display = "none";
-
-    // Track product view
-    if (window.fbLogActivity) {
-      fbLogActivity("product_view", {
-        productId: product.slug,
-        productName: product.name,
-        category: product.category,
-        price: product.price
-      });
-    }
-
-    const productAddButton = document.getElementById("addToCartBtn");
-    productAddButton.onclick = async function() {
-      if (this.disabled) return;
-      this.disabled = true;
-      const cart = addProductToCart(product);
-      await updateCartCount();
-
-      if (typeof updateCartBadge === "function") {
-        updateCartBadge();
-      }
-
-      if (window.fbLogActivity) {
-        fbLogActivity("add_to_cart", {
-          productId: product.slug,
-          productName: product.name,
-          price: product.price
-        });
-      }
-      showToast(product.name + " added to cart!");
-
-      if (cart.some(item => item.id === product.slug)) {
-        window.location.href = "cart.html";
-      }
-    };
-
-    updateCartCount();
-  }
-
-  function init() {
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
-    if (productId && window.products[productId]) {
-      renderProduct(window.products[productId]);
-    } else if (productId) {
-      document.getElementById("productLoading").style.display = "none";
-      document.getElementById("productNotFound").style.display = "block";
-    } else {
-      document.getElementById("productLoading").style.display = "none";
-      document.getElementById("productNotFound").style.display = "block";
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.PRODUCTS_LOADED) { init(); } else { document.addEventListener('productsLoaded', init); }
-  });
-
-  document.getElementById("detailSearchBtn").addEventListener("click", function() {
-    const q = document.getElementById("detailSearch").value.toLowerCase().trim();
-    for (const key in window.products) {
-      if (window.products[key].name.toLowerCase() === q) {
-        window.location.href = "product-detail.html?id=" + key; return;
-      }
-    }
-    alert("No matching product found.");
-  });
-
-  </script>
+    function showNotFound(){document.getElementById('productLoading').hidden=true;document.getElementById('productNotFound').hidden=false;}
+    function init(){var id=new URLSearchParams(window.location.search).get('id');renderProduct(id&&window.products?window.products[id]:null);}
+    document.addEventListener('DOMContentLoaded',function(){document.getElementById('quantityMinus').addEventListener('click',function(){quantity=Math.max(1,quantity-1);document.getElementById('quantityValue').textContent=quantity;});document.getElementById('quantityPlus').addEventListener('click',function(){quantity=Math.min(99,quantity+1);document.getElementById('quantityValue').textContent=quantity;});document.getElementById('addToCartBtn').addEventListener('click',function(){if(!currentProduct||this.disabled)return;addToCart(currentProduct);var button=this,span=button.querySelector('span'),icon=button.querySelector('i');button.classList.add('is-added');span.textContent='Added to Cart';icon.className='fas fa-check';setTimeout(function(){button.classList.remove('is-added');span.textContent='Add to Cart';icon.className='fas fa-cart-shopping';},1500);});if(window.PRODUCTS_LOADED)init();else document.addEventListener('productsLoaded',init);});
+    fetch('src/components/navbar.html').then(function(r){if(!r.ok)throw new Error('Navigation unavailable');return r.text();}).then(function(html){document.getElementById('navbar').innerHTML=html;if(typeof updateCartBadge==='function')updateCartBadge();if(typeof initializeMobileMenu==='function')initializeMobileMenu();document.querySelectorAll('#navbar a').forEach(function(a){if(a.getAttribute('href')==='products.html')a.classList.add('active');});});
+  }());
+  </script><script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>

@@ -94,6 +94,24 @@ async function deletePromotion(id) {
   await db.collection('promotions').doc(id).delete();
 }
 
+async function queuePromotionCampaign(promotionId, promotion, options) {
+  options = options || {};
+  var categories = promotion.categories && promotion.categories.length ? promotion.categories.join(', ') : 'all plants';
+  var subject = options.emailSubject || (promotion.name + ' — ' + promotion.discount + '% off');
+  var emailBody = options.emailBody || ('A fresh offer is blooming at Rishi\'s Lily Farm! Save ' + promotion.discount + '% on ' + categories + '. ' + (promotion.bannerText || '') + ' Shop before ' + new Date(promotion.endDate).toLocaleDateString() + '.');
+  var socialCopy = options.socialCopy || ('🌸 ' + promotion.name + ': save ' + promotion.discount + '% on ' + categories + '! ' + (promotion.bannerText || '') + ' Offer ends ' + new Date(promotion.endDate).toLocaleDateString() + '. #RishisLilyFarm #TrinidadPlants');
+  var batch = db.batch();
+  if (options.queueEmail) {
+    var emailRef = db.collection('emailCampaigns').doc();
+    batch.set(emailRef, { promotionId: promotionId, subject: subject, body: emailBody, audience: 'active-newsletter-subscribers', status: 'queued', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+  }
+  if (options.queueSocial) {
+    var socialRef = db.collection('socialPosts').doc();
+    batch.set(socialRef, { promotionId: promotionId, copy: socialCopy, channels: options.channels || ['facebook', 'instagram'], status: 'queued', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+  }
+  await batch.commit();
+}
+
 window.loadPromotions = loadPromotions;
 window.getPromotionStatus = getPromotionStatus;
 window.getActivePromotions = getActivePromotions;
@@ -104,5 +122,6 @@ window.getDiscountedPrice = getDiscountedPrice;
 window.addPromotion = addPromotion;
 window.updatePromotion = updatePromotion;
 window.deletePromotion = deletePromotion;
+window.queuePromotionCampaign = queuePromotionCampaign;
 
 loadPromotions();

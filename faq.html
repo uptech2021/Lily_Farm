@@ -1,346 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Rishi's Lily Farm and Exotic Plants</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="src/css/styles.css">
-    <link rel="stylesheet" href="src/css/faq.css">
-    <link rel="stylesheet" href="src/css/whatsapp-button.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Answers to common questions about Rishi's Lily Farm, plant care, ordering and delivery in Trinidad.">
+  <title>Frequently Asked Questions | Rishi's Lily Farm</title>
+  <link rel="icon" type="image/jpeg" href="img/lily%20flowers.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="src/css/styles.css?v=20260927c"><link rel="stylesheet" href="src/css/home.css?v=20260927c"><link rel="stylesheet" href="src/css/faq.css?v=20260928"><link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
-<body>
-    <div id="navbar"></div>
+<body class="faq-page">
+  <a class="skip-link" href="#faqSearch">Skip to FAQ search</a><div id="navbar"></div>
+  <main>
+    <section class="faq-hero" aria-labelledby="faq-title"><div class="faq-container faq-hero__inner">
+      <p class="eyebrow">Here to help</p><h1 id="faq-title">Frequently Asked <em>Questions.</em></h1>
+      <p>Find clear answers about our plants, ordering, delivery and everything in between.</p>
+    </div></section>
 
-    <!-- FAQ Page Header -->
-    <section class="page-header">
-        <h1>Frequently Asked Questions</h1>
-        <p>Find answers to common questions about plant care, payment, delivery, and more. Your botanical journey starts here.</p>
-    </section>
-
-    <!-- FAQ Container -->
-    <main class="faq-container">
-        <!-- FAQ Intro Section -->
-        <div class="faq-intro-section">
-            <h2>How Can We Help You?</h2>
-            <p>At Rishi's Lily Farm, we're passionate about helping you succeed with your plants and lilies. Browse our FAQ sections below for expert advice and information.</p>
+    <section class="faq-browser" aria-label="Browse frequently asked questions"><div class="faq-container">
+      <div class="faq-search-wrap"><label for="faqSearch"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><span class="visually-hidden">Search frequently asked questions</span></label><input id="faqSearch" type="search" placeholder="Search frequently asked questions..." autocomplete="off"><button id="searchClear" type="button" aria-label="Clear search" hidden><i class="fas fa-xmark" aria-hidden="true"></i></button></div>
+      <div class="faq-layout">
+        <aside class="faq-sidebar" aria-label="FAQ categories"><p class="faq-sidebar__label">FAQ categories</p><div class="category-filters" id="categoryFilters" role="list"></div></aside>
+        <div class="faq-content"><div class="faq-content__heading"><div><p class="eyebrow">Questions &amp; answers</p><h2 id="visibleCategoryTitle">All Questions</h2></div><p id="faqCount" aria-live="polite">Loading questions…</p></div><div class="faq-sections" id="faqSections" aria-live="polite"><div class="faq-loading"><i class="fas fa-seedling fa-pulse" aria-hidden="true"></i><span>Gathering answers…</span></div></div>
+          <div class="no-results" id="noResults" hidden><div class="no-results__icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div><h3>No matching questions found.</h3><p>Try another search or contact us directly.</p><a href="contact.html" class="button button--forest">Contact us</a></div>
         </div>
+      </div>
+    </div></section>
 
-        <!-- FAQ Sections (dynamic) -->
-        <div class="faq-sections-wrapper">
-            <div class="faq-sections" id="faqSections"></div>
-        </div>
-        
-        <!-- No Results Message -->
-        <div class="no-results" id="noResults" style="display:none;">
-            <i class="fas fa-inbox"></i>
-            <h3>No Results Found</h3>
-            <p>Try different keywords or browse all categories</p>
-        </div>
-        
-        <!-- CTA Section -->
-        <section class="cta-section">
-            <div class="cta-content">
-                <i class="fas fa-comments"></i>
-                <h3>Still Have Questions?</h3>
-                <p>Can't find the answer? Our plant experts are just one click away and ready to help with any questions about plant care, ordering, or visiting our farm.</p>
-                <div class="cta-buttons">
-                    <a href="contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> Contact Us</a>
-                    <a href="products.html" class="btn btn-secondary"><i class="fas fa-leaf"></i> Browse Plants</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div id="footer"></div>
-    </footer>
-
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="src/js/firebase-config.js"></script>
-    <script src="src/js/firebase.js"></script>
-    <script src="src/js/utils.js"></script>
-    <script src="src/js/footer.js?v=20260816d"></script>
-
-    <script>
-    let allFAQs = [];
-    let currentFilter = 'all';
-
-    // Mock FAQ data for testing
-    const mockFAQData = [
-      {
-        id: '1',
-        section: 'General Questions',
-        sectionIcon: 'fa-question-circle',
-        question: 'Are you the only place in Trinidad to get these lilies?',
-        answer: 'Yes! Rishi\'s Lily Farm is uniquely positioned as the only dedicated lily and exotic plant nursery in Trinidad. We specialize in rare varieties that you won\'t find elsewhere on the island. Our collection includes over 50 varieties of lilies and lotus species, along with exotic ornamentals from around the world.',
-        order: 1,
-        status: 'published'
-      },
-      {
-        id: '2',
-        section: 'General Questions',
-        sectionIcon: 'fa-question-circle',
-        question: 'Can I visit the farm to see the plants?',
-        answer: 'Yes, we welcome visitors to our farm! You can see our full collection of lilies and exotic plants in their natural growing environment. Please contact us in advance to schedule a visit, especially during peak growing seasons.',
-        order: 2,
-        status: 'published'
-      },
-      {
-        id: '3',
-        section: 'General Questions',
-        sectionIcon: 'fa-question-circle',
-        question: 'Do you offer planting services or consultations?',
-        answer: 'Yes! We offer professional planting services and expert consultations to help you choose the right plants for your garden and ensure they thrive in Trinidad\'s climate.',
-        order: 3,
-        status: 'published'
-      },
-      {
-        id: '4',
-        section: 'Payment & Delivery',
-        sectionIcon: 'fa-credit-card',
-        question: 'What payment methods do you accept?',
-        answer: 'We accept various payment methods for your convenience: Cash, Debit/Credit Cards, Online Bank Transfer, Mobile Wallets (WiPay, etc.). For online orders, you can send a screenshot to payments: darren.kowlessar6@gmail.com',
-        order: 1,
-        status: 'published'
-      },
-      {
-        id: '5',
-        section: 'Payment & Delivery',
-        sectionIcon: 'fa-credit-card',
-        question: 'Do you offer delivery? What are the charges?',
-        answer: 'Yes, we offer delivery services throughout Trinidad. Delivery charges vary based on location and order size. Please contact us for a custom quote for your specific delivery area.',
-        order: 2,
-        status: 'published'
-      },
-      {
-        id: '6',
-        section: 'Payment & Delivery',
-        sectionIcon: 'fa-credit-card',
-        question: 'How long does delivery take?',
-        answer: 'Delivery times depend on the location. Most deliveries within the greater Port of Spain area take 2-3 business days. Remote locations may take longer. We\'ll provide a specific timeframe when you place your order.',
-        order: 3,
-        status: 'published'
-      },
-      {
-        id: '7',
-        section: 'Plant Care & Maintenance',
-        sectionIcon: 'fa-leaf',
-        question: 'How do I care for lilies in Trinidad\'s climate?',
-        answer: 'Lilies thrive in Trinidad\'s tropical climate but need proper care. Plant them in well-draining soil with partial sunlight (4-6 hours daily). Water regularly but avoid waterlogging. In rainy seasons, reduce watering frequency. Apply organic fertilizer every 4-6 weeks during growing season.',
-        order: 1,
-        status: 'published'
-      },
-      {
-        id: '8',
-        section: 'Plant Care & Maintenance',
-        sectionIcon: 'fa-leaf',
-        question: 'What\'s the best way to plant lotus species?',
-        answer: 'Lotus species are best planted in water containers, ponds, or water-logged soil. They need good sunlight (minimum 6 hours daily), however they thrive really well in direct sun. Use nutrient-rich soil and regular fertilization. Apply organic fertilizer every 4-6 weeks during growing season.',
-        order: 2,
-        status: 'published'
-      },
-      {
-        id: '9',
-        section: 'Plant Care & Maintenance',
-        sectionIcon: 'fa-leaf',
-        question: 'How often should I water exotic ornamental plants?',
-        answer: 'Watering frequency depends on the specific plant type and season. In general, water when the top inch of soil feels dry. During rainy seasons in Trinidad, reduce watering frequency to prevent root rot. Always ensure proper drainage.',
-        order: 3,
-        status: 'published'
-      }
-    ];
-
-    document.addEventListener('DOMContentLoaded', async function() {
-        await loadFAQs();
-        initAccordion();
-        initSearch();
-        initFilters();
-    });
-
-    async function loadFAQs() {
-        const container = document.getElementById('faqSections');
-        if (!container) return;
-
-        try {
-            // Try to load from Firebase, fall back to mock data
-            let faqs = [];
-            if (typeof db !== 'undefined' && db && db.collection) {
-              const snap = await db.collection('faqs').where('status', '==', 'published').orderBy('section').orderBy('order').get();
-              snap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
-            } else {
-              faqs = mockFAQData;
-            }
-            
-            allFAQs = faqs;
-
-            const grouped = {};
-            const categories = new Set();
-            
-            faqs.forEach(f => {
-                categories.add(f.section);
-                if (!grouped[f.section]) grouped[f.section] = { icon: f.sectionIcon || 'fa-question-circle', items: [] };
-                grouped[f.section].items.push(f);
-            });
-
-            // Build category filter buttons
-            buildCategoryFilters([...categories]);
-
-            let html = '';
-            Object.entries(grouped).forEach(([sectionName, section], index) => {
-                html += `
-                    <section class="faq-section" data-category="${esc(sectionName)}">
-                        <div class="section-header">
-                            <span class="section-badge">${index + 1}</span>
-                            <i class="fas ${section.icon}"></i>
-                            <h3>${esc(sectionName)}</h3>
-                            <span class="question-count">${section.items.length}</span>
-                        </div>
-                        <div class="faq-items">
-                `;
-                section.items.forEach((f, qIndex) => {
-                    html += `
-                        <div class="faq-item" data-question="${esc(f.question).toLowerCase()}" data-category="${esc(sectionName)}">
-                            <div class="faq-question">
-                                <div class="question-header">
-                                    <span class="q-number">${qIndex + 1}</span>
-                                    <h4>${esc(f.question)}</h4>
-                                </div>
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                            <div class="faq-answer">
-                                <p>${esc(f.answer)}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div></section>';
-            });
-
-            container.innerHTML = html || '<p style="text-align:center;padding:40px;color:var(--light-text);">FAQs coming soon!</p>';
-        } catch (e) {
-            console.error('Failed to load FAQs:', e);
-            document.getElementById('faqSections').innerHTML = '<p style="text-align:center;padding:40px;color:var(--light-text);">Unable to load FAQs right now. Please try again later.</p>';
-        }
-    }
-
-    function buildCategoryFilters(categories) {
-        const filterContainer = document.getElementById('categoryFilters');
-        if (!filterContainer) return;
-        
-        filterContainer.innerHTML = `
-            <button class="filter-btn active" data-filter="all">
-                <i class="fas fa-list"></i> All Categories
-            </button>
-        `;
-        
-        categories.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'filter-btn';
-            btn.dataset.filter = cat;
-            btn.innerHTML = `<i class="fas fa-filter"></i> ${esc(cat)}`;
-            filterContainer.appendChild(btn);
-        });
-    }
-
-    function initFilters() {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                filterFAQs();
-            });
-        });
-    }
-
-    function initSearch() {
-        const searchInput = document.getElementById('faqSearch');
-        const searchClear = document.getElementById('searchClear');
-        
-        if (searchInput) {
-            searchInput.addEventListener('keyup', filterFAQs);
-        }
-        if (searchClear) {
-            searchClear.addEventListener('click', function() {
-                searchInput.value = '';
-                filterFAQs();
-                searchInput.focus();
-            });
-        }
-    }
-
-    function filterFAQs() {
-        const searchTerm = document.getElementById('faqSearch').value.toLowerCase();
-        const faqItems = document.querySelectorAll('.faq-item');
-        const faqSections = document.querySelectorAll('.faq-section');
-        let visibleCount = 0;
-
-        faqItems.forEach(item => {
-            const questionText = item.dataset.question || '';
-            const category = item.dataset.category || '';
-            const matchesSearch = questionText.includes(searchTerm);
-            const matchesFilter = currentFilter === 'all' || category === currentFilter;
-            const shouldShow = matchesSearch && matchesFilter;
-
-            item.style.display = shouldShow ? 'block' : 'none';
-            if (shouldShow) visibleCount++;
-        });
-
-        // Hide empty sections
-        faqSections.forEach(section => {
-            const visibleItems = section.querySelectorAll('.faq-item[style="display: block"]').length;
-            section.style.display = visibleItems > 0 ? 'block' : 'none';
-        });
-
-        // Show/hide no results message
-        document.getElementById('noResults').style.display = visibleCount === 0 ? 'flex' : 'none';
-    }
-
-    function initAccordion() {
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const item = question.parentElement;
-                const wasActive = item.classList.contains('active');
-                const parentSection = item.closest('.faq-items');
-                parentSection.querySelectorAll('.faq-item').forEach(otherItem => {
-                    otherItem.classList.remove('active');
-                });
-                if (!wasActive) item.classList.add('active');
-            });
-        });
-        document.querySelectorAll('.faq-items').forEach(section => {
-            const firstItem = section.querySelector('.faq-item');
-            if (firstItem) firstItem.classList.add('active');
-        });
-    }
-
-    function esc(str) {
-        if (!str) return '';
-        const d = document.createElement('div');
-        d.textContent = str;
-        return d.innerHTML;
-    }
-
-    // Navbar and footer
-    fetch("src/components/navbar.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("navbar").innerHTML = data;
-            updateCartBadge();
-            initializeMobileMenu();
-            const currentPage = window.location.pathname.split("/").pop();
-            document.querySelectorAll(".nav-links a").forEach(link => {
-                if (link.getAttribute("href") === currentPage) {
-                    link.classList.add("active");
-                }
-            });
-        });
-
-    </script>
-    <script src="src/js/whatsapp-button.js"></script>
+    <section class="faq-cta"><div class="faq-container faq-cta__inner"><div><p class="eyebrow">Still have questions?</p><h2>Let's help your garden grow.</h2><p>Our plant-loving team is ready to help with plant care, ordering or planning your visit.</p></div><div class="faq-cta__actions"><a href="contact.html" class="button button--forest"><i class="fas fa-envelope" aria-hidden="true"></i> Contact us</a><a href="products.html" class="button button--outline-dark"><i class="fas fa-leaf" aria-hidden="true"></i> Browse plants</a></div></div></section>
+  </main>
+  <footer><div id="footer"></div></footer>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js?v=20260906"></script><script src="src/js/utils.js?v=20260927"></script><script src="src/js/footer.js?v=20260928"></script><script src="src/js/faq.js?v=20260928"></script><script src="src/js/whatsapp-button.js"></script>
 </body>
 </html>
-            

@@ -5,35 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart - Rishi's Lily Farm and Exotic Plants</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="src/css/styles.css">
-    <link rel="stylesheet" href="src/css/cart.css">
+    <link rel="stylesheet" href="src/css/styles.css?v=20260927c">
+    <link rel="stylesheet" href="src/css/home.css?v=20260927c">
+    <link rel="stylesheet" href="src/css/cart.css?v=20260928">
     <link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
-<body>
+<body class="cart-page">
     <div id="navbar"></div>
 
-    <section class="page-header cart-hero">
-        <h1>Your Shopping Cart</h1>
-        <p>Review your items and proceed to checkout when you're ready.</p>
+    <section class="cart-hero" aria-labelledby="cart-title">
+        <div class="cart-shell cart-hero__inner">
+            <p class="eyebrow">Your selection</p>
+            <h1 id="cart-title">Your Shopping Cart</h1>
+            <p>Review your plants and continue to checkout whenever you're ready.</p>
+        </div>
     </section>
 
     <main class="cart-container">
-        <div class="cart-intro">
-            <h2>Cart Summary</h2>
-            <p>Browse our collection and add your favorite plants.</p>
-        </div>
-
         <div id="emptyCart" class="empty-cart">
-            <i class="fas fa-shopping-cart"></i>
-            <h3>Let's Grow Your Collection</h3>
-            <p>You haven't selected any plants yet. Explore our catalog and find something you'll love.</p>
-            <a href="products.html" class="btn-cart btn-cart-green"><i class="fas fa-seedling" style="color: var(--primary-green);"></i> Browse Products</a>
+            <div class="empty-cart__icon"><i class="fas fa-seedling" aria-hidden="true"></i></div>
+            <p class="eyebrow">Room to grow</p>
+            <h3>Your garden is waiting.</h3>
+            <p>Your cart is currently empty. Explore our collection and find something worth growing.</p>
+            <a href="products.html" class="btn-cart btn-cart-green"><i class="fas fa-leaf" aria-hidden="true"></i> Browse Plants</a>
         </div>
 
         <div id="recommendedSection" class="recommended-section">
             <div class="recommended-header">
-                <h3>Popular Plants</h3>
-                <p>Explore our best-selling varieties and add something special to your order</p>
+                <div><p class="eyebrow">A little inspiration</p><h3>Popular Plants</h3></div>
+                <p>Explore well-loved varieties and add something special to your garden.</p>
             </div>
             <div class="recommended-grid" id="recommendedGrid"></div>
         </div>
@@ -77,6 +77,7 @@
         </div>
 
         <section class="cta-section">
+            <p class="eyebrow">We're here to help</p>
             <h3>Need Help With Your Order?</h3>
             <p>Have questions about your plants or delivery? Our team is here to help you every step of the way.</p>
             <div class="cta-buttons">
@@ -96,7 +97,7 @@
     <script src="src/js/firebase.js"></script>
     <script src="src/js/utils.js"></script>
     <script src="src/js/cart.js"></script>
-    <script src="src/js/footer.js?v=20260816d"></script>
+    <script src="src/js/footer.js?v=20260928"></script>
     <script>
         fetch("src/components/navbar.html")
             .then(response => response.text())

@@ -6,8 +6,8 @@
         }
 
         :root {
-            --primary-green: #2e7d32;
-            --light-green: #4caf50;
+            --primary-green: #31b86b;
+            --light-green: #31b86b;
             --accent-gold: #ffb300;
             --light-bg: #f9f9f9;
             --dark-text: #333;
@@ -550,4 +550,52 @@
                 padding: 15px 16px 16px;
             }
         }
-  
+
+/* 2026 visual system refresh — shared across every customer-facing page */
+:root { --primary-green:#31b86b; --light-green:#31b86b; --accent-gold:#d9a441; --light-bg:#f7faf8; --dark-text:#17221d; --light-text:#607069; --white:#fff; --shadow:0 12px 34px rgba(20,55,41,.09); --border:#e1e9e4; --radius:16px; }
+html { scroll-behavior:smooth; }
+body { background:#f8faf8; color:var(--dark-text); -webkit-font-smoothing:antialiased; }
+button,.btn,.btn-primary,.btn-secondary,.btn-outline,.add-to-cart-btn,.view-details-btn,.use-location-btn,.search-btn,.submit-btn { animation:none; border-radius:999px; }
+.btn-success,.btn-success:hover,.btn-success:focus { background-color:var(--primary-green); border-color:var(--primary-green); }
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid rgba(217,164,65,.55); outline-offset:3px; }
+header { box-shadow:0 1px 0 rgba(23,107,77,.12); }
+.top-bar { background:#31b86b; padding:7px clamp(18px,4vw,64px); font-size:.82rem; }
+.logo-container { max-width:1240px; margin:0 auto; padding:14px clamp(18px,4vw,32px); }
+.logo-placeholder>div { width:48px!important; height:48px!important; box-shadow:0 8px 24px rgba(23,107,77,.2); }
+.logo-text h1 { font-size:1.45rem; letter-spacing:-.03em; }
+.logo-text p { font-size:.82rem; font-style:normal; }
+nav { background:var(--white); border-top:1px solid #edf2ee; padding:0 clamp(18px,4vw,32px); }
+.nav-links { max-width:1240px; margin:0 auto; }
+.nav-links a { color:#43514b; padding:12px 18px; font-size:.92rem; border-bottom:2px solid transparent; }
+.nav-links a:hover,.nav-links a.active { background:#eaf8f0; color:#238a52; border-bottom-color:var(--primary-green); }
+.nav-links li:last-child a { color:#fff; background:var(--primary-green); border:0; border-radius:999px; min-width:116px; margin:6px 0; padding:8px 20px; }
+.cart-badge { top:-4px; right:2px; }
+.page-header { border-radius:0 0 28px 28px; margin-bottom:48px; }
+footer { background:#18211d; margin-top:64px; padding:52px 24px 24px; }
+.footer-content { gap:clamp(32px,6vw,72px); }
+.footer-column h4 { letter-spacing:-.01em; }
+.footer-column p,.footer-column a { color:#b8c8c0; }
+.eyebrow { display:inline-block; color:var(--primary-green); font-size:.76rem; font-weight:800; letter-spacing:.16em; margin-bottom:10px; }
+.visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+@media (max-width:768px) { .top-bar{display:none}.logo-container{flex-direction:row;text-align:left;min-height:72px}.nav-links{background:#fff;box-shadow:0 18px 30px rgba(20,55,41,.12);border-radius:0 0 18px 18px;padding:8px}.nav-links a{justify-content:flex-start;border:0;border-radius:10px;padding:13px 16px}.nav-links li:last-child{margin-left:0}.nav-links li:last-child a{margin:6px 0 2px;justify-content:center} }
+@media (max-width:480px) { .logo-container{flex-direction:row;gap:12px;padding:11px 16px}.logo-placeholder>div{width:44px!important;height:44px!important}.logo-text h1{font-size:1.2rem}footer{padding-top:40px} }
+
+/* Premium shared footer */
+footer{margin-top:0;background:#0c2d22;padding:72px 24px 24px;color:#d5e0d9}
+.footer-content--modern{grid-template-columns:1.35fr .7fr .7fr 1.15fr;max-width:1240px;gap:clamp(28px,5vw,70px);margin-bottom:44px}
+.footer-brand__mark{display:grid;place-items:center;width:42px;height:42px;margin-bottom:18px;border-radius:50%;background:#d6a84b;color:#0d3527}
+.footer-column h4{font-family:'DM Serif Display','Playfair Display',serif;font-size:1.2rem;font-weight:400;margin-bottom:19px;padding:0;color:#fff}
+.footer-column h4::after{display:none}.footer-column p,.footer-column a{margin-bottom:8px;color:#aebfb5;font-size:.82rem;line-height:1.65}.footer-column a:hover{color:#efd28f}.footer-brand>p{max-width:320px}.footer-contact i{width:20px;color:#d6a84b}.social-icons a{width:34px;height:34px;background:rgba(255,255,255,.08);font-size:.8rem}.payment-badges-wrapper{max-width:1240px;justify-content:flex-start;gap:9px;margin:0 auto;padding:18px 0;border-top:1px solid rgba(255,255,255,.1)}.payment-label{margin-right:8px;color:#80958a;font-size:.68rem;text-transform:uppercase;letter-spacing:.09em}.payment-badge{min-width:50px;width:auto;height:26px;padding:0 8px;border:0;border-radius:4px;box-shadow:none}.payment-badge span{font-size:.65rem!important;letter-spacing:0!important}.visa-badge::before,.mastercard-badge::before,.mastercard-badge::after{display:none}.copyright{display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:auto;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);color:#80958a;font-size:.72rem}.copyright div{display:flex;gap:20px}.copyright a{color:#80958a;text-decoration:none}
+@media(max-width:800px){.footer-content--modern{grid-template-columns:1fr 1fr}.footer-brand,.footer-contact{grid-column:1/-1}.copyright{align-items:flex-start;flex-direction:column;gap:10px}}
+@media(max-width:480px){footer{padding:54px 20px 22px}.footer-content--modern{grid-template-columns:1fr 1fr;gap:34px 24px}.payment-label{width:100%;margin-bottom:3px}.payment-badges-wrapper{justify-content:flex-start}}
+
+/* Fresh botanical footer palette */
+footer{background:#347c55;color:#f3fbf4}
+.footer-brand__mark{background:#dff3dc;color:#2c7a51}
+.footer-column p,.footer-column a{color:#edf7ef}
+.footer-column a:hover{color:#fff5c8}
+.footer-contact i{color:#eff6c9}
+.social-icons a{background:rgba(255,255,255,.14)}
+.payment-label,.copyright,.copyright a{color:#e0f0e4}
+.payment-badges-wrapper,.copyright{border-color:rgba(255,255,255,.2)}

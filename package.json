@@ -6,10 +6,10 @@
   "scripts": {
     "config": "node scripts/generate-firebase-config.js",
     "prestart": "npm run config",
-    "start": "live-server --port=3000 --middleware=scripts/deny-env-middleware.js",
+    "start": "node scripts/serve.js",
     "build": "npm run config",
     "predev": "npm run config",
-    "dev": "live-server --port=3000 --open --middleware=scripts/deny-env-middleware.js"
+    "dev": "node scripts/serve.js"
   },
   "keywords": [
     "lily-farm",

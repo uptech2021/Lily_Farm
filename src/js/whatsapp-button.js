@@ -9,7 +9,7 @@
     
     // Create button HTML
     const buttonHTML = `
-      <a id="whatsapp-button" href="#" class="whatsapp-button" title="Message us on WhatsApp">
+      <a id="whatsapp-button" href="https://wa.me/18687104296" target="_blank" rel="noopener noreferrer" class="whatsapp-button" title="Message us on WhatsApp" aria-label="Message Rishi's Lily Farm on WhatsApp">
         <div class="whatsapp-button-inner">
           <i class="fab fa-whatsapp"></i>
         </div>

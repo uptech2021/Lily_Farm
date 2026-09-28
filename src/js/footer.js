@@ -14,42 +14,44 @@
 
   function esc(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+  function socialLink(url, icon, label) {
+    if (!url || url === '#') return '';
+    return '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" aria-label="' + label + '"><i class="' + icon + '" aria-hidden="true"></i></a>';
+  }
+
   function render(settings) {
     var el = document.getElementById('footer');
     if (!el) return;
     el.innerHTML =
-      '<div class="footer-content">' +
-        '<div class="footer-column">' +
+      '<div class="footer-content footer-content--modern">' +
+        '<div class="footer-column footer-brand">' +
+          '<div class="footer-brand__mark"><i class="fas fa-seedling" aria-hidden="true"></i></div>' +
           '<h4>' + esc(settings.storeName) + '</h4>' +
           '<p>' + esc(settings.description) + '</p>' +
           '<div class="social-icons">' +
-            '<a href="' + esc(settings.facebookUrl) + '" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>' +
-            '<a href="' + esc(settings.instagramUrl) + '" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>' +
-            '<a href="' + esc(settings.whatsappUrl) + '" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>' +
-            '<a href="' + esc(settings.youtubeUrl) + '" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>' +
+            socialLink(settings.facebookUrl, 'fab fa-facebook-f', 'Facebook') +
+            socialLink(settings.instagramUrl, 'fab fa-instagram', 'Instagram') +
+            socialLink(settings.whatsappUrl, 'fab fa-whatsapp', 'WhatsApp') +
+            socialLink(settings.youtubeUrl, 'fab fa-youtube', 'YouTube') +
           '</div>' +
         '</div>' +
-        '<div class="footer-column">' +
-          '<h4>Contact Info</h4>' +
-          '<p><i class="fas fa-map-marker-alt"></i> ' + esc(settings.address) + '</p>' +
-          '<p><i class="fas fa-phone"></i> ' + esc(settings.phone) + '</p>' +
-          '<p><i class="fas fa-envelope"></i> ' + esc(settings.email) + '</p>' +
-          '<p><i class="fas fa-clock"></i> ' + esc(settings.hours) + '</p>' +
+        '<div class="footer-column"><h4>Shop</h4>' +
+          '<a href="products.html?category=lily">Lilies</a><a href="products.html?category=exotic">Exotic Plants</a><a href="products.html?category=fertilizer">Fertilizers</a><a href="products.html">All Products</a>' +
         '</div>' +
-        '<div class="footer-column">' +
-          '<h4>Quick Links</h4>' +
-          '<a href="index.html">Home</a>' +
-          '<a href="products.html">Products & Fertilizers</a>' +
-          '<a href="faq.html">FAQ & Plant Care</a>' +
-          '<a href="contact.html">Contact Us</a>' +
+        '<div class="footer-column"><h4>Help</h4>' +
+          '<a href="faq.html">FAQ &amp; Plant Care</a><a href="faq.html">Delivery</a><a href="contact.html">Contact</a>' +
+        '</div>' +
+        '<div class="footer-column footer-contact"><h4>Contact</h4>' +
+          '<p><i class="fas fa-phone"></i> <a href="tel:+18687104296">' + esc(settings.phone) + '</a></p>' +
+          '<p><i class="fas fa-envelope"></i> <a href="mailto:' + esc(settings.email) + '">' + esc(settings.email) + '</a></p>' +
+          '<p><i class="fas fa-clock"></i> ' + esc(settings.hours) + '</p>' +
         '</div>' +
       '</div>' +
       '<div class="payment-badges-wrapper" aria-label="Accepted payment methods">' +
-        '<div class="payment-badge visa-badge"><span>VISA</span></div>' +
-        '<div class="payment-badge mastercard-badge"><span>MasterCard</span></div>' +
+        '<span class="payment-label">Secure payments accepted</span><div class="payment-badge visa-badge"><span>VISA</span></div><div class="payment-badge mastercard-badge"><span>Mastercard</span></div>' +
       '</div>' +
       '<div class="copyright">' +
-        '<p>&copy; ' + new Date().getFullYear() + ' ' + esc(settings.storeName) + '. All rights reserved.</p>' +
+        '<p>&copy; ' + new Date().getFullYear() + ' ' + esc(settings.storeName) + '. All rights reserved.</p><div><a href="#">Privacy Policy</a><a href="#">Terms</a></div>' +
       '</div>';
   }
 

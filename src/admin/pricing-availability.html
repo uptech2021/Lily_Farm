@@ -30,6 +30,11 @@
         .promo-banner-preview { padding:14px 20px; border-radius:8px; font-size:0.85rem; font-weight:600; }
         .promo-banner-preview.active { background:linear-gradient(135deg,#e8f5e9,#c8e6c9); color:#1b5e20; }
         .promo-banner-preview.upcoming { background:linear-gradient(135deg,#fff3e0,#ffe0b2); color:#e65100; }
+        .marketing-summary { display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center; }
+        .subscriber-count { width:72px; height:72px; border-radius:18px; display:grid; place-items:center; background:var(--brand); color:#fff; font-size:1.45rem; font-weight:800; }
+        .campaign-options { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:18px; }
+        .campaign-options textarea { min-height:96px; resize:vertical; }
+        .channel-options { display:flex; flex-wrap:wrap; gap:16px; margin-top:10px; }
         @media (max-width:600px) { .promo-grid { grid-template-columns:1fr; } }
     </style>
 </head>
@@ -129,6 +134,17 @@
                     </div>
                 </div>
 
+                <div class="card mb-4">
+                    <div class="card-body marketing-summary">
+                        <div class="subscriber-count" id="subscriberCount">—</div>
+                        <div>
+                            <h3 style="margin:0 0 5px;">Promotion communications</h3>
+                            <p style="margin:0;color:var(--light-text);">Active newsletter subscribers. New promotions can automatically queue a formatted email.</p>
+                            <small id="campaignDeliveryNote" style="display:block;margin-top:6px;color:var(--light-text);"><i class="fas fa-shield-alt"></i> Queued emails require your configured server-side email provider to deliver.</small>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="promotionsContainer" class="promo-grid"></div>
             </div>
         </main>
@@ -184,6 +200,21 @@
                             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--light-text);font-size:0.85rem;"><input type="checkbox" id="promoAllCats"> <span>All Categories</span></label>
                         </div>
                     </div>
+                    <div class="campaign-options">
+                        <h4 style="margin:0 0 6px;"><i class="fas fa-paper-plane"></i> Campaign content</h4>
+                        <p style="margin:0 0 14px;color:var(--light-text);font-size:.85rem;">Content is generated from the promotion and remains editable before it is queued.</p>
+                        <div class="form-group">
+                            <label class="form-label" for="promoEmailSubject">Email subject</label>
+                            <input type="text" id="promoEmailSubject" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="promoEmailBody">Email message</label>
+                            <textarea id="promoEmailBody" class="form-control"></textarea>
+                        </div>
+                        <div class="channel-options">
+                            <label><input type="checkbox" id="promoQueueEmail" checked> Email subscribers</label>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -210,9 +241,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="../js/firebase-config.js"></script>
-    <script src="../js/firebase.js"></script>
+    <script src="../js/firebase.js?v=20260906"></script>
     <script src="../js/products.js"></script>
-    <script src="../js/promotions.js"></script>
+    <script src="../js/promotions.js?v=20260906"></script>
     <script src="../js/admin.js"></script>
 
     <script>
@@ -225,7 +256,31 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('promotionsLoaded', renderPromotions);
         if (window.PROMOTIONS_LOADED) renderPromotions();
+        loadSubscriberCount();
+        ['promoName','promoDiscount','promoBanner','promoEnd'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', generateCampaignContent);
+        });
     });
+
+    async function loadSubscriberCount() {
+        try {
+            var snap = await db.collection('newsletterSubscribers').where('status', '==', 'active').get();
+            document.getElementById('subscriberCount').textContent = snap.size;
+        } catch (error) {
+            document.getElementById('subscriberCount').textContent = '0';
+        }
+    }
+
+    function generateCampaignContent() {
+        if (editingId) return;
+        var name = document.getElementById('promoName').value.trim() || 'New bloom sale';
+        var discount = document.getElementById('promoDiscount').value || '—';
+        var banner = document.getElementById('promoBanner').value.trim();
+        var end = document.getElementById('promoEnd').value;
+        var endLabel = end ? new Date(end).toLocaleDateString() : 'while stocks last';
+        document.getElementById('promoEmailSubject').value = name + ' — ' + discount + '% off';
+        document.getElementById('promoEmailBody').value = 'A fresh offer is blooming at Rishi\'s Lily Farm! Save ' + discount + '% on selected plants. ' + banner + ' Shop before ' + endLabel + '.';
+    }
 
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('modal-backdrop')) closeModal(e.target.id);
@@ -302,6 +357,7 @@
         document.getElementById('promoForm').reset();
         document.querySelectorAll('.promo-cat').forEach(function(c) { c.checked = false; });
         document.getElementById('promoAllCats').checked = false;
+        generateCampaignContent();
         openModal('promo-modal');
     }
 
@@ -318,6 +374,9 @@
         var cats = p.categories || [];
         document.querySelectorAll('.promo-cat').forEach(function(c) { c.checked = cats.indexOf(c.value) !== -1; });
         document.getElementById('promoAllCats').checked = cats.length === 0;
+        document.getElementById('promoEmailSubject').value = p.emailSubject || (p.name + ' — ' + p.discount + '% off');
+        document.getElementById('promoEmailBody').value = p.emailBody || '';
+        document.getElementById('promoQueueEmail').checked = false;
         openModal('promo-modal');
     }
 
@@ -362,13 +421,27 @@
         btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Saving...';
 
         try {
-            var data = { name: name, discount: discount, bannerText: bannerText, startDate: startDate, endDate: endDate, categories: categories };
+            var data = {
+                name: name, discount: discount, bannerText: bannerText, startDate: startDate, endDate: endDate, categories: categories,
+                emailSubject: document.getElementById('promoEmailSubject').value.trim(),
+                emailBody: document.getElementById('promoEmailBody').value.trim()
+            };
+            var promotionId;
             if (editingId) {
                 await updatePromotion(editingId, data);
+                promotionId = editingId;
                 if (window.adminUI) adminUI.showToast('Promotion updated', 'success', 'Updated');
             } else {
-                await addPromotion(data);
+                var created = await addPromotion(data);
+                promotionId = created.firestoreId;
                 if (window.adminUI) adminUI.showToast('Promotion created', 'success', 'Created');
+            }
+            if (document.getElementById('promoQueueEmail').checked) {
+                await queuePromotionCampaign(promotionId, data, {
+                    queueEmail: document.getElementById('promoQueueEmail').checked,
+                    emailSubject: data.emailSubject,
+                    emailBody: data.emailBody
+                });
             }
             closeModal('promo-modal');
             await loadPromotions();

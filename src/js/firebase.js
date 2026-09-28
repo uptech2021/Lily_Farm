@@ -423,6 +423,24 @@ async function fbSaveCustomer(customerData) {
   }
 }
 
+async function fbSubscribeToNewsletter(email) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error('A valid email address is required.');
+  }
+  var normalizedEmail = email.trim().toLowerCase();
+  var subscriberId = encodeURIComponent(normalizedEmail).replace(/\./g, '%2E');
+  await db.collection('newsletterSubscribers').doc(subscriberId).set({
+    email: normalizedEmail,
+    status: 'active',
+    consentSource: 'website-homepage',
+    subscribedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return normalizedEmail;
+}
+
+window.fbSubscribeToNewsletter = fbSubscribeToNewsletter;
+
 async function fbGetCustomer() {
   try {
     const doc = await db.collection("customers").doc(getSessionId()).get();
