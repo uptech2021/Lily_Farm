@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "config": "node scripts/generate-firebase-config.js",
+    "email:secret": "node scripts/generate-email-token.js",
     "prestart": "npm run config",
     "start": "node scripts/serve.js",
     "build": "npm run config",

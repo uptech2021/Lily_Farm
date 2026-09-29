@@ -1,4 +1,15 @@
 :root {
+  --admin-bg: #f8f6ef;
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #eef7ef;
+  --admin-text: #18271f;
+  --admin-muted: #66736d;
+  --admin-primary: #42a56d;
+  --admin-primary-dark: #245d42;
+  --admin-border: #d8e4d8;
+  --admin-accent: #c99a3d;
+  --admin-serif: 'DM Serif Display', Georgia, serif;
+  --admin-sans: 'Manrope', Arial, sans-serif;
   --primary-green: #42a56d;
   --light-green: #76bd8b;
   --accent-gold: #c99a3d;

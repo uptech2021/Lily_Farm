@@ -5,7 +5,7 @@ import { readSession } from './_auth.mjs';
 const allowedPages = new Set([
   'dashboard.html', 'faqs.html', 'gallery.html', 'orders.html',
   'pricing-availability.html', 'products.html', 'profile.html',
-  'reviews.html', 'settings.html'
+  'reviews.html', 'settings.html', 'newsletters.html'
 ]);
 
 export default {

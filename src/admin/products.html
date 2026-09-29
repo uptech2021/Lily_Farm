@@ -5,82 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - Rishi's Lily Farm Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .product-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .product-card:hover { box-shadow: var(--shadow); }
-        .product-card .card-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background: var(--panel);
-        }
-        .product-image-link {
-            display: block;
-            position: relative;
-            cursor: pointer;
-            outline: none;
-        }
-        .product-image-link::after {
-            content: 'Edit product';
-            position: absolute;
-            inset: auto 10px 10px auto;
-            padding: 5px 8px;
-            border-radius: 6px;
-            background: rgba(27, 94, 32, 0.9);
-            color: #fff;
-            font-size: 0.72rem;
-            opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.15s ease, transform 0.15s ease;
-        }
-        .product-image-link:hover::after,
-        .product-image-link:focus-visible::after {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .product-image-link:focus-visible {
-            box-shadow: inset 0 0 0 3px var(--brand);
-        }
-        .product-card .card-body { padding: 14px 16px 16px; flex: 1; }
-        .product-card .card-body h4 {
-            margin: 0 0 4px;
-            min-height: 2.66em;
-            font-size: 0.95rem;
-            line-height: 1.33;
-        }
-        .product-card .card-body .cat-badge {
-            font-size: 0.75rem; color: var(--light-text); margin-bottom: 6px;
-        }
-        .product-card .card-body .price { font-weight: 700; color: var(--brand); font-size: 1.05rem; }
-        .product-card .card-actions {
-            display: flex; gap: 6px; padding: 10px 16px 14px; border-top: 1px solid var(--border);
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 18px;
-        }
-        .no-img {
-            width: 100%; height: 160px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--panel); color: var(--light-text); font-size: 2.5rem;
-        }
-        @media (max-width: 600px) {
-            .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-        }
+        .inventory-header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:22px; }
+        .inventory-eyebrow { margin-bottom:5px; color:var(--brand); font-size:.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+        .inventory-header .page-title { font-family:Georgia, 'Times New Roman', serif; font-size:2rem; letter-spacing:-.025em; }
+        .inventory-count { flex:0 0 auto; padding:7px 12px; border:1px solid var(--border); border-radius:999px; background:var(--white); color:var(--light-text); font-size:.82rem; font-weight:700; }
+        .inventory-toolbar { display:grid; grid-template-columns:minmax(240px, 1fr) auto auto; align-items:center; gap:14px; padding:14px; margin-bottom:18px; background:var(--white); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-sm); }
+        .inventory-search { position:relative; }
+        .inventory-search i { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+        .inventory-search .search-input { max-width:none; padding-left:38px; min-height:42px; background:var(--white); }
+        .inventory-filters { display:flex; gap:9px; }
+        .inventory-filter { min-width:138px; min-height:42px; padding-top:8px; padding-bottom:8px; }
+        .inventory-actions { display:flex; align-items:center; gap:9px; }
+        .view-toggle { display:flex; padding:3px; border:1px solid var(--border); border-radius:9px; background:var(--light-bg); }
+        .view-toggle button { min-width:38px; height:34px; padding:0 10px; border:0; border-radius:6px; background:transparent; color:var(--light-text); cursor:pointer; font:inherit; font-size:.8rem; font-weight:700; }
+        .view-toggle button.active { background:var(--white); color:var(--brand); box-shadow:0 1px 4px rgba(25,50,35,.1); }
+        .inventory-results { display:flex; justify-content:space-between; align-items:center; min-height:28px; margin:0 2px 12px; color:var(--light-text); font-size:.82rem; }
+        .clear-filters { border:0; background:none; color:var(--brand); cursor:pointer; font:inherit; font-weight:700; }
+        .product-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; }
+        .admin-product-card { display:flex; flex-direction:column; min-width:0; height:100%; overflow:hidden; background:var(--white); border:1px solid var(--border); border-radius:12px; transition:border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
+        .admin-product-card:hover { border-color:rgba(49,184,107,.42); box-shadow:0 8px 20px rgba(31,65,45,.08); transform:translateY(-1px); }
+        .product-image-link { position:relative; display:block; aspect-ratio:4/3; overflow:hidden; background:#edf7f0; cursor:pointer; outline:none; }
+        .product-image-link:focus-visible { box-shadow:inset 0 0 0 3px var(--brand); }
+        .product-image-link .card-img { width:100%; height:100%; display:block; object-fit:cover; }
+        .no-img { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; background:#edf7f0; color:#71927d; font-size:.76rem; font-weight:700; }
+        .no-img i { font-size:1.55rem; color:#8db79a; }
+        .admin-product-card__body { display:flex; flex-direction:column; flex:1; padding:14px 15px 13px; }
+        .product-meta { min-height:22px; display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:5px; }
+        .product-category { color:var(--light-text); font-size:.69rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+        .featured-badge { display:inline-flex; align-items:center; gap:4px; color:#9b6c12; font-size:.69rem; font-weight:700; white-space:nowrap; }
+        .admin-product-card h3 { display:-webkit-box; min-height:42px; margin:0 0 8px; overflow:hidden; color:var(--dark-text); font-size:.96rem; line-height:1.35; font-weight:750; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+        .product-price { margin-bottom:11px; color:var(--brand); font-size:1.05rem; line-height:1.25; font-weight:800; }
+        .product-card-status { margin-top:auto; }
+        .inventory-status { gap:6px; border-radius:999px; text-transform:none; letter-spacing:0; }
+        .inventory-status::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+        .product-card-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:11px 15px 14px; border-top:1px solid var(--border); }
+        .product-card-actions .btn { min-height:36px; padding:7px 10px; }
+        .btn-delete-subtle { background:#fff7f6; color:#a23a35; border-color:#efd0cd; }
+        .btn-delete-subtle:hover:not(:disabled) { background:#fae9e7; color:#8d2824; border-color:#e7bbb7; }
+        .inventory-table-wrap { overflow:auto; background:var(--white); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-sm); }
+        .inventory-table { min-width:790px; }
+        .inventory-table thead th { position:sticky; top:0; z-index:1; }
+        .inventory-product-cell { display:flex; align-items:center; gap:11px; min-width:260px; font-weight:700; color:var(--dark-text); }
+        .inventory-thumb { width:52px; height:42px; flex:0 0 auto; overflow:hidden; border-radius:7px; background:#edf7f0; }
+        .inventory-thumb img { width:100%; height:100%; object-fit:cover; }
+        .inventory-thumb .no-img { font-size:0; }
+        .inventory-thumb .no-img i { font-size:1rem; }
+        .table-actions { display:flex; gap:6px; white-space:nowrap; }
+        .admin-empty-state { grid-column:1/-1; padding:72px 24px; text-align:center; background:var(--white); border:1px dashed #cfded3; border-radius:12px; color:var(--light-text); }
+        .admin-empty-state i { display:block; margin-bottom:14px; color:#9ab7a2; font-size:2rem; }
+        .admin-empty-state h3 { margin-bottom:4px; color:var(--dark-text); font-size:1rem; }
+        .admin-empty-state .btn { margin-top:16px; }
+        .delete-warning { display:flex; gap:12px; padding:13px; margin-top:14px; border:1px solid #efd0cd; border-radius:9px; background:#fff8f7; color:#7f3c37; font-size:.84rem; }
+        .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+        @media (max-width:1260px) { .product-grid { grid-template-columns:repeat(3, minmax(0,1fr)); } .inventory-toolbar { grid-template-columns:1fr auto; } .inventory-filters { grid-column:1/-1; grid-row:2; } }
+        @media (max-width:900px) { .product-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } .inventory-toolbar { grid-template-columns:1fr; } .inventory-filters,.inventory-actions { grid-column:auto; grid-row:auto; flex-wrap:wrap; } .inventory-actions { justify-content:space-between; } .inventory-filter { flex:1 1 150px; } }
+        @media (max-width:560px) { .admin-content { padding:18px 14px; } .inventory-header { align-items:flex-start; } .inventory-header .page-title { font-size:1.65rem; } .product-grid { grid-template-columns:1fr; } .inventory-actions .add-product-btn { flex:1; } .view-toggle button span { display:none; } }
     </style>
 </head>
-<body>
+<body class="admin-dashboard">
     <div class="admin-app">
         <aside class="admin-sidebar">
             <div class="sidebar-header">
@@ -90,7 +75,8 @@
                 <ul class="nav-list">
                     <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
                     <li class="nav-item"><a href="products.html" class="nav-link active"><i class="fas fa-box"></i> Products</a></li>
-                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Pricing &amp; Availability</a></li>
+                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li class="nav-item"><a href="newsletters.html" class="nav-link"><i class="fas fa-envelope-open-text"></i> Newsletters</a></li>
                     <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-truck"></i> Orders</a></li>
                     <li class="nav-item"><a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a></li>
                     <li class="nav-item"><a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
@@ -104,7 +90,7 @@
             <div class="admin-topbar">
                 <button class="btn btn-secondary d-md-none" data-sidebar-toggle><i class="fas fa-bars"></i></button>
                 <div class="topbar-search">
-                    <input type="search" class="search-input" placeholder="Search products..." id="productSearch" oninput="filterProducts()">
+                    <input type="search" class="search-input" placeholder="Search products, orders, customers..." aria-label="Search admin">
                 </div>
                 <div class="topbar-actions">
                     <button class="notification-btn" data-modal-target="notifications-modal"><i class="fas fa-bell"></i><span class="notification-badge">3</span></button>
@@ -161,43 +147,55 @@
             </div>
 
             <div class="admin-content">
-                <div class="page-header">
-                    <h1 class="page-title">Products</h1>
-                    <p class="page-subtitle">Manage your inventory and product catalog</p>
+                <div class="page-header inventory-header">
+                    <div>
+                        <div class="inventory-eyebrow">Inventory</div>
+                        <h1 class="page-title">Products</h1>
+                        <p class="page-subtitle">Manage your inventory and product catalog.</p>
+                    </div>
+                    <div class="inventory-count" id="productCount">Loading products…</div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:12px;">
-                            <div class="d-flex gap-3 flex-wrap">
-                                <div class="form-group mb-0">
-                                    <select class="form-control form-select" id="catFilter" style="min-width:150px;" onchange="filterProducts()">
-                                        <option value="">All Categories</option>
-                                        <option value="Lily">Lily</option>
-                                        <option value="Exotic">Exotic</option>
-                                        <option value="Fertilizer">Fertilizer</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <select class="form-control form-select" id="stockFilter" style="min-width:130px;" onchange="filterProducts()">
-                                        <option value="">All Stock</option>
-                                        <option value="in">In Stock</option>
-                                        <option value="out">Out of Stock</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <select class="form-control form-select" id="featuredFilter" style="min-width:120px;" onchange="filterProducts()">
-                                        <option value="">All Items</option>
-                                        <option value="featured">Featured</option>
-                                        <option value="non-featured">Non-Featured</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary add-product-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Product</button>
+                <div class="inventory-toolbar" aria-label="Product management toolbar">
+                    <div class="inventory-search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <label class="sr-only" for="productSearch">Search products</label>
+                        <input type="search" class="search-input" placeholder="Search products..." id="productSearch" oninput="filterProducts()" autocomplete="off">
+                    </div>
+                    <div class="inventory-filters">
+                        <label class="sr-only" for="catFilter">Filter by category</label>
+                        <select class="form-control form-select inventory-filter" id="catFilter" onchange="filterProducts()">
+                            <option value="">Category: All</option>
+                            <option value="Lily">Category: Lily</option>
+                            <option value="Exotic">Category: Exotic</option>
+                            <option value="Fertilizer">Category: Fertilizer</option>
+                        </select>
+                        <label class="sr-only" for="stockFilter">Filter by stock</label>
+                        <select class="form-control form-select inventory-filter" id="stockFilter" onchange="filterProducts()">
+                            <option value="">Stock: All</option>
+                            <option value="in">Stock: In Stock</option>
+                            <option value="out">Stock: Out of Stock</option>
+                        </select>
+                        <label class="sr-only" for="featuredFilter">Filter by featured status</label>
+                        <select class="form-control form-select inventory-filter" id="featuredFilter" onchange="filterProducts()">
+                            <option value="">Status: All</option>
+                            <option value="featured">Status: Featured</option>
+                            <option value="non-featured">Status: Standard</option>
+                        </select>
+                    </div>
+                    <div class="inventory-actions">
+                        <div class="view-toggle" role="group" aria-label="Product view">
+                            <button type="button" class="active" id="gridViewBtn" onclick="setProductView('grid')" aria-pressed="true" title="Grid view"><i class="fas fa-border-all"></i> <span>Grid</span></button>
+                            <button type="button" id="listViewBtn" onclick="setProductView('list')" aria-pressed="false" title="List view"><i class="fas fa-list"></i> <span>List</span></button>
                         </div>
+                        <button class="btn btn-primary add-product-btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Product</button>
                     </div>
                 </div>
 
+                <div class="inventory-results">
+                    <span id="productResults">Loading inventory…</span>
+                    <button type="button" class="clear-filters d-none" id="clearFiltersBtn" onclick="clearProductFilters()">Clear filters</button>
+                </div>
                 <div id="productsContainer" class="product-grid"></div>
             </div>
         </main>
@@ -269,13 +267,14 @@
     <!-- Delete Modal -->
     <div id="delete-modal" class="modal-backdrop d-none">
         <div class="modal" style="max-width:420px;">
-            <div class="modal-header"><h3 class="modal-title">Delete Product</h3><button class="modal-close" type="button"><i class="fas fa-times"></i></button></div>
+            <div class="modal-header"><h3 class="modal-title">Delete product?</h3><button class="modal-close" type="button" aria-label="Close delete confirmation"><i class="fas fa-times"></i></button></div>
             <div class="modal-body">
-                <p>Are you sure you want to delete <strong id="deleteProdName"></strong>?</p>
+                <p>You're about to delete <strong id="deleteProdName"></strong>.</p>
+                <div class="delete-warning"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>This action cannot be undone.</span></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
-                <button type="button" class="btn btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> Delete</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> Delete Product</button>
             </div>
         </div>
     </div>
@@ -291,6 +290,7 @@
     <script>
     let editingId = null;
     let deletingId = null;
+    let productView = localStorage.getItem('adminProductView') === 'list' ? 'list' : 'grid';
 
     function openModal(id) { const el = document.getElementById(id); if (el) { el.classList.remove('d-none'); document.body.style.overflow = 'hidden'; } }
     function closeModal(id) { const el = document.getElementById(id); if (el) { el.classList.add('d-none'); document.body.style.overflow = ''; } }
@@ -306,8 +306,9 @@
         const cat = document.getElementById('catFilter')?.value || '';
         const stock = document.getElementById('stockFilter')?.value || '';
         const featured = document.getElementById('featuredFilter')?.value || '';
+        const allProducts = Object.values(window.products || {});
 
-        let list = Object.values(window.products).filter(p => {
+        let list = allProducts.filter(p => {
             if (search && !p.name.toLowerCase().includes(search)) return false;
             if (cat && p.category !== cat) return false;
             if (stock === 'in' && !p.inStock) return false;
@@ -317,42 +318,99 @@
             return true;
         });
 
+        const filtersActive = !!(search || cat || stock || featured);
+        document.getElementById('productCount').textContent = allProducts.length + (allProducts.length === 1 ? ' product' : ' products');
+        document.getElementById('productResults').textContent = filtersActive
+            ? list.length + (list.length === 1 ? ' product found' : ' products found')
+            : 'Showing ' + list.length + ' of ' + allProducts.length + ' products';
+        document.getElementById('clearFiltersBtn').classList.toggle('d-none', !filtersActive);
+        document.getElementById('gridViewBtn').classList.toggle('active', productView === 'grid');
+        document.getElementById('listViewBtn').classList.toggle('active', productView === 'list');
+        document.getElementById('gridViewBtn').setAttribute('aria-pressed', String(productView === 'grid'));
+        document.getElementById('listViewBtn').setAttribute('aria-pressed', String(productView === 'list'));
+
         if (list.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--light-text);"><i class="fas fa-box-open" style="font-size:3rem;opacity:0.4;display:block;margin-bottom:16px;"></i><h3>No products found</h3><p>Add your first product to get started.</p></div>';
+            container.className = 'product-grid';
+            container.innerHTML = '<div class="admin-empty-state"><i class="fas fa-box-open" aria-hidden="true"></i><h3>No products found</h3><p>Try adjusting your search or filters.</p><button type="button" class="btn btn-secondary" onclick="clearProductFilters()"><i class="fas fa-rotate-left"></i> Clear Filters</button></div>';
             return;
         }
 
-        container.innerHTML = list.map(p => {
-            const catColors = { Lily: 'var(--info)', Exotic: 'var(--warn)', Fertilizer: 'var(--brand)' };
-            const stockBadge = p.inStock !== false
-                ? '<span class="badge success" style="font-size:0.7rem;">In Stock</span>'
-                : '<span class="badge" style="background:rgba(220,53,69,0.1);color:var(--danger);font-size:0.7rem;">Out of Stock</span>';
-            const featuredStar = p.featured ? '<i class="fas fa-star" style="color:var(--accent-gold);font-size:0.75rem;" title="Featured"></i>' : '';
+        const cardMarkup = list.map(p => {
+            const stockBadge = productStockBadge(p);
+            const featuredBadge = p.featured ? '<span class="featured-badge"><i class="fas fa-star" aria-hidden="true"></i> Featured</span>' : '';
             const imagePath = p.image || `img/${getProductImage(p.slug)}`;
             const imgSrc = imagePath.startsWith('http') ? imagePath : '../../' + imagePath;
             const imageAction = `onclick="openEditModal('${esc(p.slug)}')" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openEditModal('${esc(p.slug)}'); }"`;
             const img = imgSrc
-                ? `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Edit ${esc(p.name)} image"><img class="card-img" src="${esc(imgSrc)}" alt="${esc(p.name)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="no-img" style="display:none;"><i class="fas fa-image"></i></div></div>`
-                : `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Add image for ${esc(p.name)}"><div class="no-img"><i class="fas fa-image"></i></div></div>`;
+                ? `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Edit ${esc(p.name)}"><img class="card-img" src="${esc(imgSrc)}" alt="${esc(p.name)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="no-img" style="display:none;"><i class="fas fa-seedling" aria-hidden="true"></i><span>No image</span></div></div>`
+                : `<div class="product-image-link" role="button" tabindex="0" ${imageAction} aria-label="Add image for ${esc(p.name)}"><div class="no-img"><i class="fas fa-seedling" aria-hidden="true"></i><span>No image</span></div></div>`;
             return `
-                <div class="product-card">
+                <article class="admin-product-card">
                     ${img}
-                    <div class="card-body">
-                        <div class="cat-badge"><span style="color:${catColors[p.category] || '#666'};font-weight:600;">${p.category}</span> ${featuredStar}</div>
-                        <h4>${esc(p.name)}</h4>
-                        <div class="price">TTD $${Number(p.price).toFixed(2)}</div>
-                        <div style="margin-top:6px;">${stockBadge}</div>
+                    <div class="admin-product-card__body">
+                        <div class="product-meta"><span class="product-category">${esc(p.category || 'Uncategorized')}</span>${featuredBadge}</div>
+                        <h3>${esc(p.name)}</h3>
+                        <div class="product-price">TTD $${Number(p.price).toFixed(2)}</div>
+                        <div class="product-card-status">${stockBadge}</div>
                     </div>
-                    <div class="card-actions">
-                        <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="openEditModal('${p.slug}')"><i class="fas fa-pen"></i> Edit</button>
-                        <button class="btn btn-sm btn-danger" style="flex:1;" onclick="openDeleteModal('${p.slug}')"><i class="fas fa-trash"></i> Delete</button>
+                    <div class="product-card-actions">
+                        <button class="btn btn-sm btn-secondary" onclick="openEditModal('${esc(p.slug)}')" aria-label="Edit ${esc(p.name)}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
+                        <button class="btn btn-sm btn-delete-subtle" onclick="openDeleteModal('${esc(p.slug)}')" aria-label="Delete ${esc(p.name)}"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
                     </div>
-                </div>
+                </article>
             `;
         }).join('');
+
+        if (productView === 'list') {
+            container.className = 'inventory-table-wrap';
+            container.innerHTML = `<table class="table inventory-table">
+                <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Featured</th><th>Actions</th></tr></thead>
+                <tbody>${list.map(productTableRow).join('')}</tbody>
+            </table>`;
+        } else {
+            container.className = 'product-grid';
+            container.innerHTML = cardMarkup;
+        }
     }
 
     function filterProducts() { renderProducts(); }
+
+    function productStockBadge(product) {
+        return product.inStock !== false
+            ? '<span class="badge success inventory-status">In Stock</span>'
+            : '<span class="badge danger inventory-status">Out of Stock</span>';
+    }
+
+    function productTableRow(p) {
+        const imagePath = p.image || `img/${getProductImage(p.slug)}`;
+        const imgSrc = imagePath.startsWith('http') ? imagePath : '../../' + imagePath;
+        const thumb = imgSrc
+            ? `<div class="inventory-thumb"><img src="${esc(imgSrc)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="no-img" style="display:none;"><i class="fas fa-seedling" aria-hidden="true"></i></div></div>`
+            : '<div class="inventory-thumb"><div class="no-img"><i class="fas fa-seedling" aria-hidden="true"></i></div></div>';
+        return `<tr>
+            <td><div class="inventory-product-cell">${thumb}<span>${esc(p.name)}</span></div></td>
+            <td><span class="product-category">${esc(p.category || 'Uncategorized')}</span></td>
+            <td><strong class="product-price">TTD $${Number(p.price).toFixed(2)}</strong></td>
+            <td>${productStockBadge(p)}</td>
+            <td>${p.featured ? '<span class="featured-badge"><i class="fas fa-star" aria-hidden="true"></i> Featured</span>' : '<span style="color:var(--muted);">—</span>'}</td>
+            <td><div class="table-actions"><button class="btn btn-sm btn-secondary" onclick="openEditModal('${esc(p.slug)}')" aria-label="Edit ${esc(p.name)}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button><button class="btn btn-sm btn-delete-subtle" onclick="openDeleteModal('${esc(p.slug)}')" aria-label="Delete ${esc(p.name)}"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button></div></td>
+        </tr>`;
+    }
+
+    function setProductView(view) {
+        productView = view === 'list' ? 'list' : 'grid';
+        localStorage.setItem('adminProductView', productView);
+        renderProducts();
+    }
+
+    function clearProductFilters() {
+        document.getElementById('productSearch').value = '';
+        document.getElementById('catFilter').value = '';
+        document.getElementById('stockFilter').value = '';
+        document.getElementById('featuredFilter').value = '';
+        renderProducts();
+        document.getElementById('productSearch').focus();
+    }
 
     const productImageMap = {
         'amaryllis': 'amaryllis.jpg',

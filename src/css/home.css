@@ -17,6 +17,7 @@
 @media(max-width:520px){.eyebrow{font-size:.8rem;line-height:1.5}.product-card__category,.product-card__status{font-size:.68rem}.stat span{font-size:.65rem}}
 @media(max-width:390px){.featured-grid{grid-template-columns:1fr;gap:18px}.product-card__media{aspect-ratio:4/3}.product-card__body{padding:18px}.product-card h3{font-size:1.28rem}.product-card__foot strong{font-size:.9rem}.product-card__foot>a{width:34px;height:34px}}
 .hero-promo[hidden]{display:none!important}
+.home-promotion{padding:34px 0;background:#f6f1e6}.home-promotion[hidden]{display:none!important}.home-promotion__card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:22px;padding:30px 34px;border:1px solid #d9dfd3;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(13,53,39,.08)}.home-promotion__icon{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:#e5f5e7;color:var(--botanical);font-size:1.25rem}.home-promotion .eyebrow{margin-bottom:7px}.home-promotion h2{font-size:clamp(1.8rem,3vw,2.7rem)}.home-promotion p:last-child{margin:8px 0 0;color:var(--muted)}@media(max-width:768px){.home-promotion__card{grid-template-columns:auto 1fr;padding:25px}.home-promotion__card .button{grid-column:1/-1;width:100%}}@media(max-width:520px){.home-promotion__card{grid-template-columns:1fr;text-align:center}.home-promotion__icon{margin:auto}}
 
 /* Fresh growth palette: light, lively greens across the largest surfaces. */
 #navbar header{background:rgba(255,254,250,.97);box-shadow:0 1px 0 rgba(36,93,66,.1)}

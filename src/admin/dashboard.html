@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Rishi's Lily Farm Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="admin-dashboard">
     <div class="admin-app">
         <aside class="admin-sidebar">
             <div class="sidebar-header">
@@ -17,7 +21,8 @@
                 <ul class="nav-list">
                     <li class="nav-item"><a href="dashboard.html" class="nav-link active"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
                     <li class="nav-item"><a href="products.html" class="nav-link"><i class="fas fa-box"></i> Products</a></li>
-                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Pricing &amp; Availability</a></li>
+                    <li class="nav-item"><a href="pricing-availability.html" class="nav-link"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li class="nav-item"><a href="newsletters.html" class="nav-link"><i class="fas fa-envelope-open-text"></i> Newsletters</a></li>
                     <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-truck"></i> Orders</a></li>
                     <li class="nav-item"><a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a></li>
                     <li class="nav-item"><a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
@@ -103,42 +108,43 @@
 
             <!-- Dashboard Content -->
             <div class="admin-content">
-                <div class="page-header">
-                    <h1 class="page-title">Dashboard</h1>
-                    <p class="page-subtitle">Welcome back, Kyle! Here's what's happening at Rishi's Lily Farm.</p>
+                <div class="page-header dashboard-heading">
+                    <div><p class="admin-eyebrow">Overview</p><h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back, <span data-admin-name>Kyle</span>! Here's what's happening at Rishi's Lily Farm.</p></div>
+                    <div class="dashboard-context"><span class="dashboard-data-note" id="dashboardSyncStatus"><i class="fas fa-rotate" aria-hidden="true"></i> Syncing live data</span><time id="dashboardDate"></time></div>
                 </div>
 
                 <!-- KPI Cards -->
                 <div class="kpi-grid">
-                    <a class="kpi-card kpi-link" href="orders.html" aria-label="View today's orders">
-                        <div class="kpi-value">12</div>
+                    <a class="kpi-card kpi-link kpi-orders" href="orders.html" aria-label="View today's orders">
+                        <div class="kpi-head"><span class="kpi-icon"><i class="fas fa-bag-shopping"></i></span><i class="fas fa-arrow-up-right-from-square kpi-arrow"></i></div><div class="kpi-value" id="todayOrders">&mdash;</div>
                         <div class="kpi-label">Today's Orders</div>
-                        <div class="kpi-change positive">+8% from yesterday</div>
+                        <div class="kpi-change" id="ordersChange">Loading&hellip;</div>
                     </a>
-                    <a class="kpi-card kpi-link" href="products.html" aria-label="View products low in stock">
-                        <div class="kpi-value">4</div>
+                    <a class="kpi-card kpi-link kpi-stock" href="pricing-availability.html" aria-label="View items low in stock">
+                        <div class="kpi-head"><span class="kpi-icon"><i class="fas fa-box-open"></i></span><i class="fas fa-arrow-up-right-from-square kpi-arrow"></i></div><div class="kpi-value" id="lowStockCount">&mdash;</div>
                         <div class="kpi-label">Items Low in Stock</div>
-                        <div class="kpi-change negative">2 more than last week</div>
+                        <div class="kpi-change" id="stockChange">Loading inventory&hellip;</div>
                     </a>
-                    <a class="kpi-card kpi-link" href="reviews.html" aria-label="View pending reviews">
-                        <div class="kpi-value">6</div>
+                    <a class="kpi-card kpi-link kpi-reviews" href="reviews.html" aria-label="View pending reviews">
+                        <div class="kpi-head"><span class="kpi-icon"><i class="fas fa-star-half-stroke"></i></span><i class="fas fa-arrow-up-right-from-square kpi-arrow"></i></div><div class="kpi-value" id="pendingReviews">&mdash;</div>
                         <div class="kpi-label">Pending Reviews</div>
-                        <div class="kpi-change positive">3 new today</div>
+                        <div class="kpi-change" id="reviewsChange">Loading&hellip;</div>
                     </a>
-                    <a class="kpi-card kpi-link" href="pricing-availability.html" aria-label="View active promotions">
-                        <div class="kpi-value">1</div>
+                    <a class="kpi-card kpi-link kpi-promos" href="pricing-availability.html" aria-label="View active promotions">
+                        <div class="kpi-head"><span class="kpi-icon"><i class="fas fa-tags"></i></span><i class="fas fa-arrow-up-right-from-square kpi-arrow"></i></div><div class="kpi-value" id="activePromos">&mdash;</div>
                         <div class="kpi-label">Active Promos</div>
-                        <div class="kpi-change">Ending soon</div>
+                        <div class="kpi-change" id="promosChange">Loading&hellip;</div>
                     </a>
                 </div>
 
                 <!-- Quick Actions -->
-                <div class="card mb-4">
+                <div class="card mb-4 quick-actions-card">
                     <div class="card-header">
-                        <h2 class="card-title">Quick Actions</h2>
+                        <div><p class="card-kicker">Work faster</p><h2 class="card-title">Quick Actions</h2></div>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row quick-actions-grid">
                             <div class="col-6 col-md-3">
                                 <a href="products.html" class="btn btn-primary w-100">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -178,106 +184,27 @@
                 </div>
 
                 <!-- Charts and Activity -->
-                <div class="row">
+                <div class="row dashboard-analytics">
                     <div class="col-12 col-lg-8">
-                        <div class="card">
+                        <div class="card sales-card">
                             <div class="card-header">
-                                <h2 class="card-title">Sales Overview</h2>
+                                <div><p class="card-kicker">Performance</p><h2 class="card-title">Sales Overview</h2></div><span class="card-period">Last 7 days</span>
                             </div>
                             <div class="card-body">
-                                <div class="chart-placeholder">
-                                <div class="chart-bars" aria-label="Sales from August 29 to September 4, 2026">
-                                    <div class="chart-column"><span class="chart-value">$420</span><div class="chart-bar" style="height: 42%" title="Saturday, August 29: $420"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$630</span><div class="chart-bar" style="height: 63%" title="Sunday, August 30: $630"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$510</span><div class="chart-bar" style="height: 51%" title="Monday, August 31: $510"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$860</span><div class="chart-bar" style="height: 86%" title="Tuesday, September 1: $860"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$760</span><div class="chart-bar" style="height: 76%" title="Wednesday, September 2: $760"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$570</span><div class="chart-bar" style="height: 57%" title="Thursday, September 3: $570"></div></div>
-                                    <div class="chart-column"><span class="chart-value">$940</span><div class="chart-bar" style="height: 94%" title="Friday, September 4: $940"></div></div>
-                                </div>
-                                    <div class="chart-labels">
-                                        <span>Sat<br>Aug 29</span>
-                                        <span>Sun<br>Aug 30</span>
-                                        <span>Mon<br>Aug 31</span>
-                                        <span>Tue<br>Sep 1</span>
-                                        <span>Wed<br>Sep 2</span>
-                                        <span>Thu<br>Sep 3</span>
-                                        <span>Fri<br>Sep 4</span>
-                                    </div>
+                                <div class="chart-placeholder" id="salesChart" aria-live="polite">
+                                    <div class="dashboard-loading"><i class="fas fa-spinner fa-spin"></i> Loading sales&hellip;</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-lg-4">
-                        <div class="card">
+                        <div class="card activity-card">
                             <div class="card-header">
-                                <h2 class="card-title">Recent Activity</h2>
+                                <div><p class="card-kicker">Latest updates</p><h2 class="card-title">Recent Activity</h2></div><span class="card-period">Live</span>
                             </div>
                             <div class="card-body">
-                                <div class="activity-list">
-                                    <!-- SEED DATA -->
-                                    <a class="activity-item activity-link seed" href="pricing-availability.html" aria-label="View pricing and availability">
-                                        <div class="activity-icon activity-icon-price">
-                                            <img class="activity-logo" src="../assets/admin-logo.svg" alt="Lily Farm logo">
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Updated price for 'White Lotus' from $180 → $190 (Kyle)</div>
-                                            <div class="activity-time">2h ago</div>
-                                        </div>
-                                    </a>
-                                    <a class="activity-item activity-link seed" href="reviews.html" aria-label="View reviews">
-                                        <div class="activity-icon activity-icon-review">
-                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Approved review by Aaliyah B. (Ethan)</div>
-                                            <div class="activity-time">3h ago</div>
-                                        </div>
-                                    </a>
-                                    <a class="activity-item activity-link seed" href="products.html" aria-label="View products">
-                                        <div class="activity-icon activity-icon-product">
-                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15v-6h4v6H8z" clip-rule="evenodd"/>
-                                            </svg>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Added product 'Bloom Booster 500g' (Jasmine)</div>
-                                            <div class="activity-time">Yesterday</div>
-                                        </div>
-                                    </a>
-                                    <a class="activity-item activity-link seed" href="products.html" aria-label="View product stock">
-                                        <div class="activity-icon activity-icon-stock">
-                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                            </svg>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Replenished 'Pink Lily' stock: +20 (Kyle)</div>
-                                            <div class="activity-time">Yesterday</div>
-                                        </div>
-                                    </a>
-                                    <a class="activity-item activity-link seed" href="pricing-availability.html" aria-label="View promotions">
-                                        <div class="activity-icon activity-icon-promo">
-                                            <img class="activity-logo" src="../assets/admin-logo.svg" alt="Lily Farm logo">
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Created promo 'Diwali Bloom Sale' (Kyle)</div>
-                                            <div class="activity-time">2d ago</div>
-                                        </div>
-                                    </a>
-                                    <a class="activity-item activity-link seed" href="gallery.html" aria-label="View gallery">
-                                        <div class="activity-icon activity-icon-gallery">
-                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                                            </svg>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-title">Published 4 gallery photos (Ethan)</div>
-                                            <div class="activity-time">3d ago</div>
-                                        </div>
-                                    </a>
+                                <div class="activity-list" id="activityList" aria-live="polite">
+                                    <div class="dashboard-loading"><i class="fas fa-spinner fa-spin"></i> Loading activity&hellip;</div>
                                 </div>
                             </div>
                         </div>
@@ -320,7 +247,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal(this.closest('.modal-backdrop'))">Cancel</button>
-                <button type="button" class="btn btn-primary" data-action="create-promotion">Create Promotion</button>
+                <button type="button" class="btn btn-primary" id="createPromotionButton">Create Promotion</button>
             </div>
         </div>
     </div>
@@ -353,22 +280,28 @@
                         <label for="price-category" class="form-label">Category</label>
                         <select id="price-category" class="form-control form-select">
                             <option value="all">All Categories</option>
-                            <option value="water-lilies">Water Lilies</option>
-                            <option value="lotus">Lotus</option>
-                            <option value="fertilizers">Fertilizers</option>
+                            <option value="Lily">Lilies</option>
+                            <option value="Exotic">Exotic Plants</option>
+                            <option value="Fertilizer">Fertilizers</option>
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal(this.closest('.modal-backdrop'))">Cancel</button>
-                <button type="button" class="btn btn-primary" data-action="update-prices">Update Prices</button>
+                <button type="button" class="btn btn-primary" id="updatePricesButton">Update Prices</button>
             </div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase.js"></script>
     <script src="../js/admin.js"></script>
     <script src="../js/forms.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>document.getElementById('dashboardDate').textContent=new Intl.DateTimeFormat('en-TT',{weekday:'short',month:'short',day:'numeric'}).format(new Date());</script>
     
     <style>
         .page-header {

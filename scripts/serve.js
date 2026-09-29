@@ -116,6 +116,12 @@ http.createServer((req, res) => {
   if (handleApi(req, res, pathname)) return;
   if (/(^|\/)\./.test(pathname)) { res.writeHead(404).end("Not Found"); return; }
 
+  if (pathname === "/admin" || pathname === "/admin/") {
+    const destination = sessionFor(req) ? "/src/admin/dashboard.html" : "/src/admin/login.html";
+    res.writeHead(302, { Location: destination, "Cache-Control": "no-store" }).end();
+    return;
+  }
+
   const isAdminPage = pathname.startsWith("/src/admin/") && pathname.endsWith(".html");
   const isLoginPage = pathname === "/src/admin/login.html";
   const session = sessionFor(req);

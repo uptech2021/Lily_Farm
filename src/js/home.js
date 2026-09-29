@@ -17,9 +17,12 @@
     }).join(''); reveal();
   }
   function renderPromotion() {
-    var banner = document.getElementById('heroPromoBanner'); if (!banner || typeof getActivePromotions !== 'function') return;
-    var items = getActivePromotions(); if (!items.length) return; var p = items[0]; banner.hidden = false;
-    banner.innerHTML = '<i class="fas fa-bolt"></i><strong>' + esc(p.bannerText || 'Seasonal offer') + '</strong><span>' + Number(p.discount || 0) + '% off</span>';
+    var section = document.getElementById('homePromotionSection'); if (!section || typeof getActivePromotions !== 'function') return;
+    var items = getActivePromotions(); if (!items.length) { section.hidden = true; return; } var p = items[0], cats = p.categories || [];
+    var scope = cats.length ? cats.join(' & ') : 'all plants';
+    document.getElementById('homePromotionTitle').textContent = p.bannerText || p.name || 'Fresh savings from the farm';
+    document.getElementById('homePromotionCopy').textContent = Number(p.discount || 0) + '% off ' + scope + (items.length > 1 ? ' — plus more offers in the shop.' : ' for a limited time.');
+    document.getElementById('homePromotionLink').href = 'products.html'; section.hidden = false; reveal();
   }
   function initMap() { if (typeof window.initFarmMap === 'function') window.initFarmMap('mapContainer'); }
   function initNewsletter() {
