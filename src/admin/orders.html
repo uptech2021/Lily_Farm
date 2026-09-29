@@ -106,24 +106,24 @@
             <!-- Orders Content -->
             <div class="admin-content">
                 <div class="page-header">
-                    <h1 class="page-title">Orders</h1>
-                    <p class="page-subtitle">Manage customer orders and fulfillment</p>
+                    <p class="admin-eyebrow">Order management</p><h1 class="page-title">Orders</h1>
+                    <p class="page-subtitle">Manage customer orders, payments and fulfilment.</p>
                 </div>
 
                 <!-- Order Tabs -->
                 <div class="tabs">
                     <ul class="tab-list">
                         <li class="tab-item">
-                            <a href="#all-orders" class="tab-link active">All (6)</a>
+                            <a href="#all-orders" class="tab-link active">All (<span id="allCount">0</span>)</a>
                         </li>
                         <li class="tab-item">
-                            <a href="#pending-orders" class="tab-link">Pending (3)</a>
+                            <a href="#pending-orders" class="tab-link">Pending (<span id="pendingCount">0</span>)</a>
                         </li>
                         <li class="tab-item">
-                            <a href="#fulfilled-orders" class="tab-link">Fulfilled (2)</a>
+                            <a href="#fulfilled-orders" class="tab-link">Fulfilled (<span id="fulfilledCount">0</span>)</a>
                         </li>
                         <li class="tab-item">
-                            <a href="#cancelled-orders" class="tab-link">Cancelled (1)</a>
+                            <a href="#cancelled-orders" class="tab-link">Cancelled (<span id="cancelledCount">0</span>)</a>
                         </li>
                     </ul>
                 </div>
@@ -143,7 +143,7 @@
                                 <th scope="col" style="width: 120px;">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ordersBody">
                             <!-- SEED DATA -->
                             <tr data-id="TT-10021" class="order-row seed" data-tab="all-orders pending-orders">
                                 <td data-value="TT-10021">#TT-10021</td>
@@ -276,7 +276,7 @@
                 </svg>
             </button>
         </div>
-        <div class="drawer-body">
+        <div class="drawer-body" id="orderDrawerBody">
             <!-- SEED DATA for Order #TT-10021 -->
             <div class="order-details seed">
                 <div class="order-header">
@@ -382,11 +382,17 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase.js"></script>
     <script src="../js/admin.js"></script>
     <script src="../js/forms.js"></script>
     <script src="../js/tables.js"></script>
+    <script src="../js/admin-orders.js"></script>
     
     <style>
+        .order-cell-sub{display:block;margin-top:3px;color:var(--light-text);font-size:.72rem;font-weight:400}.order-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.order-section{padding:16px;border:1px solid var(--border);border-radius:10px;background:var(--white)}.order-section h5{margin:0 0 11px!important;color:var(--brand)!important;font-size:.7rem!important;letter-spacing:.12em;text-transform:uppercase}.order-section p{margin:5px 0;color:var(--light-text);font-size:.84rem}.order-item{display:grid!important;grid-template-columns:52px 1fr auto auto;gap:12px;align-items:center}.order-item-thumb{display:grid;place-items:center;width:52px;height:48px;overflow:hidden;border-radius:8px;background:#edf6ef;color:var(--brand)}.order-item-thumb img{width:100%;height:100%;object-fit:cover}.item-info small{display:block;color:var(--light-text)}.inventory-event{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)}.inventory-event:last-child{border-bottom:0}.inventory-event>i{color:var(--brand)}.inventory-event strong,.inventory-event span{display:block}.inventory-event span{margin-top:2px;color:var(--light-text);font-size:.76rem}.inventory-return-option{display:flex;align-items:flex-start;gap:12px;padding:14px;margin-top:16px;border:1px solid #cfe1d3;border-radius:10px;background:#f1f8f3;cursor:pointer}.inventory-return-option input{margin-top:4px}.inventory-return-option strong,.inventory-return-option small{display:block}.inventory-return-option small{margin-top:4px;color:var(--light-text);line-height:1.45}.order-action-error{min-height:18px;margin-top:10px;color:var(--danger);font-size:.8rem}.order-muted{color:var(--light-text)!important}@media(max-width:700px){.order-detail-grid{grid-template-columns:1fr}.drawer-footer{flex-wrap:wrap}.drawer-footer .btn{flex:1 1 140px}}
         .order-row {
             cursor: pointer;
             transition: var(--transition);

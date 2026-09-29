@@ -3,6 +3,7 @@
     var deliveryMap = null;
     var userMarker = null;
     var userLocation = { lat: null, lng: null, accuracy: null };
+    var currentConfirmation = null;
 
     async function loadSettings() {
         var defaults = {
@@ -10,10 +11,12 @@
             deliveryCentral: 60,
             deliveryNorth: 85,
             deliverySouth: 60,
-            wireAcctName: "Rishi's Lily Farm & Exotic Plants",
-            wireBank: 'Scotiabank Couva',
-            wireAcctNum: '2416939',
-            wireAcctType: 'Chequing',
+            wireAcctName: '',
+            wireBank: '',
+            wireAcctNum: '',
+            wireAcctType: '',
+            paymentInstructions: '',
+            paymentProofEmail: 'darren.kowlessar6@gmail.com',
             email: 'darren.kowlessar6@gmail.com'
         };
         try {
@@ -46,11 +49,15 @@
     function populateWireDetails() {
         if (!settingsCache) return;
         var id = function(id) { return document.getElementById(id); };
-        if (id('wireAcctName')) id('wireAcctName').textContent = settingsCache.wireAcctName || "Rishi's Lily Farm & Exotic Plants";
-        if (id('wireBank')) id('wireBank').textContent = settingsCache.wireBank || 'Scotiabank Couva';
-        if (id('wireAcctNum')) id('wireAcctNum').textContent = settingsCache.wireAcctNum || '2416939';
-        if (id('wireAcctType')) id('wireAcctType').textContent = settingsCache.wireAcctType || 'Chequing';
-        if (id('wireEmail')) id('wireEmail').textContent = settingsCache.email || 'darren.kowlessar6@gmail.com';
+        var configured = !!(settingsCache.wireAcctName && settingsCache.wireBank && (settingsCache.paymentInstructions || settingsCache.wireAcctNum));
+        if (id('wireAcctName')) id('wireAcctName').textContent = settingsCache.wireAcctName || 'To be confirmed';
+        if (id('wireBank')) id('wireBank').textContent = settingsCache.wireBank || 'To be confirmed';
+        if (id('wireAcctNum')) id('wireAcctNum').textContent = settingsCache.paymentInstructions || settingsCache.wireAcctNum || 'Provided after order review';
+        if (id('wireAcctType')) id('wireAcctType').textContent = settingsCache.wireAcctType || 'To be confirmed';
+        if (id('wireEmail')) id('wireEmail').textContent = settingsCache.paymentProofEmail || settingsCache.email || 'darren.kowlessar6@gmail.com';
+        if (id('wireConfiguredDetails')) id('wireConfiguredDetails').hidden = !configured;
+        if (id('wireProofNote')) id('wireProofNote').hidden = !configured;
+        if (id('wireConfigWarning')) id('wireConfigWarning').hidden = configured;
     }
 
     function togglePaymentDetails() {
@@ -65,21 +72,7 @@
         if (cardDetailsBox) cardDetailsBox.style.display = selectedPayment === 'card' ? 'block' : 'none';
         if (el) el.style.display = selectedPayment === 'bank_transfer' ? 'block' : 'none';
 
-        if (selectedPayment === 'bank_transfer') {
-            var selectedBank = document.querySelector('[name="bank"]:checked')?.value || 'republic';
-            var bankMap = {
-                republic: { bank: 'Republic Bank', account: '2416939', type: 'Chequing' },
-                scotiabank: { bank: 'Scotiabank', account: '2416939', type: 'Chequing' },
-                rcb: { bank: 'Royal Bank', account: '2416939', type: 'Chequing' }
-            };
-            var info = bankMap[selectedBank] || bankMap.republic;
-            var bankEl = document.getElementById('wireBank');
-            var acctEl = document.getElementById('wireAcctNum');
-            var typeEl = document.getElementById('wireAcctType');
-            if (bankEl) bankEl.textContent = info.bank;
-            if (acctEl) acctEl.textContent = info.account;
-            if (typeEl) typeEl.textContent = info.type;
-        }
+        document.querySelectorAll('.payment-option').forEach(function(option) { option.classList.toggle('selected', !!option.querySelector('input:checked')); });
     }
     window.togglePaymentDetails = togglePaymentDetails;
 
@@ -130,6 +123,24 @@
         }
     }
 
+    async function reverseGeocode(lat, lng) {
+        var errorEl = document.getElementById('geolocationError');
+        try {
+            var response = await fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lng), { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) throw new Error('Address lookup failed');
+            var result = await response.json(), address = result.address || {};
+            document.getElementById('address').value = address.road || address.pedestrian || address.neighbourhood || result.display_name || '';
+            document.getElementById('city').value = address.city || address.town || address.village || address.suburb || '';
+            var regionName = String(address.state || address.region || address.county || '').toLowerCase();
+            var region = regionName.includes('north') || regionName.includes('port of spain') || regionName.includes('diego martin') ? 'north' : (regionName.includes('south') || regionName.includes('princes town') || regionName.includes('penal') || regionName.includes('siparia') ? 'south' : 'central');
+            document.getElementById('region').value = region;
+            if (errorEl) { errorEl.textContent = 'Location selected ✓ Address found: ' + (result.display_name || 'Please review the address fields.'); errorEl.classList.add('success-message'); errorEl.style.display = 'block'; }
+            var cart = await getCheckoutCart(); updateSummary(cart);
+        } catch (error) {
+            if (errorEl) { errorEl.textContent = 'Location selected ✓ We could not resolve the street address. Please enter or correct it manually.'; errorEl.style.display = 'block'; }
+        }
+    }
+
     function updateMapLocation(lat, lng, accuracy) {
         if (!deliveryMap) return;
         
@@ -172,6 +183,7 @@
             }
         }
         if (infoEl) infoEl.style.display = 'block';
+        reverseGeocode(lat, lng);
         
         console.log('Map location updated:', lat, lng, accuracy);
     }
@@ -213,7 +225,7 @@
                 var message = '';
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = 'Location permission denied. Please enable location access in your browser settings. You can also click on the map to select your location manually.';
+                        message = "We couldn't access your current location. You can enter your address manually or choose your location on the map.";
                         break;
                     case error.POSITION_UNAVAILABLE:
                         message = 'Location information is unavailable. Please click on the map to select your location manually.';
@@ -262,96 +274,78 @@
         var totalEl = document.getElementById("checkoutTotal");
 
         var subtotal = 0;
-        cart.forEach(function(item) {
-            var qty = Number(item.qty || item.quantity || 1);
-            var prod = window.products ? window.products[item.id] : null;
-            var price = Number(item.price || 0);
-
-            if ((!price || price <= 0) && prod) {
-                price = Number(prod.price || 0);
-            }
-
-            subtotal += price * qty;
-        });
+        cart.forEach(function(item) { subtotal += Number(item.lineTotal || 0); });
+        var discount = cart.reduce(function(sum, item) { return sum + (Number(item.basePrice || item.unitPrice || 0) - Number(item.unitPrice || 0)) * Number(item.quantity || 1); }, 0);
 
         var option = deliveryOption ? deliveryOption.value : "";
         var region = regionSelect ? regionSelect.value : "";
         var fee = calcDeliveryFee(subtotal, option, region);
         var total = subtotal + fee;
 
-        if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toFixed(2);
-        if (deliveryEl) {
-            deliveryEl.textContent = option !== "delivery" ? '$0.00' : (fee === 0 ? 'Free' : '$' + fee.toFixed(2));
+        if (subtotalEl) subtotalEl.textContent = 'TTD $' + subtotal.toFixed(2);
+        var discountRow = document.getElementById('checkoutDiscountRow');
+        if (discountRow) { discountRow.style.display = discount > 0 ? 'flex' : 'none'; document.getElementById('checkoutDiscount').textContent = '-TTD $' + discount.toFixed(2); }
+        var savingsMessage = document.getElementById('checkoutSavingsMessage');
+        if (savingsMessage) {
+            savingsMessage.hidden = !(discount > 0);
+            document.getElementById('checkoutSavingsValue').textContent = 'TTD $' + discount.toFixed(2);
         }
-        if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+        if (deliveryEl) {
+            deliveryEl.textContent = option !== "delivery" ? 'TTD $0.00' : (fee === 0 ? 'Free' : 'TTD $' + fee.toFixed(2));
+        }
+        if (totalEl) totalEl.textContent = 'TTD $' + total.toFixed(2);
     }
 
     function renderCheckoutItem(item) {
-        var prod = window.products ? window.products[item.id] : null;
-        var fallbackPrice = Number(item.price || 0);
+        var price = item.discount ? '<span class="checkout-old-price">TTD $' + item.basePrice.toFixed(2) + '</span><strong>TTD $' + item.unitPrice.toFixed(2) + '</strong>' : '<strong>TTD $' + item.unitPrice.toFixed(2) + '</strong>';
+        return '<div class="checkout-item"><div class="checkout-item-img"><img src="' + (item.image || 'img/' + item.id + '.jpg') + '" alt="' + item.name + '" onerror="this.style.display=\'none\'"></div><div class="checkout-item-info"><h4>' + item.name + '</h4><p>' + (item.category || item.product && item.product.category || 'Plant') + ' · Qty ' + item.quantity + '<br>' + price + '</p></div><div class="checkout-item-price">TTD $' + item.lineTotal.toFixed(2) + '</div></div>';
+    }
 
-        if (!prod) {
-            var staticProducts = {
-                "purple-blue-day-bloomer": { name: "Purple Blue Day Bloomer", price: 58, image: "img/purple-blue-day-bloomer.jpg", category: "Water Lilies" },
-                "light-yellow-day-bloomer": { name: "Light Yellow Day Bloomer", price: 50, image: "img/light-yellow-day-bloomer.jpg", category: "Water Lilies" },
-                "white-night-bloomer": { name: "White Night Bloomer", price: 60, image: "img/white-night-bloomer.jpg", category: "Water Lilies" },
-                "light-pink-night-bloomer": { name: "Light Pink Night Bloomer", price: 61, image: "img/light-pink-night-bloomer.jpg", category: "Water Lilies" },
-                "variegated-purple-day-bloomer": { name: "Variegated Purple Day Bloomer", price: 200, image: "img/variegated-purple-day-bloomer.jpg", category: "Water Lilies" },
-                "light-purple-day-bloomer": { name: "Light Purple Day Bloomer", price: 57, image: "img/light-purple-day-bloomer.jpg", category: "Water Lilies" },
-                "dark-purple-day-bloomer": { name: "Dark Purple Day Bloomer", price: 59, image: "img/dark-purple-day-bloomer.jpg", category: "Water Lilies" },
-                "pink-indian-lotus": { name: "Pink Indian Lotus", price: 55, image: "img/pink-indian-lotus.jpg", category: "Water Lilies" },
-                "dark-yellow-day-bloomer": { name: "Dark Yellow Day Bloomer", price: 52, image: "img/dark-yellow-day-bloomer.jpg", category: "Water Lilies" },
-                "white-purple-day-bloomer": { name: "White Purple Day Bloomer", price: 150, image: "img/white-purple-day-bloomer.jpg", category: "Water Lilies" },
-                "golden-champaca": { name: "Golden Champaca", price: 48, image: "img/golden-champaca.jpg", category: "Exotic Plants" },
-                "amaryllis": { name: "Amaryllis", price: 45, image: "img/amaryllis.jpg", category: "Exotic Plants" },
-                "red-amaryllis": { name: "Red Amaryllis", price: 100, image: "img/red-amaryllis.jpg", category: "Exotic Plants" },
-                "rangoon-creeper": { name: "Rangoon Creeper", price: 44, image: "img/rangoon-creeper.jpg", category: "Exotic Plants" },
-                "parrots-beak-heliconia": { name: "Parrot's Beak Heliconia", price: 140, image: "img/parrot's-beak-heliconia.jpg", category: "Exotic Plants" }
-            };
-            prod = staticProducts[item.id];
-            if (!prod) return '';
-        }
+    function escapeHtml(value) {
+        var div = document.createElement('div'); div.textContent = value == null ? '' : String(value); return div.innerHTML;
+    }
 
-        var effectivePrice = Number(item.price || 0);
-        if ((!effectivePrice || effectivePrice <= 0) && prod) {
-            effectivePrice = Number(prod.price || 0);
+    function showCheckoutError(message, title) {
+        var box = document.getElementById('checkoutError');
+        document.getElementById('checkoutErrorTitle').textContent = title || 'We couldn’t place your order';
+        document.getElementById('checkoutErrorMessage').textContent = message || 'Please review your cart and try again.';
+        box.hidden = false;
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showConfirmation(data) {
+        currentConfirmation = data;
+        document.querySelectorAll('.checkout-step').forEach(function(step) { step.classList.add('checkout-step--complete'); step.classList.remove('checkout-step--active'); });
+        document.getElementById('orderIdDisplay').textContent = data.orderNumber;
+        document.getElementById('confirmationInvoiceStatus').textContent = 'Sending your invoice to ' + data.customer.email + '…';
+        var items = data.items.map(function(item) { return '<div class="checkout-item"><div class="checkout-item-info"><h4>' + escapeHtml(item.name) + '</h4><p>Qty ' + item.quantity + ' · TTD $' + item.unitPrice.toFixed(2) + '</p></div><div class="checkout-item-price">TTD $' + item.lineTotal.toFixed(2) + '</div></div>'; }).join('');
+        document.getElementById('confirmationDetails').innerHTML = '<div class="confirmation-card confirmation-items"><h3>Order summary</h3>' + items + '<p><strong>Total: TTD $' + data.total.toFixed(2) + '</strong></p></div><div class="confirmation-card"><h3>Customer & delivery</h3><p><strong>' + escapeHtml(data.customer.name) + '</strong></p><p>' + escapeHtml(data.customer.email) + '</p><p>' + escapeHtml(data.customer.phone) + '</p><p>' + escapeHtml(data.delivery.method === 'delivery' ? [data.delivery.address,data.delivery.city,data.delivery.region].filter(Boolean).join(', ') : 'Farm pickup') + '</p><p><strong>Payment:</strong> ' + escapeHtml(data.paymentMethod === 'bank_transfer' ? 'Bank transfer · Awaiting payment' : 'Cash · Pending') + '</p></div>';
+        var paymentStep = document.getElementById('confirmationPaymentStep');
+        paymentStep.hidden = data.paymentMethod !== 'bank_transfer';
+        if (!paymentStep.hidden) paymentStep.innerHTML = '<strong>Next step:</strong> Use <strong>' + escapeHtml(data.orderNumber) + '</strong> as your payment reference. Email a screenshot or payment receipt to <strong>' + escapeHtml(settingsCache.paymentProofEmail || settingsCache.email || 'darren.kowlessar6@gmail.com') + '</strong>. Your payment will remain awaiting confirmation until reviewed.';
+    }
+
+    function downloadInvoice() {
+        if (!currentConfirmation) return;
+        window.location.href = '/api/orders/invoice?orderId=' + encodeURIComponent(currentConfirmation.orderId) + '&token=' + encodeURIComponent(currentConfirmation.invoiceAccessToken);
+    }
+
+    async function sendAutomaticInvoice(data) {
+        var status = document.getElementById('confirmationInvoiceStatus');
+        try {
+            var response = await fetch('/api/orders/invoice-email', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({orderId:data.orderId,token:data.invoiceAccessToken}) });
+            if (!response.ok) throw new Error('delivery failed');
+            status.className = 'confirmation-invoice-status success';
+            status.textContent = 'We’ve sent your invoice to: ' + data.customer.email;
+        } catch (error) {
+            status.className = 'confirmation-invoice-status failed';
+            status.textContent = 'We couldn’t email your invoice right now, but your order was placed successfully. You can download it below.';
         }
-        var lineTotal = effectivePrice * Number(item.qty || item.quantity || 1);
-        return '<div class="checkout-item"><div class="checkout-item-img"><img src="' + ((prod && prod.image) || item.image || '') + '" alt="' + ((prod && prod.name) || item.name || '') + '" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<i class=\\\'fas fa-seedling\\\'></i>\'"></div><div class="checkout-item-info"><h4>' + ((prod && prod.name) || item.name || '') + '</h4><p>' + ((prod && prod.category) || item.category || '') + '</p></div><div class="checkout-item-qty">x' + Number(item.qty || item.quantity || 1) + '</div><div class="checkout-item-price">$' + lineTotal.toFixed(2) + '</div></div>';
     }
 
     async function getCheckoutCart() {
-        try {
-            if (typeof fbGetCart === "function") {
-                var remoteCart = await fbGetCart();
-                if (Array.isArray(remoteCart) && remoteCart.length) {
-                    return remoteCart;
-                }
-            }
-        } catch (error) {
-            console.warn("Remote cart unavailable, using local cart instead:", error);
-        }
-
-        try {
-            var storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-            if (Array.isArray(storedCart) && storedCart.length) {
-                return storedCart.map(function(item) {
-                    return {
-                        id: item.id,
-                        qty: Number(item.qty || item.quantity || 1),
-                        quantity: Number(item.qty || item.quantity || 1),
-                        price: Number(item.price || 0),
-                        name: item.name || "Product",
-                        category: item.category || "Lilies",
-                        image: item.image || ""
-                    };
-                });
-            }
-        } catch (error) {
-            console.warn("Local cart unavailable:", error);
-        }
-
-        return [];
+        var result = await commerce.resolveCart();
+        return result.items;
     }
 
     async function renderCheckout() {
@@ -436,12 +430,7 @@
             var phone = document.getElementById("phone").value.trim();
             var delivery = document.getElementById("deliveryOption").value;
             var paymentMethod = document.querySelector('[name="payment"]:checked')?.value || "cash";
-            var selectedBank = document.querySelector('[name="bank"]:checked')?.value || null;
-            var selectedCard = document.querySelector('[name="card"]:checked')?.value || null;
-            var cardName = document.getElementById('cardName')?.value?.trim() || null;
-            var cardNumber = normalizeCardNumber(document.getElementById('cardNumber')?.value || '');
-            var cardExpiry = document.getElementById('cardExpiry')?.value?.trim() || null;
-            var cardCvv = normalizeCvv(document.getElementById('cardCvv')?.value || '');
+            var selectedBank = paymentMethod === 'bank_transfer' ? (settingsCache.wireBank || null) : null;
             var region = document.getElementById("region")?.value || null;
             var address = document.getElementById("address")?.value || null;
             var city = document.getElementById("city")?.value || null;
@@ -458,30 +447,24 @@
                 }
             }
 
-            var cart = await getCheckoutCart();
+            var cartResult = await commerce.resolveCart();
+            var cart = cartResult.items;
             if (!cart.length) return;
-
-            if (paymentMethod === 'card') {
-                if (!cardName || !cardNumber || !cardExpiry || !cardCvv) {
-                    return;
-                }
+            if (cartResult.issues.length) {
+                showCheckoutError('Availability changed while you were shopping. ' + cartResult.issues.map(function(issue){ return issue.message; }).join(' '), 'Please review your cart');
+                return;
             }
 
             var subtotal = 0;
-            cart.forEach(function(item) {
-                var prod = window.products ? window.products[item.id] : null;
-                var price = Number(item.price || 0);
-                if ((!price || price <= 0) && prod) {
-                    price = Number(prod.price || 0);
-                }
-                subtotal += price * Number(item.qty || item.quantity || 1);
-            });
+            cart.forEach(function(item) { subtotal += item.lineTotal; });
             var deliveryFee = calcDeliveryFee(subtotal, delivery, region);
             var total = subtotal + deliveryFee;
 
             // Disable form during submission
             form.style.opacity = "0.6";
             form.style.pointerEvents = "none";
+            document.getElementById('checkoutError').hidden = true;
+            if (placeOrderBtn) { placeOrderBtn.disabled = true; placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing your order…'; }
 
             try {
                 // Save customer data
@@ -500,24 +483,17 @@
                 }
 
                 // Save order to Firebase with location data
-                var orderId = await fbSaveOrder({
+                var savedOrder = await fbSaveOrder({
                     customerName: name,
                     customerEmail: email,
                     customerPhone: phone,
-                    items: cart,
+                    items: cart.map(function(item) { return { productId:item.id, firestoreId:item.product.firestoreId, quantity:item.quantity }; }),
                     subtotal: subtotal,
                     deliveryFee: deliveryFee,
                     total: total,
                     deliveryOption: delivery,
                     paymentMethod: paymentMethod,
                     bank: selectedBank,
-                    card: selectedCard,
-                    cardDetails: paymentMethod === 'card' ? {
-                        name: cardName,
-                        number: cardNumber,
-                        expiry: cardExpiry,
-                        cvv: cardCvv
-                    } : null,
                     region: region,
                     address: address,
                     city: city,
@@ -527,7 +503,8 @@
 
                 // Log activity
                 await fbLogActivity("purchase", {
-                    orderId: orderId,
+                    orderId: savedOrder.orderId,
+                    orderNumber: savedOrder.orderNumber,
                     total: total,
                     itemCount: cart.length,
                     deliveryOption: delivery,
@@ -541,21 +518,18 @@
                 document.getElementById("checkoutContent").style.display = "none";
                 document.getElementById("orderSuccess").style.display = "block";
                 
-                // Display order confirmation details
-                var orderIdEl = document.getElementById("orderIdDisplay");
-                if (orderIdEl) {
-                    orderIdEl.textContent = orderId;
-                }
-                var orderEmailEl = document.getElementById("orderEmailDisplay");
-                if (orderEmailEl) {
-                    orderEmailEl.textContent = email;
-                }
+                var discount = cart.reduce(function(sum,item){ return sum + (Number(item.basePrice||item.unitPrice)-Number(item.unitPrice))*Number(item.quantity); },0);
+                var confirmation = { orderId:savedOrder.orderId, orderNumber:savedOrder.orderNumber, invoiceAccessToken:savedOrder.invoiceAccessToken, items:cart, customer:{name:name,email:email,phone:phone}, delivery:{method:delivery,address:address,city:city,region:region}, subtotal:subtotal, discount:discount, deliveryFee:deliveryFee, total:total, paymentMethod:paymentMethod };
+                showConfirmation(confirmation);
+                sendAutomaticInvoice(confirmation);
 
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } catch (error) {
                 console.error("Checkout error:", error);
                 form.style.opacity = "1";
                 form.style.pointerEvents = "auto";
+                if (placeOrderBtn) { placeOrderBtn.disabled = false; placeOrderBtn.innerHTML = '<span>Place order</span><i class="fas fa-arrow-right"></i>'; }
+                showCheckoutError((error.message || 'We could not place your order.') + ' Your cart has been kept.', 'Order not placed');
             }
         });
     }
@@ -567,5 +541,6 @@
         renderCheckout();
         handleDeliveryToggle();
         handleFormSubmit();
+        document.getElementById('downloadInvoiceBtn')?.addEventListener('click', downloadInvoice);
     });
 })();

@@ -7,6 +7,7 @@
     "config": "node scripts/generate-firebase-config.js",
     "email:secret": "node scripts/generate-email-token.js",
     "email:verify": "node scripts/verify-smtp.js",
+    "test": "node scripts/test-invoice.mjs",
     "prestart": "npm run config",
     "start": "node scripts/serve.js",
     "build": "npm run config",

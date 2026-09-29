@@ -337,40 +337,86 @@ window.fbClearCart = fbClearCart;
 
 // ============ ORDER MANAGEMENT ============
 async function fbSaveOrder(orderData) {
-  try {
-    const orderId = "order_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9);
+  if (!db || typeof db.runTransaction !== 'function') throw new Error('Secure order creation requires a configured Firestore database.');
+  const requested = Array.isArray(orderData.items) ? orderData.items : [];
+  if (!requested.length) throw new Error('Your cart is empty.');
+  if (requested.some(item => !item.firestoreId || !item.productId || Number(item.quantity) < 1)) throw new Error('One or more cart items could not be validated. Please refresh your cart.');
+
+  const promotionSnapshot = await db.collection('promotions').get();
+  const promotions = [];
+  promotionSnapshot.forEach(doc => promotions.push(doc.data()));
+  const settingsRef = db.collection('settings').doc('global');
+  const orderRef = db.collection('orders').doc();
+  const orderNumber = 'TT-' + new Date().getFullYear() + '-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  const invoiceAccessToken = Array.from(crypto.getRandomValues(new Uint8Array(24)), byte => byte.toString(16).padStart(2, '0')).join('');
+
+  await db.runTransaction(async transaction => {
+    const productDocs = [];
+    for (const item of requested) {
+      const ref = db.collection('products').doc(item.firestoreId);
+      productDocs.push({ item, ref, snapshot: await transaction.get(ref) });
+    }
+    const settingsDoc = await transaction.get(settingsRef);
+    const settings = settingsDoc.exists ? settingsDoc.data() : {};
+    const now = Date.now();
+    let subtotalBeforeDiscount = 0;
+    let subtotal = 0;
+    const itemSnapshots = [];
+
+    productDocs.forEach(({ item, ref, snapshot }) => {
+      if (!snapshot.exists) throw new Error('A product in your cart is no longer available.');
+      const product = snapshot.data();
+      const available = product.stockQuantity == null || product.stockQuantity === '' ? null : Math.max(0, Math.floor(Number(product.stockQuantity)));
+      const ordered = Math.max(1, Math.floor(Number(item.quantity)));
+      if (available == null) throw new Error(product.name + ' does not have an inventory quantity configured yet. Please contact the farm.');
+      if (ordered > available) throw new Error('Only ' + available + ' ' + product.name + (available === 1 ? ' is' : ' are') + ' currently available.');
+      const basePrice = Number(product.price);
+      if (!(basePrice > 0)) throw new Error(product.name + ' does not have a valid price.');
+      const promotion = promotions.find(promo => {
+        const start = new Date(promo.startDate).getTime(), end = new Date(promo.endDate).getTime(), categories = promo.categories || [];
+        return now >= start && now <= end && (!categories.length || categories.includes(product.category));
+      });
+      const discountRate = promotion ? Math.max(0, Math.min(100, Number(promotion.discount) || 0)) : 0;
+      const unitPrice = Math.round(basePrice * (1 - discountRate / 100) * 100) / 100;
+      const lineTotal = Math.round(unitPrice * ordered * 100) / 100;
+      subtotalBeforeDiscount += basePrice * ordered;
+      subtotal += lineTotal;
+      itemSnapshots.push({ productId: item.productId, productRef: ref.path, productName: product.name, image: product.image || '', category: product.category || '', quantity: ordered, baseUnitPrice: basePrice, discountRate, unitPrice, lineTotal });
+      const nextStock = available - ordered;
+      transaction.update(ref, { stockQuantity: nextStock, inStock: nextStock > 0, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      const historyRef = db.collection('inventoryTransactions').doc();
+      transaction.set(historyRef, { productId: item.productId, productRef: ref.path, productName: product.name, orderId: orderRef.id, orderNumber, type: 'order', adjustment: -ordered, before: available, after: nextStock, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    });
+
+    subtotal = Math.round(subtotal * 100) / 100;
+    const discount = Math.round((subtotalBeforeDiscount - subtotal) * 100) / 100;
+    const threshold = Number(settings.deliveryThreshold || 500);
+    const rates = { central: Number(settings.deliveryCentral || 60), north: Number(settings.deliveryNorth || 85), south: Number(settings.deliverySouth || 60) };
+    const deliveryFee = orderData.deliveryOption !== 'delivery' || subtotal >= threshold ? 0 : (rates[orderData.region] || rates.central);
+    const total = Math.round((subtotal + deliveryFee) * 100) / 100;
+    const paymentStatus = orderData.paymentMethod === 'bank_transfer' ? 'awaiting_payment' : 'pending';
     const order = {
-      orderId,
-      sessionId: getSessionId(),
-      customerName: orderData.customerName,
-      customerEmail: orderData.customerEmail,
-      customerPhone: orderData.customerPhone,
-      items: orderData.items,
-      subtotal: orderData.subtotal,
-      deliveryFee: orderData.deliveryFee,
-      total: orderData.total,
+      orderId: orderRef.id, orderNumber, sessionId: getSessionId(),
+      customerName: orderData.customerName, customerEmail: orderData.customerEmail, customerPhone: orderData.customerPhone,
+      customer: { name: orderData.customerName, email: orderData.customerEmail, phone: orderData.customerPhone },
+      items: itemSnapshots,
+      subtotalBeforeDiscount: Math.round(subtotalBeforeDiscount * 100) / 100,
+      subtotal, discount, deliveryFee, total,
+      pricing: { subtotal, discount, delivery: deliveryFee, total },
       deliveryOption: orderData.deliveryOption,
-      paymentMethod: orderData.paymentMethod,
-      bank: orderData.bank || null,
-      card: orderData.card || null,
-      cardDetails: orderData.cardDetails || null,
-      region: orderData.region || null,
-      address: orderData.address || null,
-      city: orderData.city || null,
-      notes: orderData.notes || null,
-      location: orderData.location || null,
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      delivery: { method: orderData.deliveryOption, address: orderData.address || null, city: orderData.city || null, region: orderData.region || null, latitude: orderData.location && orderData.location.latitude || null, longitude: orderData.location && orderData.location.longitude || null },
+      paymentMethod: orderData.paymentMethod, paymentStatus,
+      payment: { method: orderData.paymentMethod, status: paymentStatus, bank: orderData.bank || null, proofReference: null },
+      bank: orderData.bank || null, region: orderData.region || null, address: orderData.address || null, city: orderData.city || null,
+      notes: orderData.notes || null, location: orderData.location || null,
+      status: 'pending', inventoryRestored: false,
+      invoiceAccessToken,
+      invoiceEmail: { status: 'pending', recipient: orderData.customerEmail, sentAt: null, errorCode: null },
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(), updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    
-    await db.collection("orders").doc(orderId).set(order);
-    console.log("Order saved:", orderId);
-    return orderId;
-  } catch (e) {
-    console.error("Firebase order save failed:", e);
-    throw e;
-  }
+    transaction.set(orderRef, order);
+  });
+  return { orderId: orderRef.id, orderNumber, invoiceAccessToken };
 }
 
 async function fbGetOrders() {
@@ -422,6 +468,42 @@ async function fbSaveCustomer(customerData) {
     console.error("Firebase save customer failed:", e);
   }
 }
+
+async function fbCancelOrder(orderId, restoreInventory) {
+  if (!db || !orderId) throw new Error('A valid order is required.');
+  const orderRef = db.collection('orders').doc(orderId);
+  await db.runTransaction(async transaction => {
+    const orderSnapshot = await transaction.get(orderRef);
+    if (!orderSnapshot.exists) throw new Error('Order no longer exists.');
+    const order = orderSnapshot.data();
+    if (order.status === 'cancelled') {
+      if (restoreInventory && !order.inventoryRestored) throw new Error('This order was already cancelled without restoration. Review inventory manually.');
+      return;
+    }
+    if (restoreInventory && order.inventoryRestored) throw new Error('Inventory has already been restored for this order.');
+    const productSnapshots = [];
+    if (restoreInventory) {
+      for (const item of (order.items || [])) {
+        if (!item.productRef) throw new Error('An ordered item has no inventory reference. Cancel without restoration and review it manually.');
+        const productRef = db.doc(item.productRef);
+        productSnapshots.push({ item, productRef, snapshot: await transaction.get(productRef) });
+      }
+      productSnapshots.forEach(({ item, productRef, snapshot }) => {
+        if (!snapshot.exists) throw new Error(item.productName + ' no longer exists in inventory.');
+        const beforeRaw = snapshot.data().stockQuantity;
+        if (beforeRaw == null || beforeRaw === '') throw new Error(item.productName + ' has unconfigured inventory.');
+        const before = Math.max(0, Math.floor(Number(beforeRaw)));
+        const returned = Math.max(1, Math.floor(Number(item.quantity || 1)));
+        const after = before + returned;
+        transaction.update(productRef, { stockQuantity: after, inStock: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        transaction.set(db.collection('inventoryTransactions').doc(), { productId: item.productId, productRef: productRef.path, productName: item.productName, orderId, orderNumber: order.orderNumber, type: 'order_cancellation_return', reason: 'Order cancelled · stock returned', adjustment: returned, before, after, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      });
+    }
+    transaction.update(orderRef, { status: 'cancelled', inventoryRestored: !!restoreInventory, cancelledAt: firebase.firestore.FieldValue.serverTimestamp(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+  });
+}
+
+window.fbCancelOrder = fbCancelOrder;
 
 async function fbSubscribeToNewsletter(email) {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

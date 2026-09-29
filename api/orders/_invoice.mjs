@@ -1,0 +1,53 @@
+function text(value) { return String(value == null ? '' : value).replace(/[^\x20-\x7E]/g, ' ').replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)'); }
+function html(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, (character) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character])); }
+function money(value) { return `TTD $${Number(value || 0).toFixed(2)}`; }
+function label(value) { return String(value || 'pending').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()); }
+function wrap(value, width) { const words=String(value||'').split(/\s+/),lines=[];let line='';for(const word of words){const next=line?`${line} ${word}`:word;if(next.length>width&&line){lines.push(line);line=word}else line=next}if(line)lines.push(line);return lines.length?lines:['']; }
+
+export function invoiceData(order, settings = {}) {
+  const customer = order.customer || {};
+  const delivery = order.delivery || {};
+  const pricing = order.pricing || {};
+  return {
+    orderId: order.id || order.orderId,
+    orderNumber: order.orderNumber || order.orderId || order.id,
+    date: order.createdAt ? new Date(order.createdAt) : new Date(),
+    customer: { name: order.customerName || customer.name || '', email: order.customerEmail || customer.email || '', phone: order.customerPhone || customer.phone || '' },
+    delivery: { method: delivery.method || order.deliveryOption || 'pickup', address: delivery.address || order.address || '', city: delivery.city || order.city || '', region: delivery.region || order.region || '' },
+    items: (order.items || []).map((item) => ({ name: item.productName || item.name || 'Product', quantity: Number(item.quantity || 1), unitPrice: Number(item.unitPrice || item.price || 0), originalUnitPrice: Number(item.baseUnitPrice || item.unitPrice || item.price || 0), discountRate: Number(item.discountRate || 0), lineTotal: Number(item.lineTotal || Number(item.unitPrice || item.price || 0) * Number(item.quantity || 1)) })),
+    subtotal: Number(order.subtotalBeforeDiscount ?? pricing.originalSubtotal ?? order.subtotal ?? pricing.subtotal ?? 0),
+    savings: Number(order.discount ?? pricing.discount ?? 0),
+    deliveryFee: Number(order.deliveryFee ?? pricing.delivery ?? 0),
+    total: Number(order.total ?? pricing.total ?? 0),
+    paymentMethod: order.paymentMethod || (order.payment && order.payment.method) || 'cash',
+    paymentStatus: order.paymentStatus || (order.payment && order.payment.status) || 'pending',
+    settings: { storeName: settings.storeName || "Rishi's Lily Farm", phone: settings.phone || '(868) 710-4296', email: settings.email || 'darren.kowlessar6@gmail.com', wireAcctName: settings.wireAcctName || '', wireBank: settings.wireBank || '', wireAcctNum: settings.wireAcctNum || '', wireAcctType: settings.wireAcctType || '', paymentInstructions: settings.paymentInstructions || '', paymentProofEmail: settings.paymentProofEmail || settings.email || 'darren.kowlessar6@gmail.com' }
+  };
+}
+
+function pageContent(data, itemStart, itemEnd, page, pages) {
+  const c=[]; const line=(x1,y1,x2,y2,color='.78 .84 .79')=>c.push(`${color} RG ${x1} ${y1} m ${x2} ${y2} l S`); const fill=(x,y,w,h,color)=>c.push(`${color} rg ${x} ${y} ${w} ${h} re f`); const t=(x,y,size,value,font='F1',color='.08 .24 .17')=>c.push(`BT /${font} ${size} Tf ${color} rg ${x} ${y} Td (${text(value)}) Tj ET`);
+  fill(0,742,612,50,'.93 .96 .93'); fill(0,0,12,792,'.10 .34 .23'); t(30,768,18,data.settings.storeName,'F2'); t(30,752,8,'Rare blooms, grown in Trinidad','F1','.30 .43 .36'); t(455,768,19,'INVOICE','F2'); t(455,753,9,`#${data.orderNumber}`); t(455,740,8,data.date.toLocaleDateString('en-TT',{year:'numeric',month:'short',day:'numeric'}), 'F1','.34 .42 .37');
+  t(30,715,8,'BILL TO','F2','.12 .46 .29');t(315,715,8,'DELIVER TO','F2','.12 .46 .29');line(30,708,582,708);
+  let y=692;t(30,y,10,data.customer.name,'F2');t(30,y-15,8,data.customer.email);t(30,y-28,8,data.customer.phone);const address=data.delivery.method==='delivery'?[data.delivery.address,data.delivery.city,data.delivery.region].filter(Boolean).join(', '):'Farm pickup';wrap(address,42).slice(0,3).forEach((v,i)=>t(315,y-i*13,8,v));
+  y=635;t(30,y,8,'ORDER ITEMS','F2','.12 .46 .29');fill(30,y-24,552,20,'.96 .97 .94');t(38,y-17,8,'PRODUCT','F2');t(386,y-17,8,'QTY','F2');t(438,y-17,8,'UNIT','F2');t(522,y-17,8,'TOTAL','F2');y-=39;
+  data.items.slice(itemStart,itemEnd).forEach((item)=>{const lines=wrap(item.name,47).slice(0,2);lines.forEach((v,i)=>t(38,y-i*11,8,v,i?'F1':'F2'));t(391,y,8,item.quantity);t(432,y,8,money(item.unitPrice));t(515,y,8,money(item.lineTotal),'F2');y-=lines.length>1?32:25;line(38,y+10,574,y+10,'.88 .90 .88');});
+  if(page===pages){y=Math.min(y-8,500);fill(330,y-105,252,112,'.96 .97 .94');t(350,y-22,8,'Original subtotal');t(482,y-22,8,money(data.subtotal));t(350,y-42,8,'Promotion savings');t(474,y-42,8,`-${money(data.savings)}`);t(350,y-62,8,'Delivery');t(482,y-62,8,money(data.deliveryFee));line(348,y-73,564,y-73,'.12 .46 .29');t(350,y-94,11,'TOTAL','F2','.10 .34 .23');t(469,y-94,13,money(data.total),'F2','.10 .34 .23');
+    y-=138;t(30,y,8,'PAYMENT DETAILS','F2','.12 .46 .29');line(30,y-7,582,y-7);t(30,y-23,8,`Payment Method: ${label(data.paymentMethod)}`,'F2');t(315,y-23,8,`Payment Status: ${label(data.paymentStatus)}`,'F2');let note=data.paymentMethod==='bank_transfer'?(data.settings.paymentInstructions||`Awaiting bank transfer. Email a screenshot or payment receipt to ${data.settings.paymentProofEmail}.`):'Payment is payable on delivery or pickup.';wrap(note,95).slice(0,2).forEach((v,i)=>t(30,y-42-i*12,8,v));
+    y-=90;t(30,y,11,'Thank you for your order.','F2','.10 .34 .23');t(30,y-18,8,'Thank you for supporting a locally grown Trinidad & Tobago business.');t(30,y-35,8,`${data.settings.storeName}  |  ${data.settings.phone}  |  ${data.settings.email}`);
+  }
+  t(30,22,7,`Order Invoice #${data.orderNumber}`,'F1','.40 .46 .42');t(536,22,7,`Page ${page} of ${pages}`,'F1','.40 .46 .42');return c.join('\n');
+}
+
+export function generateInvoicePdf(order, settings = {}) {
+  const data=invoiceData(order,settings),perPage=12,pages=Math.max(1,Math.ceil(data.items.length/perPage)),objects=[null];
+  const add=(value)=>{objects.push(value);return objects.length-1}; const font=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'); const bold=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>'); const pageIds=[];
+  for(let p=0;p<pages;p++){const content=pageContent(data,p*perPage,Math.min(data.items.length,(p+1)*perPage),p+1,pages);const stream=add(`<< /Length ${Buffer.byteLength(content)} >>\nstream\n${content}\nendstream`);pageIds.push(add(`PAGE:${stream}`));}
+  const pagesId=objects.length;objects.push('');pageIds.forEach((id)=>{const stream=objects[id].slice(5);objects[id]=`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${font} 0 R /F2 ${bold} 0 R >> >> /Contents ${stream} 0 R >>`});objects[pagesId]=`<< /Type /Pages /Kids [${pageIds.map(id=>`${id} 0 R`).join(' ')}] /Count ${pageIds.length} >>`;const catalog=add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+  let pdf='%PDF-1.4\n',offsets=[0];for(let i=1;i<objects.length;i++){offsets[i]=Buffer.byteLength(pdf);pdf+=`${i} 0 obj\n${objects[i]}\nendobj\n`;}const xref=Buffer.byteLength(pdf);pdf+=`xref\n0 ${objects.length}\n0000000000 65535 f \n`;for(let i=1;i<objects.length;i++)pdf+=`${String(offsets[i]).padStart(10,'0')} 00000 n \n`;pdf+=`trailer\n<< /Size ${objects.length} /Root ${catalog} 0 R >>\nstartxref\n${xref}\n%%EOF`;return { buffer:Buffer.from(pdf,'binary'), data };
+}
+
+export function invoiceEmailHtml(data) {
+  const first=(data.customer.name||'there').split(/\s+/)[0];const rows=data.items.map(i=>`<tr><td style="padding:10px;border-bottom:1px solid #e1e8e2">${html(i.name)}</td><td style="padding:10px;text-align:center;border-bottom:1px solid #e1e8e2">${i.quantity}</td><td style="padding:10px;text-align:right;border-bottom:1px solid #e1e8e2">${money(i.lineTotal)}</td></tr>`).join('');const address=data.delivery.method==='delivery'?[data.delivery.address,data.delivery.city,data.delivery.region].filter(Boolean).join(', '):'Farm pickup';const bank=data.paymentMethod==='bank_transfer'?`<div style="margin:20px 0;padding:16px;background:#fff8e7;border:1px solid #ead9a7;border-radius:8px"><strong>Awaiting bank transfer</strong><p style="margin:6px 0 0">${html(data.settings.paymentInstructions||`Please use ${data.orderNumber} as your reference and email payment proof to ${data.settings.paymentProofEmail}.`)}</p></div>`:'';
+  return `<div style="background:#f7f5ee;padding:28px;font:14px Arial,sans-serif;color:#173d2e"><div style="max-width:680px;margin:auto;background:white;border:1px solid #dbe6dc;border-radius:12px;overflow:hidden"><div style="padding:24px;background:#edf5ee"><h1 style="margin:0;font:26px Georgia,serif">Rishi's Lily Farm</h1><p style="margin:5px 0 0;color:#65766c">Rare blooms, grown in Trinidad</p></div><div style="padding:28px"><h2 style="font:24px Georgia,serif;margin:0 0 12px">Thank you for your order</h2><p>Hi ${html(first)},</p><p>We've received your order and are preparing it for fulfilment.</p><p><strong>Order #${html(data.orderNumber)}</strong></p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr style="background:#f4f7f3"><th style="padding:10px;text-align:left">Product</th><th>Qty</th><th style="text-align:right;padding:10px">Total</th></tr></thead><tbody>${rows}</tbody></table><div style="margin-left:auto;max-width:310px"><p style="display:flex;justify-content:space-between"><span>Subtotal</span><strong>${money(data.subtotal)}</strong></p><p style="display:flex;justify-content:space-between"><span>Savings</span><strong>-${money(data.savings)}</strong></p><p style="display:flex;justify-content:space-between"><span>Delivery</span><strong>${money(data.deliveryFee)}</strong></p><p style="display:flex;justify-content:space-between;border-top:2px solid #276b49;padding-top:12px;font-size:18px"><strong>TOTAL</strong><strong>${money(data.total)}</strong></p></div><p><strong>Delivery:</strong><br>${html(address)}</p><p><strong>Payment:</strong> ${html(label(data.paymentMethod))}<br><strong>Payment Status:</strong> ${html(label(data.paymentStatus))}</p>${bank}<p style="margin-top:28px">Thank you for supporting a locally grown Trinidad & Tobago business.</p><p><strong>Rishi's Lily Farm</strong></p></div></div></div>`;
+}
