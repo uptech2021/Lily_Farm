@@ -72,6 +72,19 @@
             z-index: 100;
         }
 
+        /* The shared navigation is injected into this wrapper. Making the
+           wrapper sticky avoids constraining the header to its own height. */
+        #navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #navbar > header {
+            position: relative;
+            top: auto;
+        }
+
         .top-bar {
             background-color: var(--primary-green);
             color: white;
