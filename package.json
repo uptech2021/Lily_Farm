@@ -10,9 +10,12 @@
     "test": "node scripts/test-invoice.mjs",
     "prestart": "npm run config",
     "start": "node scripts/serve.js",
-    "build": "npm run config",
+    "build": "node scripts/build-static.js",
     "predev": "npm run config",
     "dev": "node scripts/serve.js"
+  },
+  "allowScripts": {
+    "protobufjs@7.6.6": true
   },
   "keywords": [
     "lily-farm",

@@ -28,7 +28,8 @@ if (fs.existsSync(envPath)) {
       value = value.slice(1, -1);
     }
 
-    env[key] = value;
+    // Deployment-provided values must take precedence over a local .env file.
+    if (!env[key]) env[key] = value;
   }
 }
 
@@ -42,8 +43,11 @@ const mapping = {
   measurementId: "FIREBASE_MEASUREMENT_ID"
 };
 
-// Check that all Firebase variables exist
-const missing = Object.values(mapping).filter(key => !env[key]);
+// measurementId is optional; the remaining values are required by the app.
+const requiredKeys = Object.values(mapping).filter(
+  key => key !== "FIREBASE_MEASUREMENT_ID"
+);
+const missing = requiredKeys.filter(key => !env[key]);
 
 if (missing.length) {
   console.error(
