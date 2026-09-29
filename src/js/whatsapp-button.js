@@ -1,9 +1,11 @@
 // WhatsApp Button Component
 (function() {
-  const PHONE_NUMBER = '+18687104296'; // (868) 710-4296
-  const BUSINESS_NAME = "Rishi's Lily Farm & Exotic Plants";
+  let PHONE_NUMBER = '+18687104296';
+  let BUSINESS_NAME = "Rishi's Lily Farm & Exotic Plants";
+  let DEFAULT_MESSAGE = '';
   
-  function initWhatsAppButton() {
+  async function initWhatsAppButton() {
+    if (window.StoreSettings) { const settings=await StoreSettings.load(); if(settings.storefront&&settings.storefront.whatsappEnabled===false)return; PHONE_NUMBER=settings.whatsappNumber||PHONE_NUMBER; BUSINESS_NAME=settings.storeName||BUSINESS_NAME; DEFAULT_MESSAGE=settings.whatsappMessage||''; }
     // Check if button already exists
     if (document.getElementById('whatsapp-button')) return;
     
@@ -39,7 +41,7 @@
     const currentPage = window.location.pathname.split('/').pop() || 'website';
     const timestamp = new Date().toLocaleString();
     
-    const message = `Hello ${BUSINESS_NAME}! 👋\n\nI'm interested in learning more about your exotic lilies and plants. Could you help me with information about your products and services?\n\n📱 I'm reaching out from: ${currentPage}\n⏰ Time: ${timestamp}`;
+    const message = DEFAULT_MESSAGE || `Hello ${BUSINESS_NAME}! 👋\n\nI'm interested in learning more about your exotic lilies and plants. Could you help me with information about your products and services?\n\n📱 I'm reaching out from: ${currentPage}\n⏰ Time: ${timestamp}`;
     
     return message;
   }

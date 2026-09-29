@@ -42,7 +42,7 @@
           '<a href="faq.html">FAQ &amp; Plant Care</a><a href="faq.html">Delivery</a><a href="contact.html">Contact</a>' +
         '</div>' +
         '<div class="footer-column footer-contact"><h4>Contact</h4>' +
-          '<p><i class="fas fa-phone"></i> <a href="tel:+18687104296">' + esc(settings.phone) + '</a></p>' +
+          '<p><i class="fas fa-phone"></i> <a href="tel:' + esc(String(settings.phone||'').replace(/[^+\d]/g,'')) + '">' + esc(settings.phone) + '</a></p>' +
           '<p><i class="fas fa-envelope"></i> <a href="mailto:' + esc(settings.email) + '">' + esc(settings.email) + '</a></p>' +
           '<p><i class="fas fa-clock"></i> ' + esc(settings.hours) + '</p>' +
         '</div>' +
@@ -56,7 +56,9 @@
   }
 
   if (document.getElementById('footer')) {
-    if (typeof db !== 'undefined' && db) {
+    if (window.StoreSettings) {
+      StoreSettings.load().then(render).catch(function(){ render(defaults); });
+    } else if (typeof db !== 'undefined' && db) {
       db.collection('settings').doc('global').get().then(function(doc) {
         render(doc.exists ? Object.assign({}, defaults, doc.data()) : defaults);
       }).catch(function() {

@@ -789,6 +789,47 @@ input:checked + .slider:before {
   border-radius: 8px;
 }
 
+.admin-notification-link {
+  align-items: center;
+  padding: 13px 10px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.admin-notification-link > i:first-child {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #edf7ef;
+  color: var(--ok);
+}
+
+.admin-notification-link > span { flex: 1; min-width: 0; }
+.admin-notification-link strong,
+.admin-notification-link small { display: block; }
+.admin-notification-link small { margin-top: 3px; color: var(--light-text); }
+.admin-notification-link > i:last-child { color: #9aa69f; font-size: .7rem; }
+.admin-notification-link .notification-warn { background: #fff6e3; color: #a66a17; }
+.admin-notification-link .notification-danger { background: #fff0ed; color: #b34c3f; }
+.admin-notification-link .notification-gold { background: #fff8e8; color: #a77b1c; }
+
+.notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 30px 18px;
+  margin: 0;
+  color: var(--light-text);
+  text-align: center;
+}
+
+.notification-empty > i { color: var(--ok); font-size: 1.4rem; }
+.notification-empty > strong { color: var(--text); }
+
 .notification-detail-panel {
   margin-top: 12px;
   padding: 14px 16px;

@@ -240,12 +240,13 @@ window.getStorageItem = getStorageItem;
 window.setStorageItem = setStorageItem;
 
 // Shared farm map used by Home and Contact pages.
-function initFarmMap(containerId) {
+async function initFarmMap(containerId) {
   const targetId = containerId || 'mapContainer';
   const element = document.getElementById(targetId);
   if (typeof L === 'undefined' || !element || element.dataset.mapReady === 'true') return null;
   element.dataset.mapReady = 'true';
-  const coords = [10.325615, -61.415639];
+  let coords = [10.325615, -61.415639];
+  if (window.StoreSettings) { const settings=await StoreSettings.load(); coords=[Number(settings.farmLatitude)||coords[0],Number(settings.farmLongitude)||coords[1]]; }
   const map = L.map(targetId, { scrollWheelZoom: false }).setView(coords, 15);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',

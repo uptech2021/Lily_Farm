@@ -20,6 +20,7 @@
             email: 'darren.kowlessar6@gmail.com'
         };
         try {
+            if (window.StoreSettings) { settingsCache = await StoreSettings.load(); configureCheckoutFromSettings(); return; }
             if (typeof db !== 'undefined' && db) {
                 var doc = await db.collection('settings').doc('global').get();
                 if (doc.exists) { settingsCache = Object.assign({}, defaults, doc.data()); return; }
@@ -29,6 +30,7 @@
     }
 
     function getDeliveryRates() {
+        if (settingsCache && Array.isArray(settingsCache.deliveryRegions)) return settingsCache.deliveryRegions.filter(function(r){return r.enabled !== false}).reduce(function(map,r){map[r.id]=Number(r.fee)||0;return map},{});
         if (!settingsCache) return { central: 60, north: 85, south: 60 };
         return {
             central: settingsCache.deliveryCentral || 60,
@@ -37,13 +39,24 @@
         };
     }
 
-    function getFreeThreshold() { return (settingsCache && settingsCache.deliveryThreshold) || 500; }
+    function getFreeThreshold() { return settingsCache && settingsCache.freeDeliveryEnabled === false ? Infinity : Number((settingsCache && settingsCache.deliveryThreshold) || 500); }
 
     function calcDeliveryFee(subtotal, option, region) {
         if (option !== "delivery") return 0;
         if (subtotal >= getFreeThreshold()) return 0;
         var rates = getDeliveryRates();
-        return (region && rates[region]) ? rates[region] : 60;
+        return region && Object.prototype.hasOwnProperty.call(rates, region) ? rates[region] : 0;
+    }
+
+    function configureCheckoutFromSettings() {
+        var region = document.getElementById('region');
+        if (region && Array.isArray(settingsCache.deliveryRegions)) region.innerHTML = '<option value="">Select region</option>' + settingsCache.deliveryRegions.filter(function(r){return r.enabled !== false}).map(function(r){return '<option value="'+escapeHtml(r.id)+'">'+escapeHtml(r.name)+'</option>'}).join('');
+        var deliveryOption = document.getElementById('deliveryOption');
+        if (deliveryOption && settingsCache.pickupEnabled === false) deliveryOption.querySelector('option[value="pickup"]')?.remove();
+        var methods = settingsCache.paymentMethods || {cash:true,bankTransfer:true};
+        document.querySelector('[name="payment"][value="cash"]')?.closest('.payment-option')?.toggleAttribute('hidden', methods.cash === false);
+        document.querySelector('[name="payment"][value="bank_transfer"]')?.closest('.payment-option')?.toggleAttribute('hidden', methods.bankTransfer === false);
+        var selected=document.querySelector('[name="payment"]:checked'); if(selected&&selected.closest('.payment-option')?.hidden){selected.checked=false;document.querySelector('.payment-option:not([hidden]) input')?.click();}
     }
 
     function populateWireDetails() {
@@ -52,7 +65,7 @@
         var configured = !!(settingsCache.wireAcctName && settingsCache.wireBank && (settingsCache.paymentInstructions || settingsCache.wireAcctNum));
         if (id('wireAcctName')) id('wireAcctName').textContent = settingsCache.wireAcctName || 'To be confirmed';
         if (id('wireBank')) id('wireBank').textContent = settingsCache.wireBank || 'To be confirmed';
-        if (id('wireAcctNum')) id('wireAcctNum').textContent = settingsCache.paymentInstructions || settingsCache.wireAcctNum || 'Provided after order review';
+        if (id('wireAcctNum')) id('wireAcctNum').textContent = settingsCache.wireAcctNum || 'Provided after order review';
         if (id('wireAcctType')) id('wireAcctType').textContent = settingsCache.wireAcctType || 'To be confirmed';
         if (id('wireEmail')) id('wireEmail').textContent = settingsCache.paymentProofEmail || settingsCache.email || 'darren.kowlessar6@gmail.com';
         if (id('wireConfiguredDetails')) id('wireConfiguredDetails').hidden = !configured;

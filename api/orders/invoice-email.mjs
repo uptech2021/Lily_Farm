@@ -14,7 +14,7 @@ export default async function handler(request) {
     if(resend&&!admin) return json({error:'Admin authorization required'},403);
     const recipient=order.customerEmail||(order.customer&&order.customer.email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient||'')) return json({error:'Order has no valid customer email'},400);
     await updateDocument('orders',orderId,{'invoiceEmail.status':'sending','invoiceEmail.recipient':recipient,'invoiceEmail.errorCode':null});
-    const settings=await getSettings();const {buffer,data}=generateInvoicePdf(order,settings);
+    const settings=order.settingsSnapshot || await getSettings();const {buffer,data}=generateInvoicePdf(order,settings);
     await transporter().sendMail({from:fromHeader(),to:recipient,subject:`Order Confirmation — Rishi's Lily Farm #${data.orderNumber}`,html:invoiceEmailHtml(data),attachments:[{filename:`Rishis-Lily-Farm-${data.orderNumber}.pdf`,content:buffer,contentType:'application/pdf'}]});
     await updateDocument('orders',orderId,{'invoiceEmail.status':'sent','invoiceEmail.recipient':recipient,'invoiceEmail.sentAt':new Date().toISOString(),'invoiceEmail.errorCode':null});
     return json({status:'sent',recipient});

@@ -390,9 +390,14 @@ async function fbSaveOrder(orderData) {
 
     subtotal = Math.round(subtotal * 100) / 100;
     const discount = Math.round((subtotalBeforeDiscount - subtotal) * 100) / 100;
-    const threshold = Number(settings.deliveryThreshold || 500);
-    const rates = { central: Number(settings.deliveryCentral || 60), north: Number(settings.deliveryNorth || 85), south: Number(settings.deliverySouth || 60) };
-    const deliveryFee = orderData.deliveryOption !== 'delivery' || subtotal >= threshold ? 0 : (rates[orderData.region] || rates.central);
+    const threshold = settings.freeDeliveryEnabled === false ? Infinity : Number(settings.deliveryThreshold || 500);
+    const regions = Array.isArray(settings.deliveryRegions) ? settings.deliveryRegions : [{id:'central',name:'Central Trinidad',fee:Number(settings.deliveryCentral||60),enabled:true},{id:'north',name:'North Trinidad',fee:Number(settings.deliveryNorth||85),enabled:true},{id:'south',name:'South Trinidad',fee:Number(settings.deliverySouth||60),enabled:true}];
+    const selectedRegion = regions.find(region => region.id === orderData.region && region.enabled !== false);
+    if (orderData.deliveryOption === 'delivery' && !selectedRegion) throw new Error('Please choose an available delivery region.');
+    if (orderData.deliveryOption === 'pickup' && settings.pickupEnabled === false) throw new Error('Farm pickup is not currently available.');
+    const methods = settings.paymentMethods || {cash:true,bankTransfer:true};
+    if ((orderData.paymentMethod === 'cash' && methods.cash === false) || (orderData.paymentMethod === 'bank_transfer' && methods.bankTransfer === false)) throw new Error('The selected payment method is no longer available.');
+    const deliveryFee = orderData.deliveryOption !== 'delivery' ? Number(settings.pickupFee || 0) : subtotal >= threshold ? 0 : Number(selectedRegion.fee || 0);
     const total = Math.round((subtotal + deliveryFee) * 100) / 100;
     const paymentStatus = orderData.paymentMethod === 'bank_transfer' ? 'awaiting_payment' : 'pending';
     const order = {
@@ -404,13 +409,14 @@ async function fbSaveOrder(orderData) {
       subtotal, discount, deliveryFee, total,
       pricing: { subtotal, discount, delivery: deliveryFee, total },
       deliveryOption: orderData.deliveryOption,
-      delivery: { method: orderData.deliveryOption, address: orderData.address || null, city: orderData.city || null, region: orderData.region || null, latitude: orderData.location && orderData.location.latitude || null, longitude: orderData.location && orderData.location.longitude || null },
+      delivery: { method: orderData.deliveryOption, address: orderData.address || null, city: orderData.city || null, region: orderData.region || null, regionName: selectedRegion && selectedRegion.name || null, feeSnapshot: deliveryFee, freeThresholdSnapshot: Number.isFinite(threshold) ? threshold : null, latitude: orderData.location && orderData.location.latitude || null, longitude: orderData.location && orderData.location.longitude || null },
       paymentMethod: orderData.paymentMethod, paymentStatus,
       payment: { method: orderData.paymentMethod, status: paymentStatus, bank: orderData.bank || null, proofReference: null },
       bank: orderData.bank || null, region: orderData.region || null, address: orderData.address || null, city: orderData.city || null,
       notes: orderData.notes || null, location: orderData.location || null,
       status: 'pending', inventoryRestored: false,
       invoiceAccessToken,
+      settingsSnapshot: { storeName:settings.storeName||"Rishi's Lily Farm", phone:settings.invoicePhone||settings.phone||'', email:settings.invoiceEmail||settings.email||'', address:settings.invoiceAddress||settings.address||'', invoiceBusinessName:settings.invoiceBusinessName||settings.storeName||"Rishi's Lily Farm", invoicePrefix:settings.invoicePrefix||'RLF', invoiceFooter:settings.invoiceFooter||'', wireAcctName:settings.wireAcctName||'', wireBank:settings.wireBank||'', wireAcctNum:settings.wireAcctNum||'', wireAcctType:settings.wireAcctType||'', paymentInstructions:settings.paymentInstructions||'', paymentProofEmail:settings.paymentProofEmail||settings.email||'' },
       invoiceEmail: { status: 'pending', recipient: orderData.customerEmail, sentAt: null, errorCode: null },
       createdAt: firebase.firestore.FieldValue.serverTimestamp(), updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };

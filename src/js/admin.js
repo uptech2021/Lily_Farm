@@ -486,6 +486,81 @@ function initializeAdmin() {
     initializeDropdowns();
     initializeButtonActions(); // Add this new function
     initializePlaceholderLinks();
+    initializeAdminTopbar();
+}
+
+function initializeAdminTopbar() {
+    document.querySelectorAll('.profile-menu').forEach(function(profile) { profile.remove(); });
+    var actions = document.querySelector('.admin-topbar .topbar-actions');
+    if (!actions) return;
+    var bell = actions.querySelector('.notification-btn');
+    if (!bell) {
+        bell = document.createElement('button');
+        bell.type = 'button';
+        bell.className = 'notification-btn';
+        bell.setAttribute('data-modal-target', 'notifications-modal');
+        bell.setAttribute('aria-label', 'Notifications');
+        bell.innerHTML = '<i class="fas fa-bell"></i><span class="notification-badge" hidden>0</span>';
+        actions.appendChild(bell);
+    } else {
+        bell.setAttribute('data-modal-target', 'notifications-modal');
+        bell.setAttribute('aria-label', 'Notifications');
+        if (!bell.querySelector('.notification-badge')) bell.insertAdjacentHTML('beforeend', '<span class="notification-badge" hidden>0</span>');
+    }
+    var modal = document.getElementById('notifications-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'notifications-modal';
+        modal.className = 'modal-backdrop d-none';
+        modal.innerHTML = '<div class="modal"><div class="modal-header"><div><p class="admin-eyebrow">Store activity</p><h3 class="modal-title">Notifications</h3></div><button class="modal-close" type="button" aria-label="Close notifications"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="notification-list"><p class="notification-empty">Loading notifications…</p></div></div></div>';
+        document.body.appendChild(modal);
+    }
+    loadAdminNotifications(bell, modal);
+}
+
+async function loadAdminNotifications(bell, modal) {
+    var list = modal.querySelector('.notification-list');
+    var badge = bell.querySelector('.notification-badge');
+    if (!list || !badge) return;
+    if (typeof db === 'undefined' || !db) {
+        badge.hidden = true;
+        list.innerHTML = '<p class="notification-empty">Notifications are unavailable until Firebase is configured.</p>';
+        return;
+    }
+    try {
+        var settings = window.StoreSettings ? await StoreSettings.load() : { inventory: { lowStock: 5 } };
+        var lowThreshold = Number(settings.inventory && settings.inventory.lowStock || 5);
+        var results = await Promise.all([
+            db.collection('orders').get(),
+            db.collection('products').get(),
+            db.collection('reviews').get().catch(function() { return null; })
+        ]);
+        var notices = [];
+        results[0].forEach(function(doc) {
+            var order = doc.data(), status = String(order.status || 'pending').toLowerCase();
+            if (status === 'pending' || status === 'processing' || order.paymentStatus === 'awaiting_payment') notices.push({ icon:'fa-receipt', tone:'ok', title:order.paymentStatus === 'awaiting_payment' ? 'Payment proof pending' : 'Order needs attention', detail:(order.orderNumber || doc.id) + ' · ' + (order.customerName || order.customer && order.customer.name || 'Customer'), href:'orders.html' });
+        });
+        results[1].forEach(function(doc) {
+            var product = doc.data(), quantity = Number(product.stockQuantity);
+            if (Number.isFinite(quantity) && quantity <= lowThreshold) notices.push({ icon:quantity <= 0 ? 'fa-circle-xmark' : 'fa-triangle-exclamation', tone:quantity <= 0 ? 'danger' : 'warn', title:quantity <= 0 ? 'Out of stock' : 'Low stock', detail:(product.name || 'Product') + ' · ' + quantity + ' remaining', href:'products.html' });
+        });
+        if (results[2]) results[2].forEach(function(doc) { var review=doc.data(); if (String(review.status || 'pending').toLowerCase() === 'pending') notices.push({icon:'fa-star',tone:'gold',title:'Review awaiting moderation',detail:(review.productName || 'Store review') + (review.rating ? ' · '+review.rating+' stars' : ''),href:'reviews.html?status=pending'}); });
+        notices = notices.slice(0, 20);
+        badge.textContent = notices.length > 99 ? '99+' : String(notices.length);
+        badge.hidden = notices.length === 0;
+        bell.setAttribute('aria-label', notices.length ? notices.length + ' notifications' : 'No notifications');
+        list.innerHTML = notices.length ? notices.map(function(n) { return '<a class="notification-item admin-notification-link" href="'+n.href+'"><i class="fas '+n.icon+' notification-'+n.tone+'"></i><span><strong>'+escapeAdminText(n.title)+'</strong><small>'+escapeAdminText(n.detail)+'</small></span><i class="fas fa-chevron-right"></i></a>'; }).join('') : '<div class="notification-empty"><i class="fas fa-circle-check"></i><strong>You’re all caught up</strong><span>No orders, inventory items, or reviews need attention.</span></div>';
+    } catch (error) {
+        console.warn('Admin notifications could not be loaded:', error);
+        badge.hidden = true;
+        list.innerHTML = '<p class="notification-empty">Notifications could not be loaded. Refresh to try again.</p>';
+    }
+}
+
+function escapeAdminText(value) {
+    var element = document.createElement('div');
+    element.textContent = value == null ? '' : String(value);
+    return element.innerHTML;
 }
 
 function initializePlaceholderLinks() {

@@ -21,7 +21,7 @@ export function invoiceData(order, settings = {}) {
     total: Number(order.total ?? pricing.total ?? 0),
     paymentMethod: order.paymentMethod || (order.payment && order.payment.method) || 'cash',
     paymentStatus: order.paymentStatus || (order.payment && order.payment.status) || 'pending',
-    settings: { storeName: settings.storeName || "Rishi's Lily Farm", phone: settings.phone || '(868) 710-4296', email: settings.email || 'darren.kowlessar6@gmail.com', wireAcctName: settings.wireAcctName || '', wireBank: settings.wireBank || '', wireAcctNum: settings.wireAcctNum || '', wireAcctType: settings.wireAcctType || '', paymentInstructions: settings.paymentInstructions || '', paymentProofEmail: settings.paymentProofEmail || settings.email || 'darren.kowlessar6@gmail.com' }
+    settings: { storeName: settings.invoiceBusinessName || settings.storeName || "Rishi's Lily Farm", tagline:settings.tagline || 'Rare blooms, grown in Trinidad', phone: settings.invoicePhone || settings.phone || '', email: settings.invoiceEmail || settings.email || '', invoiceFooter:settings.invoiceFooter || 'Thank you for supporting a locally grown Trinidad & Tobago business.', wireAcctName: settings.wireAcctName || '', wireBank: settings.wireBank || '', wireAcctNum: settings.wireAcctNum || '', wireAcctType: settings.wireAcctType || '', paymentInstructions: settings.paymentInstructions || '', paymentProofEmail: settings.paymentProofEmail || settings.email || '' }
   };
 }
 
@@ -34,7 +34,7 @@ function pageContent(data, itemStart, itemEnd, page, pages) {
   data.items.slice(itemStart,itemEnd).forEach((item)=>{const lines=wrap(item.name,47).slice(0,2);lines.forEach((v,i)=>t(38,y-i*11,8,v,i?'F1':'F2'));t(391,y,8,item.quantity);t(432,y,8,money(item.unitPrice));t(515,y,8,money(item.lineTotal),'F2');y-=lines.length>1?32:25;line(38,y+10,574,y+10,'.88 .90 .88');});
   if(page===pages){y=Math.min(y-8,500);fill(330,y-105,252,112,'.96 .97 .94');t(350,y-22,8,'Original subtotal');t(482,y-22,8,money(data.subtotal));t(350,y-42,8,'Promotion savings');t(474,y-42,8,`-${money(data.savings)}`);t(350,y-62,8,'Delivery');t(482,y-62,8,money(data.deliveryFee));line(348,y-73,564,y-73,'.12 .46 .29');t(350,y-94,11,'TOTAL','F2','.10 .34 .23');t(469,y-94,13,money(data.total),'F2','.10 .34 .23');
     y-=138;t(30,y,8,'PAYMENT DETAILS','F2','.12 .46 .29');line(30,y-7,582,y-7);t(30,y-23,8,`Payment Method: ${label(data.paymentMethod)}`,'F2');t(315,y-23,8,`Payment Status: ${label(data.paymentStatus)}`,'F2');let note=data.paymentMethod==='bank_transfer'?(data.settings.paymentInstructions||`Awaiting bank transfer. Email a screenshot or payment receipt to ${data.settings.paymentProofEmail}.`):'Payment is payable on delivery or pickup.';wrap(note,95).slice(0,2).forEach((v,i)=>t(30,y-42-i*12,8,v));
-    y-=90;t(30,y,11,'Thank you for your order.','F2','.10 .34 .23');t(30,y-18,8,'Thank you for supporting a locally grown Trinidad & Tobago business.');t(30,y-35,8,`${data.settings.storeName}  |  ${data.settings.phone}  |  ${data.settings.email}`);
+    y-=90;t(30,y,11,'Thank you for your order.','F2','.10 .34 .23');t(30,y-18,8,data.settings.invoiceFooter);t(30,y-35,8,`${data.settings.storeName}  |  ${data.settings.phone}  |  ${data.settings.email}`);
   }
   t(30,22,7,`Order Invoice #${data.orderNumber}`,'F1','.40 .46 .42');t(536,22,7,`Page ${page} of ${pages}`,'F1','.40 .46 .42');return c.join('\n');
 }

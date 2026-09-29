@@ -8,82 +8,53 @@
     <link rel="stylesheet" href="../css/admin-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .faq-sections {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-        .faq-section-card {
-            background: var(--white);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        .faq-section-card .section-header {
-            background: var(--primary-green, #2e7d32);
-            color: #fff;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .faq-section-card .section-header h3 {
-            margin: 0;
-            flex: 1;
-            font-size: 1.2rem;
-        }
-        .faq-section-card .section-header .section-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .faq-section-card .section-header .section-actions button {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .faq-section-card .section-header .section-actions button:hover {
-            background: rgba(255,255,255,0.35);
-        }
-        .faq-section-card .faq-items {
-            padding: 12px 20px 8px;
-        }
-        .faq-section-card .faq-item {
-            border-bottom: 1px solid #e8f0e8;
-        }
-        .faq-section-card .faq-item:last-child {
-            border-bottom: none;
-        }
+        .faq-toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto auto auto; gap:12px; align-items:center; }
+        .faq-summary { color:var(--light-text); font-size:.875rem; margin:14px 2px 0; }
+        .faq-sections { display:flex; flex-direction:column; gap:16px; }
+        .faq-section-card { background:var(--white); border:1px solid #d6e5d7; border-radius:14px; overflow:hidden; box-shadow:0 5px 16px rgba(20,60,38,.055); }
+        .faq-section-card.is-collapsed .faq-items { display:none; }
+        .faq-section-card .section-header { background:#fff; color:var(--dark-text); padding:16px 18px; display:flex; align-items:center; gap:12px; border-left:4px solid var(--brand); }
+        .section-collapse { width:38px; height:38px; border:1px solid #d6e5d7; color:var(--brand); background:#f5faf5; border-radius:9px; cursor:pointer; }
+        .faq-section-card.is-collapsed .section-collapse i { transform:rotate(-90deg); }
+        .section-icon { width:38px; height:38px; display:grid; place-items:center; border-radius:10px; color:var(--brand); background:#e9f6ec; }
+        .faq-section-card .section-header h3 { margin:0; flex:1; font-size:1rem; font-weight:750; }
+        .section-meta { display:flex; gap:8px; color:var(--light-text); font-size:.82rem; align-items:center; }
+        .section-actions { display:flex; gap:8px; align-items:center; }
+        .section-menu { position:relative; }
+        .section-menu summary { list-style:none; width:38px; height:38px; border:1px solid #d6e5d7; display:grid; place-items:center; border-radius:9px; cursor:pointer; color:var(--dark-text); }
+        .section-menu summary::-webkit-details-marker { display:none; }
+        .section-menu-list { position:absolute; right:0; top:44px; z-index:3; background:#fff; border:1px solid #d6e5d7; border-radius:10px; padding:6px; width:160px; box-shadow:0 12px 24px rgba(20,60,38,.14); }
+        .section-menu-list button { width:100%; border:0; background:transparent; text-align:left; padding:9px 10px; border-radius:7px; cursor:pointer; color:var(--dark-text); }
+        .section-menu-list button:hover { background:#f1f8f1; }
+        .section-menu-list .danger { color:var(--danger); }
+        .faq-section-card .faq-items { padding:4px 18px 10px; }
+        .faq-section-card .faq-item { border-top:1px solid #e8f0e8; }
         .faq-item-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 15px 4px;
             cursor: pointer;
             gap: 12px;
         }
         .faq-item-header h4 {
             margin: 0;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 650;
             color: var(--dark-text);
             flex: 1;
         }
         .faq-item-header .faq-item-actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-shrink: 0;
         }
         .faq-item-header .faq-item-actions button {
             background: none;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            width: 30px;
-            height: 30px;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
             color: var(--light-text);
             transition: all 0.2s;
@@ -119,9 +90,13 @@
             max-height: 600px;
             padding-bottom: 16px;
         }
-        .faq-item-answer p {
-            margin: 0;
-        }
+        .faq-item-answer p { margin:0; }
+        .faq-item-answer ul,.faq-item-answer ol { margin:0 0 12px; padding-left:20px; }
+        .badge { border-radius:999px; padding:4px 9px; font-size:.72rem; font-weight:700; }
+        .badge.success { background:#e5f6e9; color:#20753f; } .badge.warning { background:#fff3dc; color:#9a6512; }
+        .answer-toolbar { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 8px; }
+        .answer-toolbar button { min-width:34px; height:32px; padding:0 9px; background:#f5faf5; border:1px solid #d6e5d7; border-radius:7px; color:var(--brand); cursor:pointer; font-weight:700; }
+        .field-error { color:var(--danger); font-size:.78rem; min-height:18px; margin-top:4px; }
         .empty-section-message {
             color: var(--light-text);
             font-style: italic;
@@ -172,12 +147,15 @@
             text-align: center;
         }
         @media (max-width: 768px) {
+            .faq-toolbar { grid-template-columns:1fr 1fr; }
+            .faq-toolbar .filter-search { grid-column:1 / -1; }
             .faq-item-header {
                 flex-wrap: wrap;
             }
             .faq-item-header .faq-item-actions {
                 margin-left: auto;
             }
+            .section-meta { display:none; }
         }
     </style>
 </head>
@@ -287,13 +265,19 @@
                 <!-- FAQ Actions -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:12px;">
-                            <div class="d-flex gap-3 flex-wrap">
+                        <div class="faq-toolbar">
+                            <div class="filter-search">
+                                <label class="sr-only" for="faqSearchInline">Search FAQs</label>
+                                <input type="search" class="form-control" id="faqSearchInline" placeholder="Search questions, answers, or categories" oninput="syncFAQSearch(this.value)">
+                            </div>
+                            <div>
                                 <div class="form-group mb-0">
                                     <select class="form-control form-select" id="sectionFilter" style="min-width:180px;" onchange="filterFAQs()">
                                         <option value="">All Sections</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div>
                                 <div class="form-group mb-0">
                                     <select class="form-control form-select" id="statusFilter" style="min-width:140px;" onchange="filterFAQs()">
                                         <option value="">All Status</option>
@@ -303,6 +287,7 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
+                                <button class="btn btn-secondary" type="button" onclick="resetFAQFilters()">Reset</button>
                                 <button class="btn btn-secondary" onclick="openNewSectionModal()">
                                     <i class="fas fa-layer-group"></i>
                                     New Section
@@ -313,6 +298,7 @@
                                 </button>
                             </div>
                         </div>
+                        <p class="faq-summary" id="faqSummary" aria-live="polite">Loading questions…</p>
                     </div>
                 </div>
 
@@ -337,7 +323,7 @@
             <div class="modal-body">
                 <form id="faqForm" onsubmit="return false;">
                     <div class="form-group">
-                        <label class="form-label">Section</label>
+                        <label class="form-label" for="faqSectionSelect">Section</label>
                         <div class="d-flex gap-2">
                             <select id="faqSectionSelect" class="form-control form-select" style="flex:1;" onchange="onSectionSelectChange()">
                                 <option value="">Select Section</option>
@@ -346,6 +332,7 @@
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
+                        <div class="field-error" id="faqSectionError"></div>
                         <div id="customSectionGroup" class="d-none" style="margin-top:8px;">
                             <div class="d-flex gap-2">
                                 <input type="text" id="faqNewSection" class="form-control" placeholder="New section name..." style="flex:1;">
@@ -367,10 +354,19 @@
                     <div class="form-group">
                         <label for="faqQuestion" class="form-label">Question</label>
                         <input type="text" id="faqQuestion" class="form-control" placeholder="Enter the frequently asked question..." required>
+                        <div class="field-error" id="faqQuestionError"></div>
                     </div>
                     <div class="form-group">
                         <label for="faqAnswer" class="form-label">Answer</label>
+                        <div class="answer-toolbar" aria-label="Answer formatting">
+                            <button type="button" onclick="formatAnswerInput('bold')" title="Bold"><strong>B</strong></button>
+                            <button type="button" onclick="formatAnswerInput('italic')" title="Italic"><em>I</em></button>
+                            <button type="button" onclick="formatAnswerInput('bullets')" title="Bulleted list"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" onclick="formatAnswerInput('numbered')" title="Numbered list"><i class="fas fa-list-ol"></i></button>
+                            <button type="button" onclick="formatAnswerInput('link')" title="Link"><i class="fas fa-link"></i></button>
+                        </div>
                         <textarea id="faqAnswer" class="form-control" rows="6" placeholder="Provide a detailed answer to the question..." required></textarea>
+                        <div class="field-error" id="faqAnswerError"></div>
                     </div>
                     <div class="form-group">
                         <label for="faqStatus" class="form-label">Status</label>
@@ -392,7 +388,7 @@
     <div id="new-section-modal" class="modal-backdrop d-none">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">New FAQ Section</h3>
+                <h3 class="modal-title" id="sectionModalTitle">New FAQ Section</h3>
                 <button class="modal-close" type="button"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
@@ -400,6 +396,11 @@
                     <div class="form-group">
                         <label for="newSectionName" class="form-label">Section Name</label>
                         <input type="text" id="newSectionName" class="form-control" placeholder="e.g. Plant Care &amp; Maintenance" required>
+                        <div class="field-error" id="sectionNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newSectionStatus" class="form-label">Visibility</label>
+                        <select id="newSectionStatus" class="form-control form-select"><option value="published">Published</option><option value="draft">Draft</option></select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Icon</label>
@@ -426,8 +427,20 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('new-section-modal')">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="createNewSection()"><i class="fas fa-check"></i> Create Section</button>
+                <button type="button" class="btn btn-primary" onclick="saveSection()"><i class="fas fa-check"></i> Save Section</button>
             </div>
+        </div>
+    </div>
+
+    <div id="delete-section-modal" class="modal-backdrop d-none">
+        <div class="modal" style="max-width:520px;">
+            <div class="modal-header"><h3 class="modal-title">Delete FAQ Section</h3><button class="modal-close" type="button" onclick="closeModal('delete-section-modal')"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <p id="deleteSectionMessage"></p>
+                <div class="form-group"><label class="form-label" for="moveSectionSelect">Move its FAQs instead</label><select id="moveSectionSelect" class="form-control form-select"></select></div>
+                <p class="field-error">Deleting a section never deletes FAQs unless you explicitly choose the permanent-delete action below.</p>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" onclick="closeModal('delete-section-modal')">Cancel</button><button type="button" class="btn btn-primary" onclick="moveSectionFAQs()">Move FAQs &amp; delete section</button><button type="button" class="btn btn-danger" onclick="deleteSectionWithFAQs()">Delete section &amp; FAQs</button></div>
         </div>
     </div>
 
@@ -457,8 +470,11 @@
 
     <script>
     let allFAQs = [];
+    let allSections = [];
     let editingFaqId = null;
     let deletingFaqId = null;
+    let editingSectionId = null;
+    let deletingSection = null;
     let isCustomSection = false;
 
     // ─── Modal Helpers (use admin.js functions) ───
@@ -497,11 +513,16 @@
         container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-spinner fa-pulse"></i><h3>Loading FAQs...</h3></div>';
 
         try {
-            const snap = await db.collection('faqs').orderBy('section').orderBy('order').get();
-            allFAQs = [];
-            snap.forEach(doc => {
-                allFAQs.push({ id: doc.id, ...doc.data() });
-            });
+            const [faqSnap, sectionSnap] = await Promise.all([
+                db.collection('faqs').get(),
+                db.collection('faqSections').get()
+            ]);
+            allFAQs = []; allSections = [];
+            faqSnap.forEach(doc => allFAQs.push({ id: doc.id, ...doc.data() }));
+            sectionSnap.forEach(doc => allSections.push({ id: doc.id, ...doc.data() }));
+            hydrateLegacySections();
+            allFAQs.sort((a,b) => (a.section || '').localeCompare(b.section || '') || (Number(a.order)||0) - (Number(b.order)||0));
+            allSections.sort((a,b) => (Number(a.order)||9999) - (Number(b.order)||9999) || a.name.localeCompare(b.name));
             renderFAQs(allFAQs);
             populateSectionFilter();
         } catch (e) {
@@ -510,40 +531,55 @@
         }
     }
 
+    function sectionKey(name) { return String(name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'general'; }
+    function hydrateLegacySections() {
+        [...new Set(allFAQs.map(f => f.section).filter(Boolean))].forEach((name, index) => {
+            if (!allSections.some(s => s.name === name || s.id === sectionKey(name))) {
+                const example = allFAQs.find(f => f.section === name) || {};
+                allSections.push({ id: sectionKey(name), name, icon: example.sectionIcon || 'fa-question-circle', status: 'published', order: 1000 + index, legacy: true });
+            }
+        });
+    }
+    function getSection(name) { return allSections.find(s => s.name === name || s.id === sectionKey(name)); }
+
     // ─── Group & Render ───
     function renderFAQs(faqs) {
         const container = document.getElementById('faqSectionsContainer');
-        const search = (document.getElementById('faqSearch')?.value || '').toLowerCase();
+        const search = (document.getElementById('faqSearchInline')?.value || document.getElementById('faqSearch')?.value || '').trim().toLowerCase();
         const sectionFilter = document.getElementById('sectionFilter')?.value || '';
         const statusFilter = document.getElementById('statusFilter')?.value || '';
 
         let filtered = faqs.filter(f => {
-            if (search && !f.question.toLowerCase().includes(search) && !f.answer.toLowerCase().includes(search)) return false;
+            if (search && !String(f.question||'').toLowerCase().includes(search) && !String(f.answer||'').toLowerCase().includes(search) && !String(f.section||'').toLowerCase().includes(search)) return false;
             if (sectionFilter && f.section !== sectionFilter) return false;
             if (statusFilter && f.status !== statusFilter) return false;
             return true;
         });
 
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-inbox"></i><h3>No FAQs found</h3><p>Try adjusting filters or add a new FAQ.</p></div>';
-            return;
-        }
+        document.getElementById('faqSummary').textContent = `Showing ${filtered.length} of ${allFAQs.length} question${allFAQs.length === 1 ? '' : 's'}`;
 
         const grouped = {};
         filtered.forEach(f => {
-            if (!grouped[f.section]) grouped[f.section] = { icon: f.sectionIcon || 'fa-question-circle', items: [] };
+            const meta = getSection(f.section) || {};
+            if (!grouped[f.section]) grouped[f.section] = { icon: meta.icon || f.sectionIcon || 'fa-question-circle', meta, items: [] };
             grouped[f.section].items.push(f);
         });
-
+        const visibleSections = allSections.filter(s => grouped[s.name]);
+        if (!visibleSections.length) { container.innerHTML = '<div class="no-faqs-message"><i class="fas fa-inbox"></i><h3>No FAQs found</h3><p>Try adjusting filters or add a new question.</p></div>'; return; }
         let html = '<div class="faq-sections">';
-        Object.entries(grouped).forEach(([sectionName, section]) => {
+        visibleSections.forEach(meta => {
+            const sectionName = meta.name, section = grouped[sectionName];
+            const collapsed = sessionStorage.getItem('faq-section-' + meta.id) === 'collapsed';
             html += `
-                <div class="faq-section-card">
+                <div class="faq-section-card${collapsed ? ' is-collapsed' : ''}" data-section-id="${escapeHtml(meta.id)}">
                     <div class="section-header">
-                        <i class="fas ${section.icon}"></i>
+                        <button class="section-collapse" type="button" onclick="toggleSection('${escapeHtml(meta.id)}')" aria-label="Toggle ${escapeHtml(sectionName)}"><i class="fas fa-chevron-down"></i></button>
+                        <span class="section-icon"><i class="fas ${escapeHtml(section.icon)}"></i></span>
                         <h3>${escapeHtml(sectionName)}</h3>
+                        <span class="section-meta">${section.items.length} question${section.items.length === 1 ? '' : 's'} · <span class="${meta.status === 'published' ? 'badge success' : 'badge warning'}">${meta.status === 'published' ? 'Published' : 'Draft section'}</span></span>
                         <div class="section-actions">
-                            <button onclick="openAddFAQModal('${escapeHtml(sectionName)}')" title="Add FAQ to this section"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-secondary" onclick="openAddFAQModal('${escapeHtml(sectionName)}')" title="Add FAQ to this section"><i class="fas fa-plus"></i><span class="d-none d-md-inline"> Add</span></button>
+                            <details class="section-menu"><summary title="Section actions"><i class="fas fa-ellipsis"></i></summary><div class="section-menu-list"><button onclick="openEditSectionModal('${escapeHtml(meta.id)}')"><i class="fas fa-pen"></i> Edit</button><button onclick="moveSection('${escapeHtml(meta.id)}',-1)"><i class="fas fa-arrow-up"></i> Move up</button><button onclick="moveSection('${escapeHtml(meta.id)}',1)"><i class="fas fa-arrow-down"></i> Move down</button><button class="danger" onclick="openDeleteSectionModal('${escapeHtml(meta.id)}')"><i class="fas fa-trash"></i> Delete</button></div></details>
                         </div>
                     </div>
                     <div class="faq-items">
@@ -556,7 +592,9 @@
                         <div class="faq-item-header" onclick="toggleFaqItem(this)">
                             <h4>${escapeHtml(f.question)}</h4>
                             <div class="faq-item-actions" onclick="event.stopPropagation()">
-                                <span class="${statusClass}" style="font-size:0.7rem;padding:2px 8px;">${statusLabel}</span>
+                                <span class="${statusClass}">${statusLabel}</span>
+                                <button onclick="moveFAQ('${f.id}',-1)" title="Move question up"><i class="fas fa-arrow-up"></i></button>
+                                <button onclick="moveFAQ('${f.id}',1)" title="Move question down"><i class="fas fa-arrow-down"></i></button>
                                 <button class="btn-edit" onclick="openEditFAQModal('${f.id}')" title="Edit"><i class="fas fa-pen"></i></button>
                                 <button class="btn-delete" onclick="openDeleteModal('${f.id}')" title="Delete"><i class="fas fa-trash"></i></button>
                             </div>
@@ -586,13 +624,15 @@
     function populateSectionFilter() {
         const select = document.getElementById('sectionFilter');
         const current = select.value;
-        const sections = [...new Set(allFAQs.map(f => f.section).filter(Boolean))].sort();
-        select.innerHTML = '<option value="">All Sections</option>' + sections.map(s => `<option value="${escapeHtml(s)}"${s === current ? ' selected' : ''}>${escapeHtml(s)}</option>`).join('');
+        select.innerHTML = '<option value="">All Sections</option>' + allSections.map(s => `<option value="${escapeHtml(s.name)}"${s.name === current ? ' selected' : ''}>${escapeHtml(s.name)}</option>`).join('');
     }
 
     function filterFAQs() {
         renderFAQs(allFAQs);
     }
+    function syncFAQSearch(value) { document.getElementById('faqSearch').value = value; filterFAQs(); }
+    function resetFAQFilters() { document.getElementById('faqSearch').value = ''; document.getElementById('faqSearchInline').value = ''; document.getElementById('sectionFilter').value = ''; document.getElementById('statusFilter').value = ''; filterFAQs(); }
+    function toggleSection(id) { const key='faq-section-' + id, isCollapsed=sessionStorage.getItem(key)==='collapsed'; sessionStorage.setItem(key, isCollapsed ? 'open' : 'collapsed'); document.querySelector(`[data-section-id="${CSS.escape(id)}"]`)?.classList.toggle('is-collapsed', !isCollapsed); }
 
     // ─── Add/Edit FAQ Modal ───
     function openAddFAQModal(prefillSection) {
@@ -630,8 +670,7 @@
 
     function populateSectionSelect() {
         const select = document.getElementById('faqSectionSelect');
-        const sections = [...new Set(allFAQs.map(f => f.section).filter(Boolean))].sort();
-        select.innerHTML = '<option value="">Select Section</option>' + sections.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+        select.innerHTML = '<option value="">Select Section</option>' + allSections.map(s => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}${s.status === 'draft' ? ' (draft)' : ''}</option>`).join('');
     }
 
     function onSectionSelectChange() {
@@ -654,32 +693,38 @@
     async function saveFAQ() {
         let section = document.getElementById('faqSectionSelect').value;
         let sectionIcon = 'fa-leaf';
+        clearFieldErrors();
         if (isCustomSection) {
             const newName = document.getElementById('faqNewSection').value.trim();
-            if (!newName) { alert('Please enter a section name.'); return; }
+            if (!newName) { setFieldError('faqSectionError', 'Enter a section name.'); return; }
             section = newName;
             sectionIcon = document.getElementById('faqSectionIcon').value;
         } else {
-            if (!section) { alert('Please select a section.'); return; }
-            const existing = allFAQs.find(f => f.section === section);
-            if (existing) sectionIcon = existing.sectionIcon || 'fa-question-circle';
+            if (!section) { setFieldError('faqSectionError', 'Select a section.'); return; }
+            const existing = getSection(section);
+            if (existing) sectionIcon = existing.icon || 'fa-question-circle';
         }
 
         const question = document.getElementById('faqQuestion').value.trim();
         const answer = document.getElementById('faqAnswer').value.trim();
         const status = document.getElementById('faqStatus').value;
 
-        if (!question) { alert('Please enter a question.'); return; }
-        if (!answer) { alert('Please enter an answer.'); return; }
+        if (!question) { setFieldError('faqQuestionError', 'A question is required.'); return; }
+        if (!answer) { setFieldError('faqAnswerError', 'An answer is required.'); return; }
 
         const btn = document.querySelector('#faq-modal .modal-footer .btn-primary');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Saving...';
 
         try {
+            const sectionId = sectionKey(section);
+            if (isCustomSection && !allSections.some(s => s.id === sectionId || s.name === section)) {
+                await db.collection('faqSections').doc(sectionId).set({ name: section, icon: sectionIcon, status: 'published', order: allSections.length + 1, createdAt: firebase.firestore.FieldValue.serverTimestamp(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+            }
             if (editingFaqId) {
                 await db.collection('faqs').doc(editingFaqId).update({
                     section,
+                    sectionId,
                     sectionIcon,
                     question,
                     answer,
@@ -693,6 +738,7 @@
                 const maxOrder = allFAQs.filter(f => f.section === section).length;
                 await db.collection('faqs').add({
                     section,
+                    sectionId,
                     sectionIcon,
                     question,
                     answer,
@@ -714,6 +760,14 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-save"></i> Save FAQ';
         }
+    }
+
+    function setFieldError(id, message) { const el = document.getElementById(id); if (el) el.textContent = message; }
+    function clearFieldErrors() { document.querySelectorAll('.field-error').forEach(el => el.textContent = ''); }
+    function formatAnswerInput(type) {
+        const field = document.getElementById('faqAnswer'); const start = field.selectionStart, end = field.selectionEnd, selected = field.value.slice(start,end) || 'text';
+        const wrap = type === 'bold' ? `**${selected}**` : type === 'italic' ? `*${selected}*` : type === 'bullets' ? `- ${selected}` : type === 'numbered' ? `1. ${selected}` : `[${selected}](https://)`;
+        field.setRangeText(wrap,start,end,'end'); field.focus();
     }
 
     // ─── Delete FAQ ───
@@ -743,7 +797,11 @@
 
     // ─── New Section Modal ───
     function openNewSectionModal() {
+        editingSectionId = null;
+        document.getElementById('sectionModalTitle').textContent = 'New FAQ Section';
         document.getElementById('newSectionName').value = '';
+        document.getElementById('newSectionStatus').value = 'published';
+        setFieldError('sectionNameError', '');
         const grid = document.getElementById('iconGrid');
         grid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
         grid.querySelector('button')?.classList.add('selected');
@@ -771,6 +829,62 @@
         if (window.adminUI && adminUI.showToast) {
             adminUI.showToast('New section "' + name + '" ready. Add your first FAQ.', 'info', 'Section Created');
         }
+    }
+
+    async function saveSection() {
+        const name = document.getElementById('newSectionName').value.trim();
+        if (!name) { setFieldError('sectionNameError', 'A section name is required.'); return; }
+        const selectedIcon = document.querySelector('#iconGrid button.selected');
+        const icon = selectedIcon ? selectedIcon.dataset.icon : 'fa-leaf';
+        const existing = editingSectionId ? allSections.find(s => s.id === editingSectionId) : null;
+        const id = editingSectionId || sectionKey(name);
+        const duplicate = allSections.find(s => s.id !== id && s.name.toLowerCase() === name.toLowerCase());
+        if (duplicate) { setFieldError('sectionNameError', 'A section with that name already exists.'); return; }
+        const payload = { name, icon, status: document.getElementById('newSectionStatus').value, order: existing ? existing.order : allSections.length + 1, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+        try {
+            if (!existing) payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection('faqSections').doc(id).set(payload, { merge:true });
+            if (existing && existing.name !== name) {
+                const matching = allFAQs.filter(f => f.section === existing.name);
+                await Promise.all(matching.map(f => db.collection('faqs').doc(f.id).update({ section:name, sectionId:id, sectionIcon:icon, updatedAt:firebase.firestore.FieldValue.serverTimestamp() })));
+            }
+            closeModal('new-section-modal'); await loadFAQs();
+            window.adminUI?.showToast?.('Section saved', 'success', 'FAQ Section');
+        } catch (e) { console.error('Save section error:', e); alert('Unable to save this section.'); }
+    }
+    function openEditSectionModal(id) {
+        const s = allSections.find(section => section.id === id); if (!s) return;
+        editingSectionId = id; document.getElementById('sectionModalTitle').textContent = 'Edit FAQ Section';
+        document.getElementById('newSectionName').value = s.name; document.getElementById('newSectionStatus').value = s.status || 'published'; setFieldError('sectionNameError', '');
+        const grid = document.getElementById('iconGrid'); grid.querySelectorAll('button').forEach(btn => btn.classList.toggle('selected', btn.dataset.icon === (s.icon || 'fa-leaf'))); openModal('new-section-modal');
+    }
+    async function moveSection(id, direction) {
+        const index = allSections.findIndex(s => s.id === id), target = allSections[index + direction]; if (index < 0 || !target) return;
+        const current = allSections[index];
+        try { await Promise.all([db.collection('faqSections').doc(current.id).set({ order:target.order },{merge:true}), db.collection('faqSections').doc(target.id).set({ order:current.order },{merge:true})]); await loadFAQs(); }
+        catch(e) { console.error('Move section error:', e); alert('Unable to reorder sections.'); }
+    }
+    async function moveFAQ(id, direction) {
+        const faq = allFAQs.find(f => f.id === id); const within = allFAQs.filter(f => f.section === faq?.section).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0)); const index = within.findIndex(f => f.id===id), target=within[index+direction]; if (!faq || !target) return;
+        try { await Promise.all([db.collection('faqs').doc(faq.id).update({order:target.order}), db.collection('faqs').doc(target.id).update({order:faq.order})]); await loadFAQs(); }
+        catch(e) { console.error('Move FAQ error:', e); alert('Unable to reorder questions.'); }
+    }
+    function openDeleteSectionModal(id) {
+        deletingSection = allSections.find(s=>s.id===id); if (!deletingSection) return;
+        const count = allFAQs.filter(f=>f.section===deletingSection.name).length;
+        document.getElementById('deleteSectionMessage').textContent = `“${deletingSection.name}” contains ${count} question${count===1?'':'s'}. Choose where to move them, or permanently delete them.`;
+        const choices=allSections.filter(s=>s.id!==id).map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join('');
+        document.getElementById('moveSectionSelect').innerHTML=choices || '<option value="">No destination section available</option>'; openModal('delete-section-modal');
+    }
+    async function moveSectionFAQs() {
+        const destination=allSections.find(s=>s.id===document.getElementById('moveSectionSelect').value); if(!deletingSection||!destination)return;
+        try { await Promise.all(allFAQs.filter(f=>f.section===deletingSection.name).map(f=>db.collection('faqs').doc(f.id).update({section:destination.name,sectionId:destination.id,sectionIcon:destination.icon}))); await db.collection('faqSections').doc(deletingSection.id).delete(); closeModal('delete-section-modal'); await loadFAQs(); }
+        catch(e){console.error('Move section FAQs error:',e);alert('Unable to move these questions.');}
+    }
+    async function deleteSectionWithFAQs() {
+        if (!deletingSection || !confirm(`Permanently delete “${deletingSection.name}” and all of its FAQs? This cannot be undone.`)) return;
+        try { await Promise.all([...allFAQs.filter(f=>f.section===deletingSection.name).map(f=>db.collection('faqs').doc(f.id).delete()), db.collection('faqSections').doc(deletingSection.id).delete()]); closeModal('delete-section-modal'); await loadFAQs(); }
+        catch(e){console.error('Delete section error:',e);alert('Unable to delete this section.');}
     }
 
     // ─── Utility ───

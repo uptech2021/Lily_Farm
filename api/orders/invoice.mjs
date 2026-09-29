@@ -8,7 +8,7 @@ export default async function handler(request) {
     const { searchParams } = new URL(request.url); const orderId=searchParams.get('orderId')||''; const token=searchParams.get('token')||'';
     const order=await getDocument('orders',orderId); if(!order) return new Response('Invoice not found',{status:404});
     if(!isAdmin(request)&&(!token||token!==order.invoiceAccessToken)) return new Response('Not authorized',{status:403});
-    const {buffer,data}=generateInvoicePdf(order,await getSettings());
+    const {buffer,data}=generateInvoicePdf(order,order.settingsSnapshot || await getSettings());
     return new Response(buffer,{status:200,headers:{'content-type':'application/pdf','content-disposition':`attachment; filename="Rishis-Lily-Farm-${data.orderNumber}.pdf"`,'cache-control':'private, no-store'}});
   } catch { return new Response('Invoice could not be generated',{status:500}); }
 }
