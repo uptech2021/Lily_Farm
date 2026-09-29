@@ -32,4 +32,4 @@
 @media(max-width:850px){.faq-sidebar{max-height:none;overflow:visible}.faq-section{scroll-margin-top:96px}}
 @media(max-width:600px){.faq-browser{padding-bottom:42px}.faq-answer__content{padding:17px 48px 20px 16px}.faq-item:not(.is-open) .faq-answer__content{padding-top:0;padding-bottom:0}}
 @media(prefers-reduced-motion:reduce){.faq-question{transition:none}}
-.faq-browser{overflow:hidden}
+.faq-browser{overflow-x:clip;overflow-y:visible}
