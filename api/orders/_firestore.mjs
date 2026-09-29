@@ -52,4 +52,27 @@ export async function updateDocument(collection, id, updates) {
   return response.json();
 }
 
+export async function createDocument(collection, data) {
+  const endpoint = `${base}/${collection}${apiKey ? `?key=${encodeURIComponent(apiKey)}` : ''}`;
+  const response = await fetch(endpoint, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ fields: Object.fromEntries(Object.entries(data).map(([key, value]) => [key, encode(value)])) })
+  });
+  if (!response.ok) throw new Error(`Firestore create failed (${response.status})`);
+  const raw = await response.json();
+  return { id: raw.name.split('/').pop(), ...decodeFields(raw.fields || {}) };
+}
+
+export async function queryCollection(collection, filters = []) {
+  const fieldFilters = filters.map(([field, op, value]) => ({ fieldFilter: { field: { fieldPath: field }, op, value: encode(value) } }));
+  const where = fieldFilters.length === 1 ? fieldFilters[0] : fieldFilters.length ? { compositeFilter: { op: 'AND', filters: fieldFilters } } : undefined;
+  const response = await fetch(`${base}:runQuery${apiKey ? `?key=${encodeURIComponent(apiKey)}` : ''}`, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: collection }], ...(where ? { where } : {}) } })
+  });
+  if (!response.ok) throw new Error(`Firestore query failed (${response.status})`);
+  const rows = await response.json();
+  return rows.filter(row => row.document).map(row => ({ id: row.document.name.split('/').pop(), ...decodeFields(row.document.fields || {}) }));
+}
+
 export async function getSettings() { return (await getDocument('settings', 'global')) || {}; }

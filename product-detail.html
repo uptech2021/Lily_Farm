@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/products.css"><link rel="stylesheet" href="src/css/product-detail.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
+  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/products.css"><link rel="stylesheet" href="src/css/product-detail.css"><link rel="stylesheet" href="src/css/reviews.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
 <body class="detail-page">
   <a class="skip-link" href="#productContent">Skip to product details</a><div id="navbar"></div>
@@ -47,13 +47,15 @@
       <aside class="care-callout" id="fertilizerCard" hidden><span class="care-callout__icon" aria-hidden="true">🌱</span><div><p class="detail-eyebrow">Care tip</p><h3>Fertilizer</h3><p id="productFertilizer"></p></div></aside>
     </div></section>
 
+    <section class="customer-reviews" id="customerReviews" hidden><div class="detail-container"><header class="customer-reviews__head"><div><p class="detail-eyebrow">Customer reviews</p><h2>Real stories from local growers.</h2><div class="review-score"><strong id="reviewAverage">—</strong><div><span class="review-stars"><span class="on">★</span><span class="on">★</span><span class="on">★</span><span class="on">★</span><span class="on">★</span></span><small id="reviewCount">No reviews yet</small></div></div></div><button class="write-review-btn" type="button" data-write-review>Write a Review</button></header><div class="public-review-list" id="publicReviewList"></div></div></section>
+
     <section class="related-products" id="relatedSection" hidden><div class="detail-container"><header class="related-heading"><div><p class="detail-eyebrow">More from the farm</p><h2>You May Also Like</h2></div><a href="products.html">View all products <i class="fas fa-arrow-right" aria-hidden="true"></i></a></header><div class="shop-grid" id="relatedGrid"></div></div></section>
   </main>
   <section class="shop-trust" aria-label="Why shop with Rishi's Lily Farm"><div class="shop-container shop-trust__grid"><div><span>🌱</span><strong>Locally Grown</strong></div><div><span>🚚</span><strong>Trinidad Delivery</strong></div><div><span>💚</span><strong>Carefully Selected</strong></div><div><span>💬</span><strong>WhatsApp Support</strong></div></div></section>
   <footer><div id="footer"></div></footer>
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js"></script><script src="src/js/utils.js"></script><script src="src/js/products.js"></script><script src="src/js/promotions.js"></script><script src="src/js/commerce.js"></script><script src="src/js/footer.js?v=20260927"></script>
+  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js"></script><script src="src/js/store-settings.js"></script><script src="src/js/utils.js"></script><script src="src/js/products.js"></script><script src="src/js/promotions.js"></script><script src="src/js/commerce.js"></script><script src="src/js/inventory-settings.js"></script><script src="src/js/reviews.js"></script><script src="src/js/footer.js?v=20260929"></script>
   <script>
   (function () {
     'use strict';
@@ -80,7 +82,7 @@
       var stock=document.getElementById('stockBadge'), state=commerce.stockState(product), available=state.purchasable; stock.className='detail-stock '+(available?'is-in-stock stock-'+state.key:'is-out-of-stock'); stock.innerHTML='<span></span>'+state.label; document.getElementById('featuredBadge').hidden=!product.featured;
       var add=document.getElementById('addToCartBtn'); add.disabled=!available; add.querySelector('span').textContent=available?'Add to Cart':'Out of Stock'; document.getElementById('purchaseArea').classList.toggle('is-disabled',!available);
       var fertilizer=String(product.fertilizerInfo||'').trim(); if(fertilizer){document.getElementById('productFertilizer').textContent=fertilizer;document.getElementById('fertilizerCard').hidden=false;}
-      renderGallery(product);renderPromotion(product);renderRelated(product);document.getElementById('additionalInformation').hidden=!product.description&&!fertilizer;document.getElementById('productContent').hidden=false;document.getElementById('productLoading').hidden=true;
+      renderGallery(product);renderPromotion(product);renderRelated(product);if(window.reviewUI){reviewUI.setProduct(product);reviewUI.renderPublic(product)}document.getElementById('additionalInformation').hidden=!product.description&&!fertilizer;document.getElementById('productContent').hidden=false;document.getElementById('productLoading').hidden=true;
       if(window.fbLogActivity)fbLogActivity('product_view',{productId:product.slug||product.id,productName:product.name,category:product.category,price:product.price});
     }
     function showNotFound(){document.getElementById('productLoading').hidden=true;document.getElementById('productNotFound').hidden=false;}

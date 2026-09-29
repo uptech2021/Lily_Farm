@@ -151,6 +151,17 @@ async function handleNewsletterApi(req, res, pathname) {
   return true;
 }
 
+async function handlePublicApi(req,res,pathname){
+  const routes={'/api/contact/submit':'../api/contact/submit.mjs','/api/reviews/submit':'../api/reviews/submit.mjs'};
+  if(!routes[pathname])return false;
+  const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>1024*1024){json(res,413,{error:'Request is too large.'});return true}chunks.push(chunk)}
+  try{
+    const headers=new Headers();Object.entries(req.headers).forEach(([key,value])=>{if(value!=null)headers.set(key,Array.isArray(value)?value.join(', '):value)});
+    const request=new Request(`http://${req.headers.host||`127.0.0.1:${port}`}${req.url}`,{method:req.method,headers,body:['GET','HEAD'].includes(req.method)?undefined:Buffer.concat(chunks)});
+    const module=await import(routes[pathname]),response=await module.default.fetch(request);res.writeHead(response.status,Object.fromEntries(response.headers.entries()));res.end(Buffer.from(await response.arrayBuffer()));
+  }catch(error){console.error('Public API failed:',error);json(res,500,{error:'The service failed unexpectedly.'})}return true;
+}
+
 http.createServer(async (req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname); }
@@ -158,6 +169,7 @@ http.createServer(async (req, res) => {
 
   if (handleApi(req, res, pathname)) return;
   if (await handleNewsletterApi(req, res, pathname)) return;
+  if (await handlePublicApi(req,res,pathname)) return;
   if (/(^|\/)\./.test(pathname)) { res.writeHead(404).end("Not Found"); return; }
 
   if (pathname === "/admin" || pathname === "/admin/") {

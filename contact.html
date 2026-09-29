@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/contact.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
+  <link rel="stylesheet" href="src/css/styles.css"><link rel="stylesheet" href="src/css/home.css"><link rel="stylesheet" href="src/css/contact.css"><link rel="stylesheet" href="src/css/reviews.css"><link rel="stylesheet" href="src/css/whatsapp-button.css">
 </head>
 <body class="contact-page">
   <a class="skip-link" href="#contactForm">Skip to contact form</a><div id="navbar"></div>
@@ -24,13 +24,16 @@
         <div class="contact-card-heading"><span><i class="fas fa-seedling" aria-hidden="true"></i></span><div><p class="eyebrow">Send a note</p><h2>Send us a Message</h2></div></div>
         <p class="contact-form-intro">Tell us how we can help and include any useful order or plant details.</p>
         <form id="contactForm" action="#" method="post">
-          <div class="contact-field"><label for="name">Full Name <span aria-hidden="true">*</span></label><input type="text" id="name" name="name" autocomplete="name" placeholder="Your name" required></div>
-          <div class="contact-field"><label for="email">Email Address <span aria-hidden="true">*</span></label><input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required></div>
+          <input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-10000px">
+          <div class="contact-field"><label for="name">Full Name <span aria-hidden="true">*</span></label><input type="text" id="name" name="name" minlength="2" maxlength="100" autocomplete="name" placeholder="Your name" required></div>
+          <div class="contact-field"><label for="email">Email Address <span aria-hidden="true">*</span></label><input type="email" id="email" name="email" maxlength="160" autocomplete="email" placeholder="you@example.com" required></div>
           <div class="contact-field"><label for="phone">Phone Number <small>Optional</small></label><input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+1 (868) 555-0123"></div>
           <div class="contact-field"><label for="subject">Subject <small>Optional</small></label><input type="text" id="subject" name="subject" placeholder="How can we help?"></div>
-          <div class="contact-field"><label for="message">Message <span aria-hidden="true">*</span></label><textarea id="message" name="message" placeholder="Tell us more about your inquiry..." required></textarea></div>
+          <div class="contact-field"><label for="message">Message <span aria-hidden="true">*</span></label><textarea id="message" name="message" minlength="10" maxlength="3000" placeholder="Tell us more about your inquiry..." required></textarea></div>
           <button type="submit" class="contact-submit"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Send Message</span></button>
+          <p id="contactError" role="alert" style="color:#ad3e36;min-height:20px"></p>
         </form>
+        <div id="contactSuccess" class="review-success" hidden><span>✓</span><h3>Message Sent</h3><p id="contactSuccessText"></p><a class="button button--forest" href="products.html">Continue Shopping</a></div>
         <div class="faq-helper"><i class="far fa-circle-question" aria-hidden="true"></i><div><strong>Looking for a quick answer?</strong><a href="faq.html">Browse our FAQs <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div>
       </section>
 
@@ -45,6 +48,8 @@
       </aside>
     </div></section>
 
+    <section class="review-love"><div class="contact-container"><div class="review-love__card"><div><p class="eyebrow">Love your plants?</p><h2>Share Your Experience</h2><p>Bought something from Rishi's Lily Farm? We'd love to hear how your plants are doing.</p></div><button class="write-review-btn" type="button" data-write-review data-general="true">Leave a Review</button></div></div></section>
+
     <section class="farm-visit" aria-labelledby="visit-title"><div class="contact-container">
       <header class="farm-visit__heading"><div><p class="eyebrow">Visit the farm</p><h2 id="visit-title">Come see what’s blooming.</h2></div><p>Find our lilies and exotic plants in person at our Gasparillo farm.</p></header>
       <div class="farm-visit__card"><div id="contactMap" class="farm-visit__map" aria-label="Map showing Rishi's Lily Farm in Gasparillo"></div><div class="farm-visit__details"><img src="img/FB_IMG_1719437553161.jpg" alt="Tropical plants growing at Rishi's Lily Farm"><div class="farm-visit__copy"><p class="eyebrow">Rishi's Lily Farm</p><h3>Gasparillo, Trinidad</h3><p>#6 Kowlessar Street, Dalloo Road<br>Gasparillo, Trinidad and Tobago 570543</p><p><i class="far fa-clock" aria-hidden="true"></i> Mon–Sat: 8:00 AM–5:00 PM<br><span>Sunday: Closed</span></p><a href="https://www.google.com/maps/search/?api=1&amp;query=10.325615,-61.415639" target="_blank" rel="noopener noreferrer" class="button button--forest">Get directions <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div></div></div>
@@ -54,9 +59,10 @@
   </main>
   <footer><div id="footer"></div></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <script src="src/js/utils.js?v=20260928"></script><script src="src/js/footer.js?v=20260927"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="src/js/firebase-config.js"></script><script src="src/js/firebase.js"></script><script src="src/js/store-settings.js"></script><script src="src/js/products.js"></script><script src="src/js/utils.js?v=20260929"></script><script src="src/js/reviews.js"></script><script src="src/js/footer.js?v=20260929"></script><script src="src/js/contact-settings.js"></script>
   <script>
-  document.addEventListener('DOMContentLoaded',function(){if(typeof initFarmMap==='function')initFarmMap('contactMap');});
+  document.addEventListener('DOMContentLoaded',function(){if(typeof initFarmMap==='function')initFarmMap('contactMap');var form=document.getElementById('contactForm');form.addEventListener('submit',async function(e){e.preventDefault();if(!form.checkValidity()){form.reportValidity();return}var button=form.querySelector('button[type=submit]'),text=button.querySelector('span'),error=document.getElementById('contactError'),data=Object.fromEntries(new FormData(form).entries());button.disabled=true;text.textContent='Sending…';error.textContent='';try{var response=await fetch('/api/contact/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}),result=await response.json();if(!response.ok)throw new Error(result.error||'We could not send your message right now. Please try again.');form.hidden=true;var success=document.getElementById('contactSuccess');document.getElementById('contactSuccessText').textContent=result.confirmationSent?'Thanks, '+data.name.split(/\s+/)[0]+'! We received your message and sent a confirmation to '+data.email+'.':'Thanks, '+data.name.split(/\s+/)[0]+'! We received your message. The confirmation email could not be sent, but our team will still get back to you.';success.hidden=false}catch(err){error.textContent=err.message+' You can also use the configured phone, email or WhatsApp contact options on this page.'}finally{button.disabled=false;text.textContent='Send Message'}});});
   fetch('src/components/navbar.html?v=20260927').then(function(response){return response.text();}).then(function(html){document.getElementById('navbar').innerHTML=html;if(typeof updateCartBadge==='function')updateCartBadge();if(typeof initializeMobileMenu==='function')initializeMobileMenu();var link=document.querySelector('#navbar a[href="contact.html"]');if(link)link.classList.add('active');});
   </script><script src="src/js/whatsapp-button.js"></script>
 </body>
