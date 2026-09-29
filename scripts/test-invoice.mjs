@@ -5,5 +5,8 @@ const order={id:'test-order',orderNumber:'TT-2026-TEST',createdAt:'2026-09-28T14
 const settings={storeName:"Rishi's Lily Farm",phone:'(868) 710-4296',email:'darren.kowlessar6@gmail.com',paymentInstructions:'Use the order number as your transfer reference.',paymentProofEmail:'darren.kowlessar6@gmail.com'};
 const data=invoiceData(order,settings);const generated=generateInvoicePdf(order,settings);const html=invoiceEmailHtml(data);
 assert.equal(data.total,624);assert.equal(data.savings,36);assert.ok(generated.buffer.subarray(0,8).toString().startsWith('%PDF-1.4'));assert.ok(generated.buffer.length>2500);assert.match(html,/customer@example\.com|Thank you for your order/);assert.match(html,/TTD \$624\.00/);
+assert.match(html,/Awaiting bank transfer/);assert.match(html,/TT-2026-TEST/);assert.match(generated.buffer.toString('latin1'),/Order Invoice #TT-2026-TEST/);
+const largeOrder={...order,orderNumber:'TT-2026-MULTIPAGE',items:Array.from({length:25},(_,index)=>({...order.items[0],productName:`Botanical Plant ${index+1}`,quantity:1,lineTotal:132})),subtotalBeforeDiscount:3750,subtotal:3300,discount:450,deliveryFee:0,total:3300};
+const largePdf=generateInvoicePdf(largeOrder,settings).buffer.toString('latin1');assert.match(largePdf,/\/Count 3/);assert.match(largePdf,/Page 3 of 3/);
 if(process.argv[2]){const{writeFile}=await import('node:fs/promises');await writeFile(process.argv[2],generated.buffer)}
 console.log(`Invoice checks passed (${generated.buffer.length} bytes)`);
