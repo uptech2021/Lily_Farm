@@ -6,6 +6,7 @@
   "scripts": {
     "config": "node scripts/generate-firebase-config.js",
     "email:secret": "node scripts/generate-email-token.js",
+    "email:verify": "node scripts/verify-smtp.js",
     "prestart": "npm run config",
     "start": "node scripts/serve.js",
     "build": "npm run config",
@@ -25,6 +26,7 @@
     "live-server": "^1.2.2"
   },
   "dependencies": {
-    "firebase": "^10.7.1"
+    "firebase": "^10.7.1",
+    "nodemailer": "^7.0.13"
   }
 }

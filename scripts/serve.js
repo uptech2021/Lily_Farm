@@ -27,6 +27,7 @@ const adminPassword = process.env.ADMIN_PASSWORD || "";
 const sessions = new Map();
 const attempts = new Map();
 const SESSION_COOKIE = "lily_admin_session";
+process.env.LILY_LOCAL_API_SECRET = process.env.LILY_LOCAL_API_SECRET || crypto.randomBytes(32).toString("base64url");
 const types = {
   ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png",
@@ -108,12 +109,55 @@ function handleApi(req, res, pathname) {
   return false;
 }
 
-http.createServer((req, res) => {
+async function handleNewsletterApi(req, res, pathname) {
+  const route = pathname.match(/^\/api\/newsletters\/(status|test|send|unsubscribe)$/);
+  if (!route) return false;
+  const publicRoute = route[1] === "unsubscribe";
+  if (!publicRoute && !sessionFor(req)) {
+    json(res, 401, { error: "Unauthorized." });
+    return true;
+  }
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of req) {
+    size += chunk.length;
+    if (size > 1024 * 1024) {
+      json(res, 413, { error: "Request is too large." });
+      return true;
+    }
+    chunks.push(chunk);
+  }
+  try {
+    const headers = new Headers();
+    Object.entries(req.headers).forEach(([key, value]) => {
+      if (key.toLowerCase() !== "x-lily-local-api" && value != null) headers.set(key, Array.isArray(value) ? value.join(", ") : value);
+    });
+    headers.set("x-lily-local-api", process.env.LILY_LOCAL_API_SECRET);
+    const requestUrl = `http://${req.headers.host || `127.0.0.1:${port}`}${req.url}`;
+    const request = new Request(requestUrl, {
+      method: req.method,
+      headers,
+      body: ["GET", "HEAD"].includes(req.method) ? undefined : Buffer.concat(chunks)
+    });
+    const module = await import(`../api/newsletters/${route[1]}.mjs`);
+    const response = await module.default.fetch(request);
+    const responseHeaders = Object.fromEntries(response.headers.entries());
+    res.writeHead(response.status, responseHeaders);
+    res.end(Buffer.from(await response.arrayBuffer()));
+  } catch (error) {
+    console.error("Newsletter API failed:", error);
+    json(res, 500, { error: "Email service failed unexpectedly." });
+  }
+  return true;
+}
+
+http.createServer(async (req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname); }
   catch { res.writeHead(400).end("Bad Request"); return; }
 
   if (handleApi(req, res, pathname)) return;
+  if (await handleNewsletterApi(req, res, pathname)) return;
   if (/(^|\/)\./.test(pathname)) { res.writeHead(404).end("Not Found"); return; }
 
   if (pathname === "/admin" || pathname === "/admin/") {
