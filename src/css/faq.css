@@ -19,7 +19,7 @@
 /* Final accordion refinement: one continuous component in the expanded state. */
 @media(min-width:1200px){.faq-browser .faq-container{width:min(1360px,calc(100% - 64px))}.faq-layout{grid-template-columns:285px minmax(0,1fr);gap:clamp(56px,6vw,96px)}}
 .faq-browser{padding-bottom:clamp(46px,5vw,64px)}
-.faq-sidebar{max-height:calc(100vh - 150px);overflow-y:auto;scrollbar-width:thin}
+.faq-sidebar{max-height:calc(100vh - 150px);overflow-x:hidden;overflow-y:auto;scrollbar-width:thin}
 .faq-section{scroll-margin-top:128px}.faq-section:last-child{margin-bottom:0}
 .faq-item,.faq-item.is-open{position:relative;background:#fff;box-shadow:0 4px 15px rgba(36,93,66,.035)}
 .faq-item.is-open{border-color:#a9ceb0;box-shadow:0 7px 19px rgba(36,93,66,.055)}
