@@ -4,7 +4,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/admin/page.mjs": {
+    "api/admin/[action].mjs": {
       "includeFiles": "src/admin/*.html"
     }
   },

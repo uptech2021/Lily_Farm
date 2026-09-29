@@ -52,7 +52,7 @@ for (const page of pages) copy(page);
 for (const [source, destination] of directories) copy(source, destination);
 
 // Admin HTML is deliberately excluded from static output. It is bundled into
-// api/admin/page.mjs and is only returned after session validation.
+// the consolidated admin function and returned only after session validation.
 fs.rmSync(path.join(output, "src", "admin"), {
   recursive: true,
   force: true

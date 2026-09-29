@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import nodemailer from 'nodemailer';
-import { readSession } from '../admin/_auth.mjs';
+import { readSession } from '../../server/admin/_auth.mjs';
 
 export function json(payload, status = 200) {
   return new Response(JSON.stringify(payload), {
