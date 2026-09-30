@@ -18,7 +18,9 @@ export function isAdmin(request) {
 export function smtpConfig() {
   const port = Number(process.env.SMTP_PORT || 465);
   const secure = String(process.env.SMTP_SECURE || (port === 465)).toLowerCase() === 'true';
-  const missing = ['SMTP_HOST', 'SMTP_USER', 'SMTP_APP_PASSWORD', 'EMAIL_FROM_ADDRESS']
+  // Host and From address have safe defaults below. Gmail credentials are the
+  // only values that must be supplied for delivery to work.
+  const missing = ['SMTP_USER', 'SMTP_APP_PASSWORD']
     .filter((key) => !String(process.env[key] || '').trim());
   return {
     ready: missing.length === 0,
@@ -41,9 +43,9 @@ export function transporter() {
     port: config.port,
     secure: config.secure,
     auth: { user: config.user, pass: config.password },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 30000
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000
   });
 }
 
