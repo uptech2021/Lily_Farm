@@ -347,7 +347,8 @@
         var status = document.getElementById('confirmationInvoiceStatus');
         try {
             var response = await fetch('/api/orders/invoice-email', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({orderId:data.orderId,token:data.invoiceAccessToken}) });
-            if (!response.ok) throw new Error('delivery failed');
+            var result = await response.json().catch(function(){ return {}; });
+            if (!response.ok || result.status !== 'sent') throw new Error(result.code || 'DELIVERY_FAILED');
             status.className = 'confirmation-invoice-status success';
             status.textContent = 'We’ve sent your invoice to: ' + data.customer.email;
         } catch (error) {
@@ -534,7 +535,7 @@
                 var discount = cart.reduce(function(sum,item){ return sum + (Number(item.basePrice||item.unitPrice)-Number(item.unitPrice))*Number(item.quantity); },0);
                 var confirmation = { orderId:savedOrder.orderId, orderNumber:savedOrder.orderNumber, invoiceAccessToken:savedOrder.invoiceAccessToken, items:cart, customer:{name:name,email:email,phone:phone}, delivery:{method:delivery,address:address,city:city,region:region}, subtotal:subtotal, discount:discount, deliveryFee:deliveryFee, total:total, paymentMethod:paymentMethod };
                 showConfirmation(confirmation);
-                sendAutomaticInvoice(confirmation);
+                await sendAutomaticInvoice(confirmation);
 
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } catch (error) {
