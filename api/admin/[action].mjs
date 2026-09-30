@@ -8,7 +8,12 @@ const handlers = { entry, login, logout, page, session };
 
 export default {
   fetch(request) {
-    const action = new URL(request.url).pathname.split('/').filter(Boolean).at(-1);
+    const url = new URL(request.url);
+    const pathname = url.pathname.replace(/\/+$/, '') || '/';
+    const segment = pathname.split('/').filter(Boolean).at(-1);
+    // Vercel rewrites preserve the public /admin URL in the Request object.
+    // Treat that route as the entry action instead of returning a false 404.
+    const action = url.searchParams.has('file') ? 'page' : segment === 'admin' ? 'entry' : segment;
     const handler = handlers[action];
 
     if (!handler) {

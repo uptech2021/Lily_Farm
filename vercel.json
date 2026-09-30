@@ -11,6 +11,7 @@
   "rewrites": [
     { "source": "/admin", "destination": "/api/admin/entry" },
     { "source": "/admin/", "destination": "/api/admin/entry" },
+    { "source": "/src/admin/login.html", "destination": "/api/admin/page?file=login.html" },
     { "source": "/src/admin/dashboard.html", "destination": "/api/admin/page?file=dashboard.html" },
     { "source": "/src/admin/faqs.html", "destination": "/api/admin/page?file=faqs.html" },
     { "source": "/src/admin/gallery.html", "destination": "/api/admin/page?file=gallery.html" },
